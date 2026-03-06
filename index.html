@@ -126,7 +126,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .detail-row span:last-child{font-family:'DM Mono',monospace}
 .prorrateo-tag{display:inline-block;padding:2px 6px;border-radius:3px;font-size:10px;font-weight:600;background:#fef3c7;color:#92400e;margin-left:6px}
 /* Print: formal quote only */
-@media print{.no-print{display:none!important}body{background:white;color:#111}.app{padding:0}.section{border:1px solid #ccc;background:white}.print-header{display:block!important}.formal-print{display:block!important}}
+@media print{.no-print{display:none!important}body{background:white;color:#111}.app{padding:0 20px}.section{border:1px solid #ccc;background:white}.print-header{display:block!important}.formal-print{display:block!important}.cot-topbar{display:none!important}}
 .print-header{display:none}
 .formal-print{display:none}
 /* Formal quote styles */
@@ -197,7 +197,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .pv-nota{font-size:9px;line-height:1.4;color:#333;margin-bottom:6px;text-align:justify}
 .pv-footer{border-top:3px solid #0066ff;background:#0066ff;color:white;padding:8px 12px;font-size:8px;margin-top:20px;text-align:center;line-height:1.5}
 .pv-bold-center{font-weight:700;text-align:center;font-style:italic;font-size:10px;margin:12px 0}
-@media print{.cot-editor{display:none!important}.cot-preview{display:block!important;padding:0;background:white;max-height:none;position:static}.cot-preview-toolbar{display:none!important}.cot-preview-inner{box-shadow:none;padding:30px 40px;max-width:100%}}
+@media print{.cot-editor{display:none!important}.cot-preview{display:block!important;padding:0;background:white;max-height:none;position:static}.cot-preview-toolbar{display:none!important}.cot-preview-inner{box-shadow:none;padding:10px 15px;max-width:100%;min-height:unset;font-size:9px}}
 
 /* Watermark */
 .pv-watermark{position:relative}
