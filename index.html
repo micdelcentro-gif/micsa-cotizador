@@ -126,7 +126,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .detail-row span:last-child{font-family:'DM Mono',monospace}
 .prorrateo-tag{display:inline-block;padding:2px 6px;border-radius:3px;font-size:10px;font-weight:600;background:#fef3c7;color:#92400e;margin-left:6px}
 /* Print: formal quote only */
-@media print{.no-print{display:none!important}body{background:white;color:#111}.app{padding:0 20px}.section{border:1px solid #ccc;background:white}.print-header{display:block!important}.formal-print{display:block!important}.cot-topbar{display:none!important}}
+@media print{.no-print{display:none!important}body{background:white;color:#111}.app{padding:0 20px}.section{border:1px solid #ccc;background:white}.print-header{display:block!important}.formal-print{display:block!important}.cot-topbar{display:none!important}#gpt_sidebar_main_container,#icon_id_gpt_icon_id,#claude-static-indicator-container,[id*="gpt_sidebar"],[class*="gpt_sidebar"]{display:none!important}}
 .print-header{display:none}
 .formal-print{display:none}
 /* Formal quote styles */
@@ -861,7 +861,7 @@ function App() {
           ),
 
           // ── PAGE BREAK ──
-          React.createElement("div", { style: { borderTop: "1px dashed #ccc", margin: "20px 0", pageBreakBefore: "always" } }),
+          React.createElement("div", { style: { borderTop: "1px dashed #ccc", margin: "20px 0" } }),
 
           // ── PRECIO ──
           React.createElement("div", { className: "pv-section-title" }, "SIENDO NUESTRO PRECIO EL SIGUIENTE"),
@@ -902,7 +902,7 @@ function App() {
           ),
 
           // ── PAGE BREAK ──
-          React.createElement("div", { style: { borderTop: "1px dashed #ccc", margin: "20px 0", pageBreakBefore: "always" } }),
+          React.createElement("div", { style: { borderTop: "1px dashed #ccc", margin: "20px 0" } }),
 
           // ── NOTAS LEGALES ──
           React.createElement("div", { className: "pv-section-title" }, "NOTA."),
@@ -930,7 +930,7 @@ function App() {
           ),
 
           // ── PAGE BREAK ──
-          React.createElement("div", { style: { borderTop: "1px dashed #ccc", margin: "20px 0", pageBreakBefore: "always" } }),
+          React.createElement("div", { style: { borderTop: "1px dashed #ccc", margin: "20px 0" } }),
 
           // FORMAS DE PAGO
           React.createElement("div", { className: "pv-section-title" }, "FORMAS DE PAGO:"),
