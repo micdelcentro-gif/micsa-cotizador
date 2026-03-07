@@ -194,7 +194,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .pv-price-table th{background:#d0d0d0;padding:6px 8px;font-size:9px;text-transform:uppercase;letter-spacing:1px;border:1px solid #999;font-weight:700}
 .pv-price-table td{padding:8px;border:1px solid #999;font-size:10px;font-weight:600}
 .pv-price-amount{font-weight:700;text-align:center;font-size:11px}
-.pv-nota{font-size:9px;line-height:1.4;color:#333;margin-bottom:6px;text-align:justify;font-weight:500}
+.pv-nota{font-size:6px;line-height:1.1;color:#bbb;margin-bottom:2px;text-align:justify;font-weight:400}
 .pv-footer{border-top:3px solid #0066ff;background:#0066ff;color:white;padding:8px 12px;font-size:8px;margin-top:20px;text-align:center;line-height:1.5}
 .pv-bold-center{font-weight:700;text-align:center;font-style:italic;font-size:10px;margin:12px 0}
 @media print{.cot-editor{display:none!important}.cot-preview{display:block!important;padding:0;background:white;max-height:none;position:static}.cot-preview-toolbar{display:none!important}.cot-preview-inner{box-shadow:none;padding:10px 15px;max-width:100%;min-height:unset;font-size:9px;font-weight:600}}
@@ -913,7 +913,7 @@ function App({ onLogout } = {}) {
           React.createElement("p", { className: "pv-nota" },
             "El cliente asume toda la responsabilidad y el riesgo de cualquier daño que pueda ocurrir al centro de destino; Pavimento, pasillos, pisos y cualquier otra superficie incluida estructuras de soportes causados por cualquier equipo proporcionado por MICSA."
           ),
-          React.createElement("p", { style: { fontSize: 9, fontWeight: 700, fontStyle: "italic", textAlign: "center", margin: "10px 0" } },
+          React.createElement("p", { style: { fontSize: 5, fontWeight: 400, fontStyle: "normal", textAlign: "justify", margin: "1px 0", color: "#bbb", lineHeight: 1.05 } },
             "MICSA EXPRESAMENTE RECHAZA Y NO ASUME NINGUNA RESPONSABILIDAD, Y/O RIESGO DE CUALQUIER DAÑO QUE PUEDA OCURRIR A CUALQUIERA DE LAS SUPERFICIES."
           ),
           [
@@ -925,7 +925,7 @@ function App({ onLogout } = {}) {
             "En caso de retraso en el pago del monto correspondiente a esta cotización, se aplicará un interés moratorio del 5% semanal sobre el saldo insoluto.",
             "La presente cotización deberá formar parte integral del pedido, orden de compra o contrato que resulte de la transacción.",
           ].map((nota, i) =>
-            React.createElement("p", { key: i, style: { fontSize: 8, lineHeight: 1.4, color: "#333", marginBottom: 4, textAlign: "justify" } },
+            React.createElement("p", { key: i, style: { fontSize: 8, fontWeight: 700, lineHeight: 1.3, color: "#111", marginBottom: 3, textAlign: "justify" } },
               React.createElement("strong", null, (i + 1) + ".- "), nota
             )
           ),
