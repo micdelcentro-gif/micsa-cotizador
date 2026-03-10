@@ -488,6 +488,7 @@ function App({ onLogout } = {}) {
   ]);
 
   const [prorrateoActivo, setProrrateoActivo] = useState(true);
+  const [proyectosActivos, setProyectosActivos] = useState(1);
 
   const [exclusiones, setExclusiones] = useState([
     "Descarga, maniobras o instalación en planta destino.",
@@ -570,7 +571,7 @@ function App({ onLogout } = {}) {
   const gastosFijosAnual = gastosFijos.reduce((a, g) => a + g.monto_mensual * 12, 0);
   const totalAnualEmpresa = nominaOficinaAnual + gastosFijosAnual;
   const pctProrrateo = totalSemanasMax / 52;
-  const montoProrrateo = prorrateoActivo ? totalAnualEmpresa * pctProrrateo : 0;
+  const montoProrrateo = prorrateoActivo ? (totalAnualEmpresa * pctProrrateo) / proyectosActivos : 0;
 
   // IVA total (MO + equipos + costos operativos causan IVA en servicios REPSE)
   const ivaMO = totalMOGlobal * P.IVA;
@@ -1622,13 +1623,20 @@ function App({ onLogout } = {}) {
             React.createElement("div", { className: "section" },
               React.createElement("div", { className: "section-title" },
                 "Prorrateo costos fijos empresa",
-                React.createElement("span", { className: "prorrateo-tag" }, (pctProrrateo * 100).toFixed(1) + "% del anual")
+                React.createElement("span", { className: "prorrateo-tag" }, (pctProrrateo * 100).toFixed(1) + "% ÷ " + proyectosActivos + " proy")
               ),
               React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 } },
                 React.createElement("div", { style: { fontSize: 12, color: "var(--muted)", maxWidth: 500 } },
-                  "Costos anuales de oficina (nómina administrativa + gastos fijos) prorrateados por la duración del proyecto (" + totalSemanasMax + " sem / 52 sem = " + (pctProrrateo * 100).toFixed(1) + "%)"
+                  "Costos anuales de oficina prorrateados por duración (" + totalSemanasMax + " sem / 52 sem = " + (pctProrrateo * 100).toFixed(1) + "%) ÷ " + proyectosActivos + " proyecto(s) activo(s)"
                 ),
                 React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 10 } },
+                  React.createElement("label", { style: { fontSize: 12, color: "var(--muted)", marginRight: 4 } }, "Proy. activos:"),
+                  React.createElement("input", {
+                    type: "number", min: 1, max: 20,
+                    value: proyectosActivos,
+                    onChange: e => setProyectosActivos(Math.max(1, parseInt(e.target.value) || 1)),
+                    style: { width: 44, padding: "2px 4px", borderRadius: 4, border: "1px solid var(--border)", fontSize: 13, textAlign: "center", marginRight: 12 }
+                  }),
                   React.createElement("span", { style: { fontSize: 12, color: "var(--muted)" } }, prorrateoActivo ? "Activo" : "Desactivado"),
                   React.createElement("div", {
                     className: "toggle " + (prorrateoActivo ? "on" : ""),
@@ -1696,7 +1704,7 @@ function App({ onLogout } = {}) {
                   React.createElement("div", { className: "mono", style: { fontSize: 18, fontWeight: 700 } }, fmtP(totalAnualEmpresa))
                 ),
                 React.createElement("div", { style: { textAlign: "center" } },
-                  React.createElement("div", { style: { fontSize: 12, color: "var(--muted)" } }, "Prorrateo " + totalSemanasMax + " sem / 52 sem"),
+                  React.createElement("div", { style: { fontSize: 12, color: "var(--muted)" } }, "Prorrateo " + totalSemanasMax + " sem / 52 sem ÷ " + proyectosActivos + " proy"),
                   React.createElement("div", { className: "mono", style: { fontSize: 14 } }, (pctProrrateo * 100).toFixed(2) + "%")
                 ),
                 React.createElement("div", { style: { textAlign: "right" } },
