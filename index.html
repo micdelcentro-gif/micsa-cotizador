@@ -296,8 +296,16 @@ function calcCostoPersonaSem(pago_semanal) {
 
 // Costo anual de un empleado de oficina (pago semanal + cargas sociales simplificadas ~15%)
 function costoAnualEmpleado(pago_semanal) {
-  const cargas_pct = 0.15;
-  return pago_semanal * (1 + cargas_pct) * 52;
+  // Cargas reales patronales (mismos coeficientes SUA que calcCostoPersonaSem)
+  const imss_patronal   = pago_semanal * 0.14369;
+  const infonavit       = pago_semanal * 0.02396;
+  const aguinaldo_prov  = pago_semanal * 0.02875;
+  const vacaciones_prov = pago_semanal * 0.03833;
+  const riesgo_trabajo  = pago_semanal * 0.01246;
+  const isn             = pago_semanal * 0.01437;
+  const admin           = P.ADMIN_PERSONA_SEM;
+  const cargas = imss_patronal + infonavit + aguinaldo_prov + vacaciones_prov + riesgo_trabajo + isn + admin;
+  return (pago_semanal + cargas) * 52;
 }
 
 // Normalizar equipo a costo semanal en MXN (base sin IVA)
@@ -564,8 +572,9 @@ function App({ onLogout } = {}) {
   const pctProrrateo = totalSemanasMax / 52;
   const montoProrrateo = prorrateoActivo ? totalAnualEmpresa * pctProrrateo : 0;
 
-  // IVA total
-  const ivaTotal = ivaEquipos + ivaCostosOp;
+  // IVA total (MO + equipos + costos operativos causan IVA en servicios REPSE)
+  const ivaMO = totalMOGlobal * P.IVA;
+  const ivaTotal = ivaMO + ivaEquipos + ivaCostosOp;
 
   // Subtotal directo = MO + costos op + equipos + seguro + prorrateo
   const subtotalDirecto = totalMOGlobal + costosOpBase + totalEquiposBase + admin.seguro_rc_costo + montoProrrateo;
@@ -1629,7 +1638,7 @@ function App({ onLogout } = {}) {
               ),
 
               // Personal oficina
-              React.createElement("div", { style: { fontSize: 11, color: "var(--muted)", textTransform: "uppercase", letterSpacing: 1, marginBottom: 8 } }, "A) Nómina oficina (pago semanal + ~15% cargas)"),
+              React.createElement("div", { style: { fontSize: 11, color: "var(--muted)", textTransform: "uppercase", letterSpacing: 1, marginBottom: 8 } }, "A) Nómina oficina (pago semanal + ~26% cargas + admin REPSE)"),
               React.createElement("table", { className: "ptable" },
                 React.createElement("thead", null, React.createElement("tr", null,
                   React.createElement("th", null, "Nombre"),
@@ -1866,6 +1875,10 @@ function App({ onLogout } = {}) {
                   React.createElement("span", { className: "cost-val", style: { fontWeight: 700, fontSize: 14 } }, fmtP(totalSinIVA))
                 ),
 
+                React.createElement("div", { className: "cost-row iva-row" },
+                  React.createElement("span", { className: "cost-label" }, "IVA mano de obra (16%)"),
+                  React.createElement("span", { className: "cost-val" }, fmtP(ivaMO))
+                ),
                 React.createElement("div", { className: "cost-row iva-row" },
                   React.createElement("span", { className: "cost-label" }, "IVA costos operativos (16%)"),
                   React.createElement("span", { className: "cost-val" }, fmtP(ivaCostosOp))
