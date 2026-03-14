@@ -267,6 +267,7 @@ const ESCENARIOS = [
   { id: 2, label: "SMG + $500 bono", sublabel: "$2,705/sem", pago_semanal: 2705.28, color: "#a16207" },
   { id: 3, label: "SMG + $1,000 bono", sublabel: "$3,205/sem", pago_semanal: 3205.28, color: "#dc2626" },
   { id: 4, label: "$5,000 semanales", sublabel: "$2,500+$2,500", pago_semanal: 5000, color: "#7c3aed" },
+  { id: 0, label: "Personalizado", sublabel: "Manual", pago_semanal: 0, color: "#0066ff" },
 ];
 
 // Cálculo costo semanal por persona (calibrado FORZA STEEL)
@@ -434,9 +435,9 @@ function App({ onLogout } = {}) {
 
   const [etapas, setEtapas] = useState([
     { nombre: "Etapa 1", semanas: 4, jornada: 12, personal: [
-      { puesto: "Supervisor Obra", cantidad: 1, escenario: 4 },
-      { puesto: "Supervisor HSE", cantidad: 1, escenario: 4 },
-      { puesto: "Mecánico", cantidad: 3, escenario: 4 },
+      { puesto: "Supervisor Obra", cantidad: 1, escenario: 4, pago_semanal: 5000 },
+      { puesto: "Supervisor HSE", cantidad: 1, escenario: 4, pago_semanal: 5000 },
+      { puesto: "Mecánico", cantidad: 3, escenario: 4, pago_semanal: 5000 },
     ]}
   ]);
 
@@ -536,8 +537,9 @@ function App({ onLogout } = {}) {
   const calcEtapa = (et) => {
     const personas = et.personal.reduce((a, p) => a + p.cantidad, 0);
     const personalCalc = et.personal.map(p => {
-      const esc = ESCENARIOS.find(e => e.id === p.escenario);
-      const costo = calcCostoPersonaSem(esc.pago_semanal);
+      const esc = ESCENARIOS.find(e => e.id === p.escenario) || ESCENARIOS.find(e => e.id === 0);
+      const pagoReal = p.pago_semanal || esc.pago_semanal;
+      const costo = calcCostoPersonaSem(pagoReal);
       return { ...p, esc, costo, totalMO: costo.total * p.cantidad * et.semanas };
     });
     const totalMO = personalCalc.reduce((a, p) => a + p.totalMO, 0);
@@ -562,9 +564,9 @@ function App({ onLogout } = {}) {
   // Costos operativos sujetos a IVA
   const costosOpBase = totalViaticos + totalHospedaje + costos.traslados + costos.epp + costos.dc3 + costos.examen_medico + costos.herramienta;
 
-  // IVA
-  const ivaEquipos = totalEquiposBase * P.IVA;
-  const ivaCostosOp = costosOpBase * P.IVA;
+  // IVA por componente (solo para referencia interna, NO para facturación)
+  const ivaEquiposRef = totalEquiposBase * P.IVA;
+  const ivaCostosOpRef = costosOpBase * P.IVA;
 
   // ââ PRORRATEO COSTOS FIJOS ââââââââââââââââââââââââââââââââââââââââââââââ
   const nominaOficinaAnual = personalOficina.reduce((a, p) => a + costoAnualEmpleado(p.pago_semanal), 0);
@@ -573,16 +575,14 @@ function App({ onLogout } = {}) {
   const pctProrrateo = totalSemanasMax / 52;
   const montoProrrateo = prorrateoActivo ? (totalAnualEmpresa * pctProrrateo) / proyectosActivos : 0;
 
-  // IVA total (MO + equipos + costos operativos causan IVA en servicios REPSE)
-  const ivaMO = totalMOGlobal * P.IVA;
-  const ivaTotal = ivaMO + ivaEquipos + ivaCostosOp;
-
   // Subtotal directo = MO + costos op + equipos + seguro + prorrateo
   const subtotalDirecto = totalMOGlobal + costosOpBase + totalEquiposBase + admin.seguro_rc_costo + montoProrrateo;
   const adminMonto = subtotalDirecto * (admin.admin_pct / 100);
   const totalConAdmin = subtotalDirecto + adminMonto + admin.comision_cliente;
   const utilidadMonto = totalConAdmin * (admin.utilidad_pct / 100);
   const totalSinIVA = totalConAdmin + utilidadMonto;
+  // IVA 16% sobre el subtotal facturable completo (SAT: IVA sobre total del servicio)
+  const ivaTotal = totalSinIVA * P.IVA;
   const totalPropuestaMXN = totalSinIVA + ivaTotal;
   const totalPropuestaUSD = totalPropuestaMXN / P.USD_MXN;
 
@@ -593,7 +593,7 @@ function App({ onLogout } = {}) {
   // ââ HELPERS ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   const addEtapa = () => setEtapas([...etapas, {
     nombre: "Etapa " + (etapas.length + 1), semanas: 4, jornada: 12,
-    personal: [{ puesto: "Mecánico", cantidad: 3, escenario: 4 }]
+    personal: [{ puesto: "Mecánico", cantidad: 3, escenario: 4, pago_semanal: 5000 }]
   }]);
   const removeEtapa = (i) => etapas.length > 1 && setEtapas(etapas.filter((_, idx) => idx !== i));
   const updateEtapa = (i, field, val) => {
@@ -603,7 +603,7 @@ function App({ onLogout } = {}) {
   };
   const addPersonalToEtapa = (ei) => {
     const u = [...etapas];
-    u[ei] = { ...u[ei], personal: [...u[ei].personal, { puesto: "Técnico", cantidad: 1, escenario: 4 }] };
+    u[ei] = { ...u[ei], personal: [...u[ei].personal, { puesto: "Técnico", cantidad: 1, escenario: 4, pago_semanal: 5000 }] };
     setEtapas(u);
   };
   const removePersonalFromEtapa = (ei, pi) => {
@@ -614,7 +614,14 @@ function App({ onLogout } = {}) {
   const updatePersonalInEtapa = (ei, pi, field, val) => {
     const u = [...etapas];
     const p = [...u[ei].personal];
-    p[pi] = { ...p[pi], [field]: (field === "cantidad" || field === "escenario") ? Number(val) : val };
+    if (field === "escenario") {
+      const escSel = ESCENARIOS.find(e => e.id === Number(val));
+      p[pi] = { ...p[pi], escenario: Number(val), pago_semanal: escSel ? escSel.pago_semanal : p[pi].pago_semanal };
+    } else if (field === "pago_semanal") {
+      p[pi] = { ...p[pi], pago_semanal: Number(val) || 0, escenario: 0 };
+    } else {
+      p[pi] = { ...p[pi], [field]: field === "cantidad" ? Number(val) : val };
+    }
     u[ei] = { ...u[ei], personal: p };
     setEtapas(u);
   };
@@ -1427,17 +1434,18 @@ function App({ onLogout } = {}) {
                   )),
                   React.createElement("tbody", null,
                     et.personal.map((p, pi) => {
-                      const esc = ESCENARIOS.find(e => e.id === p.escenario);
-                      const c = calcCostoPersonaSem(esc.pago_semanal);
+                      const esc = ESCENARIOS.find(e => e.id === p.escenario) || ESCENARIOS.find(e => e.id === 0);
+                      const pagoReal = p.pago_semanal || esc.pago_semanal;
+                      const c = calcCostoPersonaSem(pagoReal);
                       return React.createElement("tr", { key: pi },
                         React.createElement("td", null, React.createElement("input", { value: p.puesto, onChange: e => updatePersonalInEtapa(ei, pi, "puesto", e.target.value) })),
                         React.createElement("td", null, React.createElement("input", { type: "number", min: 1, value: p.cantidad, onChange: e => updatePersonalInEtapa(ei, pi, "cantidad", e.target.value) })),
                         React.createElement("td", null,
-                          React.createElement("select", { value: p.escenario, onChange: e => updatePersonalInEtapa(ei, pi, "escenario", e.target.value) },
-                            ESCENARIOS.map(e => React.createElement("option", { key: e.id, value: e.id }, e.label + " (" + e.sublabel + ")"))
+                          React.createElement("select", { value: p.escenario, onChange: e => updatePersonalInEtapa(ei, pi, "escenario", e.target.value), style: { fontSize: 12 } },
+                            ESCENARIOS.map(e => React.createElement("option", { key: e.id, value: e.id }, e.label + (e.id !== 0 ? " (" + e.sublabel + ")" : "")))
                           )
                         ),
-                        React.createElement("td", { className: "mono", style: { color: esc.color, fontSize: 13 } }, fmtP(esc.pago_semanal)),
+                        React.createElement("td", null, React.createElement("input", { type: "number", min: 0, step: 100, value: p.pago_semanal || "", placeholder: "$/sem", onChange: e => updatePersonalInEtapa(ei, pi, "pago_semanal", e.target.value), style: { width: 100, fontFamily: "'DM Mono',monospace", fontSize: 13, color: esc.color } })),
                         React.createElement("td", { className: "mono", style: { fontSize: 13 } }, fmtP(c.total)),
                         React.createElement("td", { className: "mono", style: { fontSize: 13, fontWeight: 600 } }, fmtP(c.total * p.cantidad * et.semanas)),
                         React.createElement("td", null,
@@ -1520,8 +1528,8 @@ function App({ onLogout } = {}) {
 
             React.createElement("div", { style: { display: "flex", justifyContent: "flex-end", gap: 24, fontSize: 13, padding: "8px 0" } },
               React.createElement("span", { style: { color: "var(--muted)" } }, "Costos op. base: ", React.createElement("span", { className: "mono" }, fmtP(costosOpBase))),
-              React.createElement("span", { style: { color: "var(--blue)", fontWeight: 600 } }, "IVA: ", React.createElement("span", { className: "mono" }, fmtP(ivaCostosOp))),
-              React.createElement("span", { style: { fontWeight: 700 } }, "Total c/IVA: ", React.createElement("span", { className: "mono" }, fmtP(costosOpBase + ivaCostosOp)))
+              React.createElement("span", { style: { color: "var(--blue)", fontWeight: 600 } }, "IVA ref: ", React.createElement("span", { className: "mono" }, fmtP(ivaCostosOpRef))),
+              React.createElement("span", { style: { fontWeight: 700 } }, "Total c/IVA ref: ", React.createElement("span", { className: "mono" }, fmtP(costosOpBase + ivaCostosOpRef)))
             ),
 
             React.createElement("div", { className: "btn-row no-print" },
@@ -1614,8 +1622,8 @@ function App({ onLogout } = {}) {
               React.createElement("button", { className: "btn-add", onClick: addEquipoManual }, "+ Agregar equipo manual"),
               totalEquiposBase > 0 && React.createElement("div", { style: { display: "flex", justifyContent: "flex-end", gap: 20, marginTop: 16, fontSize: 13, padding: "10px 0", borderTop: "1px solid var(--border)" } },
                 React.createElement("span", { style: { color: "var(--muted)" } }, "Equipos base: ", React.createElement("span", { className: "mono" }, fmtP(totalEquiposBase))),
-                React.createElement("span", { style: { color: "var(--blue)", fontWeight: 600 } }, "IVA: ", React.createElement("span", { className: "mono" }, fmtP(ivaEquipos))),
-                React.createElement("span", { style: { fontWeight: 700 } }, "Total c/IVA: ", React.createElement("span", { className: "mono" }, fmtP(totalEquiposBase + ivaEquipos)))
+                React.createElement("span", { style: { color: "var(--blue)", fontWeight: 600 } }, "IVA ref: ", React.createElement("span", { className: "mono" }, fmtP(ivaEquiposRef))),
+                React.createElement("span", { style: { fontWeight: 700 } }, "Total c/IVA ref: ", React.createElement("span", { className: "mono" }, fmtP(totalEquiposBase + ivaEquiposRef)))
               )
             ),
 
@@ -1884,19 +1892,7 @@ function App({ onLogout } = {}) {
                 ),
 
                 React.createElement("div", { className: "cost-row iva-row" },
-                  React.createElement("span", { className: "cost-label" }, "IVA mano de obra (16%)"),
-                  React.createElement("span", { className: "cost-val" }, fmtP(ivaMO))
-                ),
-                React.createElement("div", { className: "cost-row iva-row" },
-                  React.createElement("span", { className: "cost-label" }, "IVA costos operativos (16%)"),
-                  React.createElement("span", { className: "cost-val" }, fmtP(ivaCostosOp))
-                ),
-                totalEquiposBase > 0 && React.createElement("div", { className: "cost-row iva-row" },
-                  React.createElement("span", { className: "cost-label" }, "IVA equipos (16%)"),
-                  React.createElement("span", { className: "cost-val" }, fmtP(ivaEquipos))
-                ),
-                React.createElement("div", { className: "cost-row iva-row" },
-                  React.createElement("span", { className: "cost-label", style: { fontWeight: 700 } }, "IVA TOTAL"),
+                  React.createElement("span", { className: "cost-label", style: { fontWeight: 700 } }, "IVA 16%"),
                   React.createElement("span", { className: "cost-val", style: { fontWeight: 700, fontSize: 14 } }, fmtP(ivaTotal))
                 ),
 
