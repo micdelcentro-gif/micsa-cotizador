@@ -244,21 +244,36 @@ const MICSA_LOGO = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAxsAAADICAIAAA
 
 // âââ PARAMETROS 2026 (basado en desglose real FORZA STEEL + SUA) ââââââââ
 const P = {
-  SMG: 315.04,
+  // Salario Diario registrado IMSS (default SMG 2025)
+  SD_REGISTRADO: 315.04,
   UMA: 113.14,
-  DIAS_SEMANA: 7,
-  SEMANAS_ANIO: 52,
-  IMSS_PATRONAL_PCT: 0.075,
-  INFONAVIT_PCT: 0.05,
+  // IMSS patronal tasas (sobre SD)
+  IMSS_CUOTA_FIJA: 0.2040,     // Cuota fija (sobre UMA)
+  IMSS_PREST_DINERO: 0.0070,   // Prestaciones en dinero
+  IMSS_GASTOS_MED: 0.0105,     // Gastos médicos
+  IMSS_INVALIDEZ: 0.0175,      // Invalidez y vida
+  IMSS_GUARDERIAS: 0.0100,     // Guarderías
+  // Prima de Riesgo de Trabajo (variable por empresa)
+  PRIMA_RT: 0.07589,           // 7.589% - Prima RT actual MICSA
+  // RCV
+  RCV_RETIRO: 0.0200,          // Retiro 2%
+  RCV_CESANTIA: 0.0315,        // Cesantía patronal 3.15%
+  // INFONAVIT
+  INFONAVIT: 0.0500,           // 5%
+  // Cuotas obreras absorbidas por patrón
+  CUOTAS_OBRERAS: 0.02375,     // PD+GM+IV+Ces obrero
+  // Provisiones (días/año)
   AGUINALDO_DIAS: 15,
-  VACACIONES_DIAS: 12,
-  PRIMA_VACACIONAL_PCT: 0.25,
-  RIESGO_TRABAJO_PCT: 0.065,
-  ISN_PCT: 0.03,
+  VACACIONES_EQUIV: 15,        // 12 días + 25% prima = 15 equiv
+  // ISN
+  ISN_PCT: 0.03,               // 3% impuesto estatal nómina
+  // Admin REPSE
   ADMIN_PERSONA_SEM: 181.25,
+  // Colchón seguridad
+  COLCHON_PCT: 0.008,          // 0.8%
+  // Generales
   USD_MXN: 17.23,
   IVA: 0.16,
-  PRIMA_RT_SUA: 0.0758875,
 };
 
 // Escenarios salariales
@@ -270,43 +285,73 @@ const ESCENARIOS = [
   { id: 0, label: "Personalizado", sublabel: "Manual", pago_semanal: 0, color: "#0066ff" },
 ];
 
-// Cálculo costo semanal por persona (calibrado FORZA STEEL)
-function calcCostoPersonaSem(pago_semanal) {
-  const imss_patronal = pago_semanal * 0.14369;
-  const infonavit = pago_semanal * 0.02396;
-  const aguinaldo_prov = pago_semanal * 0.02875;
-  const vacaciones_prov = pago_semanal * 0.03833;
-  const riesgo_trabajo = pago_semanal * 0.01246;
-  const isn = pago_semanal * 0.01437;
-  const admin = P.ADMIN_PERSONA_SEM;
-  const cargas = imss_patronal + infonavit + aguinaldo_prov + vacaciones_prov + riesgo_trabajo + isn + admin;
+// Cálculo costo semanal por persona (SUA real MICSA 2025)
+// IMSS/RCV/INFONAVIT se calculan sobre SD registrado, NO sobre pago total
+function calcCostoPersonaSem(pago_semanal, suaParams) {
+  const sd = (suaParams && suaParams.sd) || P.SD_REGISTRADO;
+  const uma = (suaParams && suaParams.uma) || P.UMA;
+  const primaRT = (suaParams && suaParams.prima_rt) || P.PRIMA_RT;
+  const isnPct = (suaParams && suaParams.isn_pct) || P.ISN_PCT;
+  const adminSem = (suaParams && suaParams.admin_sem) || P.ADMIN_PERSONA_SEM;
+  const colchonPct = (suaParams && suaParams.colchon_pct) || P.COLCHON_PCT;
+
+  // IMSS Patronal (sobre SD registrado)
+  const cuota_fija = uma * P.IMSS_CUOTA_FIJA * 7;
+  const prest_dinero = sd * P.IMSS_PREST_DINERO * 7;
+  const gastos_med = sd * P.IMSS_GASTOS_MED * 7;
+  const riesgo_trabajo = sd * primaRT * 7;
+  const invalidez = sd * P.IMSS_INVALIDEZ * 7;
+  const guarderias = sd * P.IMSS_GUARDERIAS * 7;
+  const imss_patronal = cuota_fija + prest_dinero + gastos_med + riesgo_trabajo + invalidez + guarderias;
+
+  // RCV + INFONAVIT (sobre SD registrado)
+  const rcv_retiro = sd * P.RCV_RETIRO * 7;
+  const rcv_cesantia = sd * P.RCV_CESANTIA * 7;
+  const infonavit = sd * P.INFONAVIT * 7;
+  const rcv_infonavit = rcv_retiro + rcv_cesantia + infonavit;
+
+  // Provisiones (sobre pago real del trabajador)
+  const aguinaldo_prov = pago_semanal * P.AGUINALDO_DIAS / 365;
+  const vacaciones_prov = pago_semanal * P.VACACIONES_EQUIV / 365;
+
+  // ISN (sobre pago real)
+  const isn = pago_semanal * isnPct;
+
+  // Administración REPSE
+  const admin = adminSem;
+
+  // Cuotas obreras absorbidas por patrón (sobre SD)
+  const cuotas_obreras = sd * P.CUOTAS_OBRERAS * 7;
+
+  // Colchón seguridad (sobre pago real)
+  const colchon = pago_semanal * colchonPct;
+
+  const cargas = imss_patronal + rcv_infonavit + aguinaldo_prov + vacaciones_prov + isn + admin + cuotas_obreras + colchon;
   const total = pago_semanal + cargas;
+
+  const r2 = n => Math.round(n * 100) / 100;
   return {
     pago_semanal,
-    imss_patronal: Math.round(imss_patronal * 100) / 100,
-    infonavit: Math.round(infonavit * 100) / 100,
-    aguinaldo_prov: Math.round(aguinaldo_prov * 100) / 100,
-    vacaciones_prov: Math.round(vacaciones_prov * 100) / 100,
-    riesgo_trabajo: Math.round(riesgo_trabajo * 100) / 100,
-    isn: Math.round(isn * 100) / 100,
+    imss_patronal: r2(imss_patronal),
+    rcv_infonavit: r2(rcv_infonavit),
+    infonavit: r2(infonavit),
+    aguinaldo_prov: r2(aguinaldo_prov),
+    vacaciones_prov: r2(vacaciones_prov),
+    riesgo_trabajo: r2(riesgo_trabajo),
+    isn: r2(isn),
     admin,
-    cargas: Math.round(cargas * 100) / 100,
-    total: Math.round(total * 100) / 100,
+    cuotas_obreras: r2(cuotas_obreras),
+    colchon: r2(colchon),
+    cargas: r2(cargas),
+    total: r2(total),
   };
 }
 
-// Costo anual de un empleado de oficina (pago semanal + cargas sociales simplificadas ~15%)
-function costoAnualEmpleado(pago_semanal) {
-  // Cargas reales patronales (mismos coeficientes SUA que calcCostoPersonaSem)
-  const imss_patronal   = pago_semanal * 0.14369;
-  const infonavit       = pago_semanal * 0.02396;
-  const aguinaldo_prov  = pago_semanal * 0.02875;
-  const vacaciones_prov = pago_semanal * 0.03833;
-  const riesgo_trabajo  = pago_semanal * 0.01246;
-  const isn             = pago_semanal * 0.01437;
-  const admin           = P.ADMIN_PERSONA_SEM;
-  const cargas = imss_patronal + infonavit + aguinaldo_prov + vacaciones_prov + riesgo_trabajo + isn + admin;
-  return (pago_semanal + cargas) * 52;
+// Costo anual de un empleado de oficina (SD = su salario real / 7)
+function costoAnualEmpleado(pago_semanal, suaP) {
+  const oficinaSua = { ...suaP, sd: pago_semanal / 7 };
+  const costo = calcCostoPersonaSem(pago_semanal, oficinaSua);
+  return costo.total * 52;
 }
 
 // Normalizar equipo a costo semanal en MXN (base sin IVA)
@@ -464,6 +509,16 @@ function App({ onLogout } = {}) {
     utilidad_pct: 20,
   });
 
+  // Parámetros SUA editables (para cálculo MO)
+  const [suaParams, setSuaParams] = useState({
+    sd: 315.04,           // Salario Diario registrado IMSS
+    uma: 113.14,          // UMA diario
+    prima_rt: 0.07589,    // Prima Riesgo de Trabajo (7.589%)
+    isn_pct: 0.03,        // ISN (3%)
+    admin_sem: 181.25,    // Admin REPSE semanal
+    colchon_pct: 0.008,   // Colchón seguridad (0.8%)
+  });
+
   // Gastos de levantamiento (viaje previo para cotizar)
   const [levantamiento, setLevantamiento] = useState({
     activo: false,
@@ -551,7 +606,7 @@ function App({ onLogout } = {}) {
     const personalCalc = et.personal.map(p => {
       const esc = ESCENARIOS.find(e => e.id === p.escenario) || ESCENARIOS.find(e => e.id === 0);
       const pagoReal = p.pago_semanal || esc.pago_semanal;
-      const costo = calcCostoPersonaSem(pagoReal);
+      const costo = calcCostoPersonaSem(pagoReal, suaParams);
       return { ...p, esc, costo, totalMO: costo.total * p.cantidad * et.semanas };
     });
     const totalMO = personalCalc.reduce((a, p) => a + p.totalMO, 0);
@@ -581,7 +636,7 @@ function App({ onLogout } = {}) {
   const ivaCostosOpRef = costosOpBase * P.IVA;
 
   // ââ PRORRATEO COSTOS FIJOS ââââââââââââââââââââââââââââââââââââââââââââââ
-  const nominaOficinaAnual = personalOficina.reduce((a, p) => a + costoAnualEmpleado(p.pago_semanal), 0);
+  const nominaOficinaAnual = personalOficina.reduce((a, p) => a + costoAnualEmpleado(p.pago_semanal, suaParams), 0);
   const gastosFijosAnual = gastosFijos.reduce((a, g) => a + g.monto_mensual * 12, 0);
   const totalAnualEmpresa = nominaOficinaAnual + gastosFijosAnual;
   const pctProrrateo = totalSemanasMax / 52;
@@ -1448,7 +1503,7 @@ function App({ onLogout } = {}) {
                     et.personal.map((p, pi) => {
                       const esc = ESCENARIOS.find(e => e.id === p.escenario) || ESCENARIOS.find(e => e.id === 0);
                       const pagoReal = p.pago_semanal || esc.pago_semanal;
-                      const c = calcCostoPersonaSem(pagoReal);
+                      const c = calcCostoPersonaSem(pagoReal, suaParams);
                       return React.createElement("tr", { key: pi },
                         React.createElement("td", null, React.createElement("input", { value: p.puesto, onChange: e => updatePersonalInEtapa(ei, pi, "puesto", e.target.value) })),
                         React.createElement("td", null, React.createElement("input", { type: "number", min: 1, value: p.cantidad, onChange: e => updatePersonalInEtapa(ei, pi, "cantidad", e.target.value) })),
@@ -1718,7 +1773,7 @@ function App({ onLogout } = {}) {
                       React.createElement("td", null, React.createElement("input", { value: p.nombre, onChange: e => updatePersonalOficina(p.id, "nombre", e.target.value) })),
                       React.createElement("td", null, React.createElement("input", { value: p.puesto, onChange: e => updatePersonalOficina(p.id, "puesto", e.target.value) })),
                       React.createElement("td", null, React.createElement("input", { type: "number", min: 0, value: p.pago_semanal, onChange: e => updatePersonalOficina(p.id, "pago_semanal", e.target.value) })),
-                      React.createElement("td", { className: "mono", style: { fontSize: 12 } }, fmtP(costoAnualEmpleado(p.pago_semanal))),
+                      React.createElement("td", { className: "mono", style: { fontSize: 12 } }, fmtP(costoAnualEmpleado(p.pago_semanal, suaParams))),
                       React.createElement("td", null, React.createElement("button", { className: "btn-del", onClick: () => removePersonalOficina(p.id) }, "\u00d7"))
                     )
                   )
@@ -1800,6 +1855,52 @@ function App({ onLogout } = {}) {
                   React.createElement("input", { type: "number", min: 0, max: 50, step: 0.5, value: admin.utilidad_pct,
                     onChange: e => setAdmin({ ...admin, utilidad_pct: Number(e.target.value) }) }),
                   React.createElement("div", { className: "cost-card-note" }, fmtP(utilidadMonto) + " (" + admin.utilidad_pct + "%)")
+                )
+              )
+            ),
+
+            // PARÁMETROS SUA (editables)
+            React.createElement("div", { className: "section", style: { border: "1px solid #93c5fd" } },
+              React.createElement("div", { className: "section-title" }, "Parámetros SUA / IMSS (editables)"),
+              React.createElement("div", { style: { background: "#dbeafe", borderRadius: 7, padding: "10px 14px", marginBottom: 16, fontSize: 12, color: "#1e40af" } },
+                "IMSS se calcula sobre SD registrado ($" + fmt(suaParams.sd) + "/día), NO sobre el pago total. Costo por persona: " + fmtP(calcCostoPersonaSem(5000, suaParams).total) + "/sem con pago de $5,000"
+              ),
+              React.createElement("div", { className: "cost-grid" },
+                React.createElement("div", { className: "cost-card" },
+                  React.createElement("div", { className: "cost-card-title" }, "SD registrado IMSS ($/día)"),
+                  React.createElement("input", { type: "number", min: 0, step: 0.01, value: suaParams.sd,
+                    onChange: e => setSuaParams({ ...suaParams, sd: Number(e.target.value) }) }),
+                  React.createElement("div", { className: "cost-card-note" }, "Default SMG 2025: $315.04")
+                ),
+                React.createElement("div", { className: "cost-card" },
+                  React.createElement("div", { className: "cost-card-title" }, "UMA diario"),
+                  React.createElement("input", { type: "number", min: 0, step: 0.01, value: suaParams.uma,
+                    onChange: e => setSuaParams({ ...suaParams, uma: Number(e.target.value) }) }),
+                  React.createElement("div", { className: "cost-card-note" }, "2025: $113.14")
+                ),
+                React.createElement("div", { className: "cost-card" },
+                  React.createElement("div", { className: "cost-card-title" }, "Prima RT (%)"),
+                  React.createElement("input", { type: "number", min: 0, max: 20, step: 0.001, value: (suaParams.prima_rt * 100).toFixed(3),
+                    onChange: e => setSuaParams({ ...suaParams, prima_rt: Number(e.target.value) / 100 }) }),
+                  React.createElement("div", { className: "cost-card-note" }, "MICSA actual: 7.589%")
+                ),
+                React.createElement("div", { className: "cost-card" },
+                  React.createElement("div", { className: "cost-card-title" }, "ISN (%)"),
+                  React.createElement("input", { type: "number", min: 0, max: 10, step: 0.1, value: (suaParams.isn_pct * 100).toFixed(1),
+                    onChange: e => setSuaParams({ ...suaParams, isn_pct: Number(e.target.value) / 100 }) }),
+                  React.createElement("div", { className: "cost-card-note" }, "Coahuila: 3%")
+                ),
+                React.createElement("div", { className: "cost-card" },
+                  React.createElement("div", { className: "cost-card-title" }, "Admin REPSE ($/sem)"),
+                  React.createElement("input", { type: "number", min: 0, step: 0.25, value: suaParams.admin_sem,
+                    onChange: e => setSuaParams({ ...suaParams, admin_sem: Number(e.target.value) }) }),
+                  React.createElement("div", { className: "cost-card-note" }, "Default: $181.25")
+                ),
+                React.createElement("div", { className: "cost-card" },
+                  React.createElement("div", { className: "cost-card-title" }, "Colchón seguridad (%)"),
+                  React.createElement("input", { type: "number", min: 0, max: 5, step: 0.1, value: (suaParams.colchon_pct * 100).toFixed(1),
+                    onChange: e => setSuaParams({ ...suaParams, colchon_pct: Number(e.target.value) / 100 }) }),
+                  React.createElement("div", { className: "cost-card-note" }, "Default: 0.8%")
                 )
               )
             ),
