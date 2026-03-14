@@ -686,7 +686,12 @@ function App({ onLogout } = {}) {
       const escSel = ESCENARIOS.find(e => e.id === Number(val));
       p[pi] = { ...p[pi], escenario: Number(val), pago_semanal: escSel ? escSel.pago_semanal : p[pi].pago_semanal };
     } else if (field === "pago_semanal") {
-      p[pi] = { ...p[pi], pago_semanal: Number(val) || 0, escenario: 0 };
+      if (val === "" || val === ".") {
+        p[pi] = { ...p[pi], pago_semanal: val };
+      } else {
+        const num = parseFloat(val);
+        p[pi] = { ...p[pi], pago_semanal: isNaN(num) ? "" : (val.endsWith(".") ? val : num), escenario: 0 };
+      }
     } else {
       p[pi] = { ...p[pi], [field]: field === "cantidad" ? Number(val) : val };
     }
@@ -1737,7 +1742,7 @@ function App({ onLogout } = {}) {
                             ESCENARIOS.map(e => React.createElement("option", { key: e.id, value: e.id }, e.label + (e.id !== 0 ? " (" + e.sublabel + ")" : "")))
                           )
                         ),
-                        React.createElement("td", null, React.createElement("input", { type: "number", min: 0, step: 100, value: p.pago_semanal || "", placeholder: "$/sem", onChange: e => updatePersonalInEtapa(ei, pi, "pago_semanal", e.target.value), style: { width: 100, fontFamily: "'DM Mono',monospace", fontSize: 13, color: esc.color } })),
+                        React.createElement("td", null, React.createElement("input", { type: "text", inputMode: "numeric", value: p.pago_semanal === "" ? "" : (p.pago_semanal || ""), placeholder: "$/sem", onChange: e => { const v = e.target.value.replace(/[^0-9.]/g, ""); updatePersonalInEtapa(ei, pi, "pago_semanal", v); }, style: { width: 110, fontFamily: "'DM Mono',monospace", fontSize: 13, color: esc.color, background: "#eff6ff", border: "2px solid var(--accent)", borderRadius: 6, padding: "6px 8px", fontWeight: 700 } })),
                         React.createElement("td", { className: "mono", style: { fontSize: 13 } }, fmtP(c.total)),
                         React.createElement("td", { className: "mono", style: { fontSize: 13, fontWeight: 600 } }, fmtP(c.total * p.cantidad * et.semanas)),
                         React.createElement("td", null,
