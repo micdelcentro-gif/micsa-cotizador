@@ -1168,7 +1168,7 @@ function App({ onLogout } = {}) {
             React.createElement("div", { className: "pv-info" },
               fechaFormal, React.createElement("br"),
               "RFC: MIC2301268S5", React.createElement("br"),
-              "COTIZACIÓN. " + proyecto.cot_numero
+              "COTIZACIÓN No. " + proyecto.cot_numero
             )
           ),
 
@@ -1182,85 +1182,61 @@ function App({ onLogout } = {}) {
                 React.createElement("td", null, proyecto.referencia || "Servicio.")
               ),
               React.createElement("tr", null,
-                React.createElement("td", { className: "pv-label" }, "Dirección"),
+                React.createElement("td", { className: "pv-label" }, "Dirección:"),
                 React.createElement("td", null, proyecto.lugar || "___"),
                 React.createElement("td", { className: "pv-label" }, "Planta:"),
                 React.createElement("td", null, proyecto.planta || "___")
               ),
               React.createElement("tr", null,
-                React.createElement("td", { className: "pv-label" }, "Atención."),
+                React.createElement("td", { className: "pv-label" }, "Atención:"),
                 React.createElement("td", null, proyecto.contacto || "___"),
-                React.createElement("td", { colSpan: 2 }, "")
+                React.createElement("td", { className: "pv-label" }, "Contacto:"),
+                React.createElement("td", null, proyecto.contacto_tel || "___")
               ),
               React.createElement("tr", null,
-                React.createElement("td", { className: "pv-label" }, "Contacto"),
-                React.createElement("td", null, proyecto.contacto_tel || "___"),
-                React.createElement("td", { colSpan: 2 }, "")
-              ),
-              React.createElement("tr", null,
-                React.createElement("td", { className: "pv-label" }, "Correo."),
+                React.createElement("td", { className: "pv-label" }, "Correo:"),
                 React.createElement("td", { colSpan: 3 }, proyecto.correo_contacto || "___")
               )
             )
           ),
 
           // Intro letter
-          React.createElement("p", { style: { fontSize: 10, marginBottom: 8 } }, "Estimado cliente:"),
-          React.createElement("p", { style: { fontSize: 10, lineHeight: 1.5, marginBottom: 12, textAlign: "justify" } }, introCartaFinal),
+          React.createElement("p", { style: { fontSize: 10, marginTop: 12, marginBottom: 8 } }, "Estimado cliente:"),
+          React.createElement("p", { style: { fontSize: 10, lineHeight: 1.5, marginBottom: 16, textAlign: "justify" } }, introCartaFinal),
 
-          // Description
-          React.createElement("p", { style: { fontSize: 10, fontWeight: 700, marginBottom: 6 } }, "DESCRIPCIÓN."),
+          // DESCRIPCION DEL SERVICIO
+          React.createElement("div", { className: "pv-section-title" }, "DESCRIPCIÓN DEL SERVICIO"),
           React.createElement("p", { style: { fontSize: 10, lineHeight: 1.5, marginBottom: 16, textAlign: "justify" } }, descPersonalFinal),
 
           // ââ ALCANCES GENERALES ââ
-          React.createElement("div", { className: "pv-section-title" }, "I. ALCANCES GENERALES"),
+          React.createElement("div", { className: "pv-section-title" }, "ALCANCE GENERAL"),
           alcances.map((a, i) =>
             React.createElement("div", { key: i, className: "pv-alcance" },
-              React.createElement("strong", null, letters[i] + ". "), a
+              React.createElement("span", { style: { fontWeight: 700 } }, "\u2022 "), a
             )
           ),
-          alcanceEspecifico && React.createElement("div", { className: "pv-alcance", style: { marginTop: 8, fontStyle: "italic" } },
-            React.createElement("strong", null, letters[alcances.length] + ". "), alcanceEspecifico
+          alcanceEspecifico && React.createElement("div", { className: "pv-alcance", style: { marginTop: 4, fontStyle: "italic" } },
+            React.createElement("span", { style: { fontWeight: 700 } }, "\u2022 "), alcanceEspecifico
           ),
 
           // ââ PAGE BREAK ââ
           React.createElement("div", { style: { borderTop: "1px dashed #ccc", margin: "20px 0" } }),
 
           // ââ PRECIO ââ
-          React.createElement("div", { className: "pv-section-title" }, "SIENDO NUESTRO PRECIO EL SIGUIENTE"),
-          React.createElement("table", { className: "pv-price-table" },
-            React.createElement("thead", null,
-              React.createElement("tr", null,
-                React.createElement("th", null, "DESCRIPCIÓN"),
-                React.createElement("th", null, "LÍNEA-ESTACIÓN"),
-                React.createElement("th", null, "COSTO")
-              )
-            ),
-            React.createElement("tbody", null,
-              React.createElement("tr", null,
-                React.createElement("td", null, descPrecioFinal),
-                React.createElement("td", { style: { textAlign: "center" } }, proyecto.planta || "PLANTA."),
-                React.createElement("td", { className: "pv-price-amount" },
-                  "$" + fmt(precioFormalSinIVA) + " " + monedaLabel + " MAS IVA"
-                )
-              )
-            )
-          ),
-          React.createElement("div", { className: "pv-bold-center" },
-            "(" + numATexto(precioFormalSinIVA, monedaLabel) + ") MÁS IVA"
-          ),
-
-          // INCLUYE
-          React.createElement("p", { style: { fontSize: 10, fontWeight: 700, marginTop: 12, marginBottom: 6 } }, "LA PRESENTE COTIZACIÓN INCLUYE:"),
+          // EL SERVICIO INCLUYE
+          React.createElement("div", { className: "pv-section-title", style: { marginTop: 16 } }, "EL SERVICIO INCLUYE"),
           incluye.map((item, i) =>
-            React.createElement("p", { key: i, style: { fontSize: 9, lineHeight: 1.5, paddingLeft: 12 } }, item)
+            React.createElement("div", { key: i, className: "pv-alcance" },
+              React.createElement("span", { style: { fontWeight: 700 } }, "\u2022 "), item
+            )
           ),
 
           // EXCLUSIONES
-          React.createElement("p", { style: { fontSize: 10, fontWeight: 700, marginTop: 12, marginBottom: 6 } }, "EXCLUSIÓN:"),
+          React.createElement("div", { className: "pv-section-title", style: { marginTop: 16 } }, "EXCLUSIONES"),
           exclusiones.map((ex, i) =>
-            React.createElement("p", { key: i, style: { fontSize: 9, lineHeight: 1.5, paddingLeft: 12 } },
-              (i + 1) + ".- " + (ex.startsWith("No incluye") ? ex : "No incluye " + ex.charAt(0).toLowerCase() + ex.slice(1))
+            React.createElement("div", { key: i, className: "pv-alcance" },
+              React.createElement("span", { style: { fontWeight: 700 } }, "\u2022 "),
+              ex.startsWith("No incluye") ? ex : "No incluye " + ex.charAt(0).toLowerCase() + ex.slice(1)
             )
           ),
 
@@ -1268,64 +1244,108 @@ function App({ onLogout } = {}) {
           React.createElement("div", { style: { borderTop: "1px dashed #ccc", margin: "20px 0" } }),
 
           // ââ NOTAS LEGALES ââ
-          React.createElement("div", { className: "pv-section-title" }, "NOTA."),
-          React.createElement("p", { className: "pv-nota" },
-            "El uso y funcionamiento del equipo de montaje de MICSA pueden causar daños a las superficies de suelo y/o estructuras de soporte. Por lo tanto, es responsabilidad del cliente asegurar que los pisos y/o estructuras son capaces de soportar los equipos y las cargas en el proceso."
+          // CONDICIONES OPERATIVAS
+          React.createElement("div", { className: "pv-section-title" }, "CONDICIONES OPERATIVAS"),
+          React.createElement("p", { style: { fontSize: 9, lineHeight: 1.5, textAlign: "justify", marginBottom: 4 } },
+            "Horario considerado: lunes a sábado de 8:00 a 18:00 hrs. Cualquier horario extraordinario al estipulado y actividades en día domingo tienen un costo adicional, lo cual se debe solicitar previamente."
           ),
-          React.createElement("p", { className: "pv-nota" },
-            "El cliente asume toda la responsabilidad y el riesgo de cualquier daño que pueda ocurrir al centro de destino; Pavimento, pasillos, pisos y cualquier otra superficie incluida estructuras de soportes causados por cualquier equipo proporcionado por MICSA."
+          React.createElement("p", { style: { fontSize: 9, lineHeight: 1.5, textAlign: "justify", marginBottom: 12 } },
+            "Recepción del área y equipos libres de producción por parte del cliente. Coordinación técnica con un representante del cliente para aclaraciones operativas y liberaciones de trabajo."
           ),
-          React.createElement("p", { style: { fontSize: 5, fontWeight: 400, fontStyle: "normal", textAlign: "justify", margin: "1px 0", color: "#bbb", lineHeight: 1.05 } },
-            "MICSA EXPRESAMENTE RECHAZA Y NO ASUME NINGUNA RESPONSABILIDAD, Y/O RIESGO DE CUALQUIER DAÑO QUE PUEDA OCURRIR A CUALQUIERA DE LAS SUPERFICIES."
-          ),
+
+          // CONDICIONES IMPORTANTES
+          React.createElement("div", { className: "pv-section-title" }, "CONDICIONES IMPORTANTES"),
           [
-            "En caso de que se nos originen tiempos muertos, maniobras dobles o en falso por: suspensión de actividades, interferencias en el área, falta de equipos o falta de supervisión por parte de CLIENTE se deberán cuantificar los tiempos para ser costeados de forma adicional, así mismo el tiempo de entrega se vuelve indefinido.",
-            "La presente cotización ha sido generada en base un plan de actividades para realizarse de forma continua, cualquier aplazamiento o reprogramación de las actividades se debe informar inmediatamente para determinar los costos adicionales que este implique.",
-            "Horario considerado lunes a sábado de 8:00 a 18:00 horario extraordinario al estipulado y actividades en día domingo tiene un costo adicional lo cual se debe solicitar previamente.",
-            "Cualquier actividad no contemplada en esta propuesta serán consideradas como adicional.",
+            "En caso de que se nos originen tiempos muertos, maniobras dobles o en falso por: suspensión de actividades, interferencias en el área, falta de equipos o falta de supervisión por parte del CLIENTE, se deberán cuantificar los tiempos para ser costeados de forma adicional, así mismo el tiempo de entrega se vuelve indefinido.",
+            "La presente cotización ha sido generada en base a un plan de actividades para realizarse de forma continua; cualquier aplazamiento o reprogramación de las actividades se debe informar inmediatamente para determinar los costos adicionales que esto implique.",
+            "Cualquier actividad no contemplada en esta propuesta será considerada como adicional.",
             "En caso de que sea requerido asistir a cursos de inducción, capacitaciones o exámenes médicos por parte de la empresa cliente antes del inicio del proyecto, el tiempo invertido, así como traslados, viáticos y gastos relacionados, no están considerados en esta cotización y serán cotizados como costo adicional.",
             "En caso de retraso en el pago del monto correspondiente a esta cotización, se aplicará un interés moratorio del 5% semanal sobre el saldo insoluto.",
             "La presente cotización deberá formar parte integral del pedido, orden de compra o contrato que resulte de la transacción.",
           ].map((nota, i) =>
-            React.createElement("p", { key: i, style: { fontSize: 8, fontWeight: 700, lineHeight: 1.3, color: "#111", marginBottom: 3, textAlign: "justify" } },
+            React.createElement("p", { key: i, style: { fontSize: 8.5, lineHeight: 1.4, color: "#111", marginBottom: 4, textAlign: "justify" } },
               React.createElement("strong", null, (i + 1) + ".- "), nota
             )
+          ),
+
+          // SEGURO
+          React.createElement("p", { style: { fontSize: 9, fontWeight: 700, marginTop: 12, marginBottom: 4 } },
+            "SEGURO DE RESPONSABILIDAD CIVIL"
+          ),
+          React.createElement("p", { style: { fontSize: 9, lineHeight: 1.4, textAlign: "justify", marginBottom: 4 } },
+            "MICSA cuenta con Seguro de Responsabilidad Civil vigente con cobertura de $" + fmt(admin.seguro_rc_cobertura_usd) + " USD durante toda la ejecución del servicio."
+          ),
+          React.createElement("p", { style: { fontSize: 8, lineHeight: 1.3, color: "#555", textAlign: "justify", marginBottom: 4 } },
+            "El uso y funcionamiento del equipo de montaje de MICSA pueden causar daños a las superficies de suelo y/o estructuras de soporte. Es responsabilidad del cliente asegurar que los pisos y/o estructuras son capaces de soportar los equipos y las cargas en el proceso."
+          ),
+          React.createElement("p", { style: { fontSize: 5, color: "#bbb", textAlign: "justify", marginBottom: 12 } },
+            "MICSA EXPRESAMENTE RECHAZA Y NO ASUME NINGUNA RESPONSABILIDAD, Y/O RIESGO DE CUALQUIER DAÑO QUE PUEDA OCURRIR A CUALQUIERA DE LAS SUPERFICIES."
           ),
 
           // ââ PAGE BREAK ââ
           React.createElement("div", { style: { borderTop: "1px dashed #ccc", margin: "20px 0" } }),
 
-          // FORMAS DE PAGO
-          React.createElement("div", { className: "pv-section-title" }, "FORMAS DE PAGO:"),
+          // PRECIO DEL SERVICIO
+          React.createElement("div", { className: "pv-section-title" }, "PRECIO DEL SERVICIO"),
+          React.createElement("div", { style: { border: "2px solid #1e3a5f", borderRadius: 8, padding: "16px 20px", margin: "8px 0 16px", background: "#f8fafc" } },
+            React.createElement("div", { style: { display: "flex", justifyContent: "space-between", fontSize: 11, marginBottom: 6 } },
+              React.createElement("span", null, descPrecioFinal),
+              React.createElement("span", { style: { fontWeight: 700, fontFamily: "'DM Mono',monospace" } }, "$" + fmt(precioFormalSinIVA) + " " + monedaLabel)
+            ),
+            React.createElement("div", { style: { display: "flex", justifyContent: "space-between", fontSize: 11, marginBottom: 6, color: "#555" } },
+              React.createElement("span", null, "IVA (16%)"),
+              React.createElement("span", { style: { fontFamily: "'DM Mono',monospace" } }, "$" + fmt(Math.round(precioFormalSinIVA * P.IVA * 100) / 100) + " " + monedaLabel)
+            ),
+            React.createElement("div", { style: { borderTop: "2px solid #1e3a5f", paddingTop: 8, display: "flex", justifyContent: "space-between", fontSize: 13, fontWeight: 700 } },
+              React.createElement("span", null, "TOTAL"),
+              React.createElement("span", { style: { fontFamily: "'DM Mono',monospace", color: "#1e3a5f" } }, "$" + fmt(Math.round(precioFormalSinIVA * (1 + P.IVA) * 100) / 100) + " " + monedaLabel)
+            )
+          ),
+          React.createElement("p", { style: { fontSize: 9, textAlign: "center", fontStyle: "italic", color: "#555", marginBottom: 16 } },
+            "(" + numATexto(precioFormalSinIVA, monedaLabel) + " más IVA)"
+          ),
+
+          // CONDICIONES DE PAGO
+          React.createElement("div", { className: "pv-section-title" }, "CONDICIONES DE PAGO"),
           React.createElement("div", { style: { fontSize: 10, lineHeight: 1.6 } },
-            React.createElement("p", { style: { marginBottom: 8 } },
+            React.createElement("p", { style: { marginBottom: 6 } },
               React.createElement("strong", null, "1. "),
               "La presente cotización está basada en la información verbal y/o escrita proporcionada por ",
               React.createElement("strong", null, proyecto.cliente || "[CLIENTE]"),
               ", obtenida en el recorrido realizado con su supervisión para el volumen total indicado, para ejecutarse de forma continua en un solo evento."
             ),
-            React.createElement("p", { style: { marginBottom: 8 } },
-              React.createElement("strong", null, "2. "), "Forma de pago:", React.createElement("br"),
-              "    " + pago.anticipo_pct + "% de anticipo. " + pago.contraentrega_pct + "% al finalizar proyecto."
+            React.createElement("p", { style: { marginBottom: 6 } },
+              React.createElement("strong", null, "2. "), "Forma de pago: ",
+              pago.anticipo_pct + "% de anticipo — " + pago.contraentrega_pct + "% al finalizar proyecto."
             ),
-            React.createElement("p", { style: { marginBottom: 8 } },
-              React.createElement("strong", null, "3. "), "Tiempo de entrega: Se está considerando elaborar un plan de actividades en conjunto con el cliente."
+            React.createElement("p", { style: { marginBottom: 6 } },
+              React.createElement("strong", null, "3. "), "Tiempo de entrega: Se elaborará un plan de actividades en conjunto con el cliente."
             ),
-            React.createElement("p", { style: { marginBottom: 8 } },
+            React.createElement("p", { style: { marginBottom: 6 } },
               React.createElement("strong", null, "4. "), "Se solicitan " + pago.anticipacion_dias + " días de anticipación a partir de la OC."
-            ),
-            React.createElement("p", { style: { marginBottom: 20 } },
-              React.createElement("strong", null, "5. "), "Vigencia: " + pago.vigencia_dias + " días."
             )
           ),
 
-          React.createElement("p", { style: { textAlign: "center", marginTop: 36, fontSize: 10 } }, "Atentamente."),
-          React.createElement("p", { style: { textAlign: "center", fontSize: 10, fontWeight: 700, marginTop: 16 } }, "TU SOCIO ESTRATÉGICO EN INSTALACIÓN DE MAQUINARIA"),
+          // VIGENCIA
+          React.createElement("div", { className: "pv-section-title", style: { marginTop: 12 } }, "VIGENCIA"),
+          React.createElement("p", { style: { fontSize: 10, marginBottom: 20 } },
+            "La presente cotización tiene una vigencia de " + pago.vigencia_dias + " días a partir de la fecha de emisión."
+          ),
+
+          // ATENTAMENTE
+          React.createElement("div", { style: { textAlign: "center", marginTop: 36 } },
+            React.createElement("p", { style: { fontSize: 11, fontWeight: 700, marginBottom: 4 } }, "ATENTAMENTE"),
+            React.createElement("div", { style: { width: 200, borderTop: "1px solid #333", margin: "24px auto 8px" } }),
+            React.createElement("p", { style: { fontSize: 10, fontWeight: 700, marginBottom: 2 } }, "Ing. Jorge González"),
+            React.createElement("p", { style: { fontSize: 9, color: "#555", marginBottom: 2 } }, "Director de Operaciones"),
+            React.createElement("p", { style: { fontSize: 9, color: "#555", marginBottom: 2 } }, "Tel: 866-176-6621"),
+            React.createElement("p", { style: { fontSize: 9, color: "#555" } }, "Jgonzalez@micsadelcentro.com")
+          ),
 
           // Footer (plantilla oficial Grupo MICSA)
           React.createElement("div", { className: "pv-footer" },
-            React.createElement("span", null, "Guerrero Sur #108 Monclova Coahuila."),
-            React.createElement("span", null, "Contacto: 866-176-6621"),
+            React.createElement("span", null, "Guerrero Sur #108 Monclova Coahuila"),
+            React.createElement("span", null, "Tel: 866-176-6621"),
             React.createElement("span", null, "micdelcentro@gmail.com"),
             React.createElement("span", null, "Jgonzalez@micsadelcentro.com")
           )
