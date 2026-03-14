@@ -454,6 +454,7 @@ function App({ onLogout } = {}) {
   const [saved, setSaved] = useState(false);
   const [historial, setHistorial] = useState(historialGlobal);
   const [showFormal, setShowFormal] = useState(false);
+  const [showDesglose, setShowDesglose] = useState(false);
 
   // Step 1: Datos + Alcance
   const [proyecto, setProyecto] = useState({
@@ -758,6 +759,229 @@ function App({ onLogout } = {}) {
   const descPersonalFinal = descripcionPersonal || autoDescPersonal;
   const introCartaFinal = introCartaPersonalizada || ("En respuesta a su amable solicitud, le presentamos nuestro presupuesto por los servicios de " + (proyecto.descripcion || proyecto.actividad || "[descripción del servicio]") + " en planta " + (proyecto.planta || proyecto.cliente) + " " + (proyecto.lugar || "") + ".");
   const descPrecioFinal = descripcionPrecio || proyecto.actividad || proyecto.nombre || "SERVICIO";
+
+  // ══════ DESGLOSE DETALLADO (estilo FORZA STEEL) ══════
+  if (showDesglose) {
+    const etCalc = etapas.map(calcEtapa);
+    const totalPersonas = etCalc.reduce((a, e) => Math.max(a, e.personas), 0);
+    const costoEjemplo = calcCostoPersonaSem(etCalc[0]?.personalCalc[0]?.pago_semanal || 5000, suaParams);
+    const pagoEjemplo = costoEjemplo.pago_semanal;
+
+    const dRow = (label, val, bold, bg) => React.createElement("div", { style: { display: "flex", justifyContent: "space-between", padding: "4px 0", borderBottom: "1px solid #e5e5e5", fontWeight: bold ? 700 : 400, background: bg || "transparent", margin: bg ? "0 -20px" : 0, padding: bg ? "6px 20px" : "4px 0" } },
+      React.createElement("span", null, label),
+      React.createElement("span", { style: { fontFamily: "'DM Mono',monospace" } }, typeof val === "number" ? fmtP(val) : val)
+    );
+    const dSection = (title) => React.createElement("div", { style: { fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 1, borderBottom: "2px solid #111", paddingBottom: 4, marginTop: 20, marginBottom: 8 } }, title);
+
+    return React.createElement("div", { className: "cot-gen" },
+      // TOOLBAR
+      React.createElement("div", { style: { position: "fixed", top: 0, left: 0, right: 0, background: "#1a1a2e", color: "white", padding: "10px 24px", display: "flex", justifyContent: "space-between", alignItems: "center", zIndex: 100 }, className: "no-print" },
+        React.createElement("button", { onClick: () => setShowDesglose(false), style: { background: "transparent", border: "1px solid white", color: "white", padding: "6px 16px", borderRadius: 6, cursor: "pointer", fontFamily: "inherit", fontSize: 13 } }, "\u2190 Volver al cotizador"),
+        React.createElement("span", { style: { fontWeight: 700, letterSpacing: 1 } }, "DESGLOSE DETALLADO \u2014 " + (proyecto.nombre || "Proyecto")),
+        React.createElement("button", { onClick: () => window.print(), style: { background: "#0066ff", border: "none", color: "white", padding: "8px 20px", borderRadius: 6, cursor: "pointer", fontWeight: 700, fontFamily: "inherit", fontSize: 13 } }, "IMPRIMIR / PDF")
+      ),
+
+      // CONTENIDO
+      React.createElement("div", { style: { maxWidth: 750, margin: "70px auto 40px", background: "white", padding: "40px 48px", boxShadow: "0 2px 20px rgba(0,0,0,0.1)", fontSize: 11, lineHeight: 1.5, color: "#111" } },
+
+        // HEADER
+        React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 } },
+          React.createElement("img", { src: MICSA_LOGO, style: { width: 200 }, alt: "MICSA" }),
+          React.createElement("div", { style: { textAlign: "right", fontSize: 9, color: "#666", lineHeight: 1.6 } },
+            "Guerrero sur #108 colonia ZC", React.createElement("br"),
+            "Monclova Coahuila CP-25700", React.createElement("br"),
+            "Cel: 866-176-6621", React.createElement("br"),
+            "micdelcentro@gmail.com", React.createElement("br"),
+            "Jgonzalez@micsadelcentro.com"
+          )
+        ),
+
+        // TÍTULO
+        React.createElement("div", { style: { background: "#1a1a2e", color: "white", padding: "12px 20px", fontWeight: 700, fontSize: 13, letterSpacing: 1, marginBottom: 16 } },
+          "DESGLOSE DETALLADO \u2014 (" + totalSemanasMax + " semana" + (totalSemanasMax !== 1 ? "s" : "") + ")"
+        ),
+
+        // INFO PROYECTO
+        React.createElement("div", { style: { fontSize: 11, marginBottom: 16, lineHeight: 1.8 } },
+          React.createElement("div", null, React.createElement("strong", null, "Proyecto: "), proyecto.nombre || "___"),
+          proyecto.cliente && React.createElement("div", null, React.createElement("strong", null, "Cliente: "), proyecto.cliente),
+          React.createElement("div", null, React.createElement("strong", null, "Personal: "), totalPersonas + " personas (" + etCalc[0]?.personalCalc.map(p => p.cantidad + " " + p.puesto).join(", ") + ")"),
+          React.createElement("div", null, React.createElement("strong", null, "Jornada: "), etapas[0]?.jornada + " horas diarias"),
+          React.createElement("div", null, React.createElement("strong", null, "Frente de trabajo: "), "Único")
+        ),
+
+        // 1) MANO DE OBRA
+        dSection("1) MANO DE OBRA (DETALLE IMSS + PROVISIONES + ADMIN)"),
+        React.createElement("div", { style: { fontSize: 10, marginBottom: 8 } },
+          React.createElement("strong", null, "SD registrado IMSS: "), "$" + fmt(suaParams.sd) + "/día",
+          React.createElement("br"),
+          React.createElement("strong", null, "Pago al trabajador: "), "$" + fmt(pagoEjemplo) + " semanal"
+        ),
+
+        // 1.1 Costo semanal por persona
+        React.createElement("div", { style: { fontWeight: 600, fontSize: 11, marginTop: 12, marginBottom: 6 } }, "1.1 Costo semanal por persona (desglose)"),
+        dRow("Pago al trabajador (sueldo + bono)", costoEjemplo.pago_semanal),
+        dRow("IMSS patronal", costoEjemplo.imss_patronal),
+        dRow("RCV + INFONAVIT", costoEjemplo.rcv_infonavit),
+        dRow("Aguinaldo (provisión)", costoEjemplo.aguinaldo_prov),
+        dRow("Vacaciones + prima (provisión)", costoEjemplo.vacaciones_prov),
+        dRow("ISN (" + (suaParams.isn_pct * 100) + "%)", costoEjemplo.isn),
+        dRow("Administración REPSE", costoEjemplo.admin),
+        dRow("Cuotas obreras (absorbe patrón)", costoEjemplo.cuotas_obreras),
+        dRow("Colchón seguridad", costoEjemplo.colchon),
+        dRow("TOTAL semanal por persona", costoEjemplo.total, true, "#f0f0f0"),
+
+        // 1.2 por etapa
+        etCalc.map((et, ei) =>
+          React.createElement("div", { key: ei },
+            React.createElement("div", { style: { fontWeight: 600, fontSize: 11, marginTop: 16, marginBottom: 6 } }, "1." + (ei + 2) + " Mano de obra " + et.nombre),
+            React.createElement("div", { style: { fontSize: 10, marginBottom: 6 } },
+              "Personas-semana: " + et.personas + " personas × " + et.semanas + " semanas = " + (et.personas * et.semanas) + " personas-semana"
+            ),
+            et.personalCalc.map((p, pi) => {
+              const c = p.costo;
+              return React.createElement("div", { key: pi, style: { marginBottom: 4, fontSize: 10 } },
+                React.createElement("span", { style: { fontWeight: 600 } }, p.cantidad + "× " + p.puesto),
+                " \u2014 $" + fmt(p.pago_semanal || c.pago_semanal) + "/sem \u2192 $" + fmt(c.total) + "/sem × " + p.cantidad + " × " + et.semanas + " sem = ",
+                React.createElement("strong", null, fmtP(p.totalMO))
+              );
+            }),
+            dRow("TOTAL MANO DE OBRA " + et.nombre.toUpperCase(), et.totalMO, true, "#e8f4e8")
+          )
+        ),
+
+        totalMOGlobal !== etCalc[0]?.totalMO && dRow("TOTAL MANO DE OBRA (todas las etapas)", totalMOGlobal, true, "#d4edda"),
+
+        // 2) VIÁTICOS
+        dSection("2) VIÁTICOS"),
+        React.createElement("div", { style: { fontSize: 10, marginBottom: 4 } },
+          "$" + fmt(costos.viaticos_persona_sem) + " por persona por semana"
+        ),
+        React.createElement("div", { style: { fontSize: 10, marginBottom: 4 } },
+          totalPersonas + " × $" + fmt(costos.viaticos_persona_sem) + " × " + totalSemanasMax + " = ",
+          React.createElement("strong", null, fmtP(totalViaticos) + " MXN")
+        ),
+
+        // 3) HOSPEDAJE
+        dSection("3) HOSPEDAJE (HABITACIÓN DOBLE)"),
+        React.createElement("div", { style: { fontSize: 10, lineHeight: 1.8 } },
+          React.createElement("div", null, React.createElement("strong", null, "Costo: "), "$" + fmt(costos.hotel_noche) + " por noche por habitación doble"),
+          React.createElement("div", null, React.createElement("strong", null, "Habitaciones: "), Math.ceil(totalPersonas / costos.personas_por_hab) + " (" + totalPersonas + " personas / " + costos.personas_por_hab + ")"),
+          React.createElement("div", null, React.createElement("strong", null, "Noches: "), "7 por semana"),
+          React.createElement("div", null, "$" + fmt(costos.hotel_noche) + " × 7 × " + Math.ceil(totalPersonas / costos.personas_por_hab) + " × " + totalSemanasMax + " = ", React.createElement("strong", null, fmtP(totalHospedaje) + " MXN"))
+        ),
+
+        // 4-8) COSTOS DIRECTOS
+        dSection("4) TRASLADOS / TRANSPORTE PERSONAL"),
+        dRow("Traslados", costos.traslados, true),
+
+        dSection("5) EPP"),
+        dRow("EPP", costos.epp, true),
+
+        dSection("6) DC3"),
+        dRow("Constancias DC3", costos.dc3, true),
+
+        dSection("7) EXAMEN MÉDICO / ANTIDOPING"),
+        dRow("Examen médico", costos.examen_medico, true),
+
+        dSection("8) HERRAMIENTA (USO Y DESGASTE)"),
+        dRow("Herramienta", costos.herramienta, true),
+
+        // 9) ADMIN
+        dSection("9) ADMINISTRACIÓN DEL PROYECTO (DOCUMENTOS / PERMISOS / ALTAS / HSE) " + admin.admin_pct + "%"),
+        dRow("Administración " + admin.admin_pct + "%", adminMonto, true),
+
+        // 10) COMISIÓN
+        dSection("10) COMISIÓN CLIENTE"),
+        dRow("Comisión cliente", admin.comision_cliente, true),
+
+        // 11) EQUIPOS
+        equipos.length > 0 && dSection("11) EQUIPOS (Aplica flete + IVA)"),
+        equipos.length > 0 && equipos.map((eq, i) => {
+          const semEq = eq.semanas || totalSemanasMax;
+          const semMXN = equipoSemanalMXN(eq);
+          return React.createElement("div", { key: i, style: { fontSize: 10, marginBottom: 4 } },
+            eq.cantidad + " " + eq.nombre + " (" + semEq + " semana" + (semEq > 1 ? "s" : "") + ") — ",
+            React.createElement("strong", null, fmtP(semMXN * eq.cantidad * semEq) + " MXN")
+          );
+        }),
+        totalEquiposBase > 0 && dRow("Total equipos", totalEquiposBase, true),
+
+        // SEGURO RC
+        dSection("SEGURO DE RESPONSABILIDAD CIVIL"),
+        React.createElement("div", { style: { fontSize: 10 } },
+          "Cobertura de $" + fmt(admin.seguro_rc_cobertura_usd) + " USD — Costo del seguro: ",
+          React.createElement("strong", null, fmtP(admin.seguro_rc_costo))
+        ),
+
+        // LEVANTAMIENTO
+        levantamiento.activo && totalLevantamiento > 0 && dSection("GASTOS DE LEVANTAMIENTO"),
+        levantamiento.activo && totalLevantamiento > 0 && React.createElement("div", { style: { fontSize: 10 } },
+          levantamiento.hospedaje > 0 && React.createElement("div", null, "Hospedaje: " + fmtP(levantamiento.hospedaje)),
+          levantamiento.comida > 0 && React.createElement("div", null, "Comida: " + fmtP(levantamiento.comida)),
+          levantamiento.combustible > 0 && React.createElement("div", null, "Combustible: " + fmtP(levantamiento.combustible)),
+          levantamiento.casetas > 0 && React.createElement("div", null, "Casetas: " + fmtP(levantamiento.casetas)),
+          levantamiento.otros > 0 && React.createElement("div", null, "Otros: " + fmtP(levantamiento.otros)),
+          levantamiento.notas && React.createElement("div", { style: { fontStyle: "italic", color: "#666" } }, levantamiento.notas)
+        ),
+        levantamiento.activo && totalLevantamiento > 0 && dRow("Total levantamiento", totalLevantamiento, true),
+
+        // PRORRATEO
+        prorrateoActivo && montoProrrateo > 0 && dSection("PRORRATEO COSTOS FIJOS EMPRESA (" + (pctProrrateo * 100).toFixed(1) + "% anual ÷ " + proyectosActivos + " proy)"),
+        prorrateoActivo && montoProrrateo > 0 && dRow("Prorrateo", montoProrrateo, true, "#fef9c3"),
+
+        // ═══ RESUMEN ═══
+        React.createElement("div", { style: { marginTop: 30, borderTop: "3px solid #111", paddingTop: 12 } },
+          React.createElement("div", { style: { fontWeight: 700, fontSize: 14, letterSpacing: 1, marginBottom: 12 } }, "RESUMEN \u2014 (SIN UTILIDAD)"),
+
+          dRow("Mano de obra", totalMOGlobal),
+          dRow("Viáticos", totalViaticos),
+          dRow("Hospedaje", totalHospedaje),
+          dRow("Traslados", costos.traslados),
+          dRow("EPP", costos.epp),
+          dRow("DC3", costos.dc3),
+          dRow("Examen Médico", costos.examen_medico),
+          dRow("Herramienta", costos.herramienta),
+          totalEquiposBase > 0 && dRow("Equipos", totalEquiposBase),
+          dRow("Administración proyecto", adminMonto),
+          dRow("Comisión Cliente", admin.comision_cliente),
+          dRow("Seguro RC", admin.seguro_rc_costo),
+          levantamiento.activo && totalLevantamiento > 0 && dRow("Levantamiento", totalLevantamiento),
+          prorrateoActivo && montoProrrateo > 0 && dRow("Prorrateo costos fijos", montoProrrateo),
+
+          React.createElement("div", { style: { background: "#111", color: "white", padding: "10px 20px", margin: "12px -20px 0", display: "flex", justifyContent: "space-between", fontWeight: 700, fontSize: 13 } },
+            React.createElement("span", null, "TOTAL COSTO REAL"),
+            React.createElement("span", { style: { fontFamily: "'DM Mono',monospace" } }, fmtP(costoReal) + " MXN")
+          ),
+
+          React.createElement("div", { style: { marginTop: 16, padding: "12px 0", borderBottom: "1px solid #ccc" } },
+            React.createElement("div", { style: { display: "flex", justifyContent: "space-between", fontSize: 12, marginBottom: 4 } },
+              React.createElement("span", null, "UTILIDAD (" + admin.utilidad_pct + "%)"),
+              React.createElement("span", { style: { fontFamily: "'DM Mono',monospace" } }, fmtP(utilidadMonto) + " MXN")
+            )
+          ),
+
+          React.createElement("div", { style: { background: "#0066ff", color: "white", padding: "14px 20px", margin: "12px -20px 0", display: "flex", justifyContent: "space-between", fontWeight: 700, fontSize: 14 } },
+            React.createElement("span", null, "PRECIO DE VENTA (ANTES DE IVA)"),
+            React.createElement("span", { style: { fontFamily: "'DM Mono',monospace", fontSize: 16 } }, fmtP(totalSinIVA) + " MXN")
+          ),
+
+          React.createElement("div", { style: { background: "#1e40af", color: "white", padding: "12px 20px", margin: "0 -20px", display: "flex", justifyContent: "space-between", fontWeight: 700, fontSize: 13 } },
+            React.createElement("span", null, "PRECIO EN DÓLAR (" + fmt(P.USD_MXN) + " MXN)"),
+            React.createElement("span", { style: { fontFamily: "'DM Mono',monospace", fontSize: 15 } }, "$" + fmt(totalSinIVA / P.USD_MXN) + " USD")
+          )
+        ),
+
+        // FOOTER
+        React.createElement("div", { style: { background: "#1a1a2e", color: "white", padding: "10px 20px", margin: "30px -48px -40px", display: "flex", justifyContent: "space-between", fontSize: 8, flexWrap: "wrap", gap: 4 } },
+          React.createElement("span", null, "Guerrero Sur #108 Monclova Coahuila."),
+          React.createElement("span", null, "Contacto: 866-176-6621"),
+          React.createElement("span", null, "micdelcentro@gmail.com"),
+          React.createElement("span", null, "Jgonzalez@micsadelcentro.com")
+        )
+      )
+    );
+  }
 
   if (showFormal) {
     return React.createElement("div", { className: "cot-gen" },
@@ -2139,8 +2363,8 @@ function App({ onLogout } = {}) {
             React.createElement("div", { className: "btn-row no-print" },
               React.createElement("button", { className: "btn btn-secondary", onClick: () => setStep(4) }, "\u2190 Atrás"),
               React.createElement("button", { className: "btn btn-green", onClick: guardar }, "\uD83D\uDCBE Guardar"),
-              React.createElement("button", { className: "btn btn-primary", onClick: () => setShowFormal(true) }, "\uD83D\uDCC4 Cotización formal (PDF)"),
-              React.createElement("button", { className: "btn btn-ghost", onClick: () => window.print() }, "\uD83D\uDDA8 Imprimir desglose")
+              React.createElement("button", { className: "btn btn-primary", onClick: () => setShowFormal(true) }, "\uD83D\uDCC4 Cotización formal"),
+              React.createElement("button", { className: "btn btn-secondary", style: { background: "#1e40af", color: "white", borderColor: "#1e40af" }, onClick: () => setShowDesglose(true) }, "\uD83D\uDCCB Desglose detallado")
             )
           )
         )
