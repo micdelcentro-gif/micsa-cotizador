@@ -464,6 +464,18 @@ function App({ onLogout } = {}) {
     utilidad_pct: 20,
   });
 
+  // Gastos de levantamiento (viaje previo para cotizar)
+  const [levantamiento, setLevantamiento] = useState({
+    activo: false,
+    hospedaje: 0,
+    comida: 0,
+    combustible: 0,
+    casetas: 0,
+    otros: 0,
+    notas: "",
+  });
+  const totalLevantamiento = levantamiento.activo ? (levantamiento.hospedaje + levantamiento.comida + levantamiento.combustible + levantamiento.casetas + levantamiento.otros) : 0;
+
   // âââ PRORRATEO DE COSTOS FIJOS ANUALES ââââââââââââââââââââââââââââââââ
   const [personalOficina, setPersonalOficina] = useState([
     { id: 1, nombre: "Armando", puesto: "Administración", pago_semanal: 3000 },
@@ -575,12 +587,12 @@ function App({ onLogout } = {}) {
   const pctProrrateo = totalSemanasMax / 52;
   const montoProrrateo = prorrateoActivo ? (totalAnualEmpresa * pctProrrateo) / proyectosActivos : 0;
 
-  // Subtotal directo = MO + costos op + equipos + seguro + prorrateo
-  const subtotalDirecto = totalMOGlobal + costosOpBase + totalEquiposBase + admin.seguro_rc_costo + montoProrrateo;
+  // Subtotal directo = MO + costos op + equipos + seguro + comisión + levantamiento + prorrateo (FORZA STEEL logic)
+  const subtotalDirecto = totalMOGlobal + costosOpBase + totalEquiposBase + admin.seguro_rc_costo + admin.comision_cliente + totalLevantamiento + montoProrrateo;
   const adminMonto = subtotalDirecto * (admin.admin_pct / 100);
-  const totalConAdmin = subtotalDirecto + adminMonto + admin.comision_cliente;
-  const utilidadMonto = totalConAdmin * (admin.utilidad_pct / 100);
-  const totalSinIVA = totalConAdmin + utilidadMonto;
+  const costoReal = subtotalDirecto + adminMonto;
+  const utilidadMonto = costoReal * (admin.utilidad_pct / 100);
+  const totalSinIVA = costoReal + utilidadMonto;
   // IVA 16% sobre el subtotal facturable completo (SAT: IVA sobre total del servicio)
   const ivaTotal = totalSinIVA * P.IVA;
   const totalPropuestaMXN = totalSinIVA + ivaTotal;
@@ -1526,10 +1538,47 @@ function App({ onLogout } = {}) {
               )
             ),
 
+            // GASTOS DE LEVANTAMIENTO
+            React.createElement("div", { className: "section", style: { border: levantamiento.activo ? "2px solid var(--accent)" : undefined } },
+              React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: levantamiento.activo ? 16 : 0 } },
+                React.createElement("div", { className: "section-title", style: { marginBottom: 0 } }, "Gastos de levantamiento (viaje previo)"),
+                React.createElement("div", { className: "toggle-row" },
+                  React.createElement("span", { style: { fontSize: 12, color: "var(--muted)" } }, levantamiento.activo ? "Activo" : "No aplica"),
+                  React.createElement("div", {
+                    className: "toggle " + (levantamiento.activo ? "on" : ""),
+                    onClick: () => setLevantamiento({ ...levantamiento, activo: !levantamiento.activo })
+                  })
+                )
+              ),
+              levantamiento.activo && React.createElement("div", { className: "cost-grid" },
+                [
+                  ["hospedaje", "Hospedaje"],
+                  ["comida", "Comida / Viáticos"],
+                  ["combustible", "Combustible"],
+                  ["casetas", "Casetas"],
+                  ["otros", "Otros gastos"],
+                ].map(([key, label]) =>
+                  React.createElement("div", { key, className: "cost-card" },
+                    React.createElement("div", { className: "cost-card-title" }, label),
+                    React.createElement("input", { type: "number", min: 0, value: levantamiento[key],
+                      onChange: e => setLevantamiento({ ...levantamiento, [key]: Number(e.target.value) }) })
+                  )
+                )
+              ),
+              levantamiento.activo && React.createElement("div", { style: { marginTop: 8 } },
+                React.createElement("div", { className: "cost-card-title" }, "Notas"),
+                React.createElement("input", { type: "text", value: levantamiento.notas, placeholder: "Ej: Viaje Monclova-Monterrey para levantamiento en planta",
+                  onChange: e => setLevantamiento({ ...levantamiento, notas: e.target.value }),
+                  style: { width: "100%", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 7, padding: "9px 12px", color: "var(--text)", fontFamily: "inherit", fontSize: 14 } })
+              ),
+              levantamiento.activo && totalLevantamiento > 0 && React.createElement("div", { style: { display: "flex", justifyContent: "flex-end", marginTop: 12, fontSize: 14, fontWeight: 700 } },
+                "Total levantamiento: ", React.createElement("span", { className: "mono", style: { marginLeft: 8, color: "var(--accent)" } }, fmtP(totalLevantamiento))
+              )
+            ),
+
             React.createElement("div", { style: { display: "flex", justifyContent: "flex-end", gap: 24, fontSize: 13, padding: "8px 0" } },
               React.createElement("span", { style: { color: "var(--muted)" } }, "Costos op. base: ", React.createElement("span", { className: "mono" }, fmtP(costosOpBase))),
-              React.createElement("span", { style: { color: "var(--blue)", fontWeight: 600 } }, "IVA ref: ", React.createElement("span", { className: "mono" }, fmtP(ivaCostosOpRef))),
-              React.createElement("span", { style: { fontWeight: 700 } }, "Total c/IVA ref: ", React.createElement("span", { className: "mono" }, fmtP(costosOpBase + ivaCostosOpRef)))
+              levantamiento.activo && totalLevantamiento > 0 && React.createElement("span", { style: { color: "var(--accent)", fontWeight: 600 } }, "Levantamiento: ", React.createElement("span", { className: "mono" }, fmtP(totalLevantamiento)))
             ),
 
             React.createElement("div", { className: "btn-row no-print" },
@@ -1858,6 +1907,16 @@ function App({ onLogout } = {}) {
                   React.createElement("span", { className: "cost-val" }, fmtP(admin.seguro_rc_costo))
                 ),
 
+                React.createElement("div", { className: "cost-row" },
+                  React.createElement("span", { className: "cost-label" }, "Comisión cliente"),
+                  React.createElement("span", { className: "cost-val" }, fmtP(admin.comision_cliente))
+                ),
+
+                levantamiento.activo && totalLevantamiento > 0 && React.createElement("div", { className: "cost-row", style: { background: "#dbeafe", margin: "4px -24px", padding: "8px 24px", border: "none" } },
+                  React.createElement("span", { className: "cost-label", style: { color: "#1e40af", fontWeight: 500 } }, "Gastos de levantamiento"),
+                  React.createElement("span", { className: "cost-val", style: { color: "#1e40af", fontWeight: 600 } }, fmtP(totalLevantamiento))
+                ),
+
                 // Prorrateo
                 prorrateoActivo && montoProrrateo > 0 && React.createElement("div", { className: "cost-row", style: { background: "#fef9c3", margin: "4px -24px", padding: "8px 24px", border: "none" } },
                   React.createElement("span", { className: "cost-label", style: { color: "#92400e", fontWeight: 500 } },
@@ -1874,13 +1933,9 @@ function App({ onLogout } = {}) {
                   React.createElement("span", { className: "cost-label" }, "Administración (" + admin.admin_pct + "%)"),
                   React.createElement("span", { className: "cost-val" }, fmtP(adminMonto))
                 ),
-                React.createElement("div", { className: "cost-row" },
-                  React.createElement("span", { className: "cost-label" }, "Comisión cliente"),
-                  React.createElement("span", { className: "cost-val" }, fmtP(admin.comision_cliente))
-                ),
                 React.createElement("div", { className: "cost-row subtotal" },
-                  React.createElement("span", { className: "cost-label" }, "Total costo real"),
-                  React.createElement("span", { className: "cost-val" }, fmtP(totalConAdmin))
+                  React.createElement("span", { className: "cost-label" }, "TOTAL COSTO REAL"),
+                  React.createElement("span", { className: "cost-val" }, fmtP(costoReal))
                 ),
                 React.createElement("div", { className: "cost-row" },
                   React.createElement("span", { className: "cost-label" }, "Utilidad (" + admin.utilidad_pct + "%)"),
