@@ -272,7 +272,7 @@ const P = {
   // Colchón seguridad
   COLCHON_PCT: 0.008,          // 0.8%
   // Generales
-  USD_MXN: 20.00, // se actualiza en tiempo real
+  USD_MXN: 17.50, // se actualiza en tiempo real via API
   IVA: 0.16,
 };
 
@@ -1711,7 +1711,7 @@ function App({ onLogout } = {}) {
                 [
                   ["nombre", "Nombre del proyecto", "Ej. Relocalización de Celdas LCV4"],
                   ["cliente", "Cliente", "Ej. Carrier México S.A. de C.V."],
-                  ["lugar", "Lugar / Ciudad", "Ej. Santa Catarina, Nuevo León"],
+                  ["lugar", "Lugar / Ciudad 📍", "Ej. Santa Catarina, Nuevo León"],
                   ["planta", "Planta", "Ej. Planta A (CMXA)"],
                   ["contacto", "Atención (contacto)", "Ej. Ing. Armando Rivas"],
                   ["correo_contacto", "Correo contacto", "Ej. arivas@carrier.com"],
@@ -1721,7 +1721,32 @@ function App({ onLogout } = {}) {
                 ].map(([key, label, ph]) =>
                   React.createElement("div", { key, className: "field" },
                     React.createElement("label", null, label),
-                    React.createElement("input", { value: proyecto[key], onChange: e => setProyecto({ ...proyecto, [key]: e.target.value }), placeholder: ph })
+                    key === "lugar" ? React.createElement("div", { style: { display: "flex", gap: 6 } },
+                      React.createElement("input", { value: proyecto[key], onChange: e => setProyecto({ ...proyecto, [key]: e.target.value }), placeholder: ph, style: { flex: 1 } }),
+                      React.createElement("button", {
+                        type: "button",
+                        style: { padding: "6px 12px", background: "var(--accent)", color: "#fff", border: "none", borderRadius: 8, cursor: "pointer", fontSize: 13, whiteSpace: "nowrap" },
+                        onClick: () => {
+                          if (!navigator.geolocation) { alert("Geolocalización no disponible"); return; }
+                          navigator.geolocation.getCurrentPosition(
+                            pos => {
+                              fetch("https://nominatim.openstreetmap.org/reverse?lat=" + pos.coords.latitude + "&lon=" + pos.coords.longitude + "&format=json&accept-language=es")
+                                .then(r => r.json())
+                                .then(d => {
+                                  const addr = d.address || {};
+                                  const city = addr.city || addr.town || addr.village || addr.municipality || "";
+                                  const state = addr.state || "";
+                                  const lugar = city + (state ? ", " + state : "");
+                                  setProyecto(prev => ({ ...prev, lugar: lugar || d.display_name }));
+                                })
+                                .catch(() => setProyecto(prev => ({ ...prev, lugar: pos.coords.latitude.toFixed(4) + ", " + pos.coords.longitude.toFixed(4) })));
+                            },
+                            err => alert("No se pudo obtener ubicación: " + err.message),
+                            { enableHighAccuracy: true, timeout: 10000 }
+                          );
+                        }
+                      }, "📍 GPS")
+                    ) : React.createElement("input", { value: proyecto[key], onChange: e => setProyecto({ ...proyecto, [key]: e.target.value }), placeholder: ph })
                   )
                 ),
                 React.createElement("div", { className: "field full" },
