@@ -1,0 +1,1736 @@
+[
+  {
+    "folio": "BIT-2026-0001",
+    "fecha": "2026-01-26",
+    "dia": "Lunes",
+    "semana": 1,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCH y LCV-4",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:00 pm",
+    "personal": 20,
+    "permisos": {
+      "trabajo_caliente": false,
+      "trabajo_rojo": false,
+      "alturas": false
+    },
+    "resumen": "Arranque del proyecto. LCH y LCV-4 mayormente energizados. Sin acceso a equipos criticos. Dependencia total de liberacion por planta.",
+    "actividades": [
+      {
+        "nombre": "Reconocimiento de area",
+        "desc": "Recorrido completo de planta Carrier A-470, identificacion de lineas LCH y LCV-4, evaluacion de condiciones de acceso"
+      },
+      {
+        "nombre": "Levantamiento tecnico",
+        "desc": "Inicio de registro fotografico de equipos para packing list, identificacion de numeros de serie y ubicaciones"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0002",
+    "fecha": "2026-01-27",
+    "dia": "Martes",
+    "semana": 1,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCH y LCV-4",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:00 pm",
+    "personal": 20,
+    "permisos": {
+      "trabajo_caliente": false,
+      "trabajo_rojo": false,
+      "alturas": false
+    },
+    "resumen": "Arranque del proyecto. LCH y LCV-4 mayormente energizados. Sin acceso a equipos criticos. Dependencia total de liberacion por planta.",
+    "actividades": [
+      {
+        "nombre": "Levantamiento tecnico",
+        "desc": "Inicio de registro fotografico de equipos para packing list, identificacion de numeros de serie y ubicaciones"
+      },
+      {
+        "nombre": "Planeacion de intervencion",
+        "desc": "Definicion de secuencia de desmantelamiento, evaluacion de restricciones por equipos energizados"
+      },
+      {
+        "nombre": "Etiquetado general",
+        "desc": "Inicio de etiquetado de cabinas y lineas para control documental"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0003",
+    "fecha": "2026-01-28",
+    "dia": "Miercoles",
+    "semana": 1,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCH y LCV-4",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:00 pm",
+    "personal": 20,
+    "permisos": {
+      "trabajo_caliente": false,
+      "trabajo_rojo": false,
+      "alturas": false
+    },
+    "resumen": "Arranque del proyecto. LCH y LCV-4 mayormente energizados. Sin acceso a equipos criticos. Dependencia total de liberacion por planta.",
+    "actividades": [
+      {
+        "nombre": "Planeacion de intervencion",
+        "desc": "Definicion de secuencia de desmantelamiento, evaluacion de restricciones por equipos energizados"
+      },
+      {
+        "nombre": "Etiquetado general",
+        "desc": "Inicio de etiquetado de cabinas y lineas para control documental"
+      },
+      {
+        "nombre": "Retiro de perifericos",
+        "desc": "Retiro de scrap no energizado y perifericos accesibles sin riesgo electrico"
+      },
+      {
+        "nombre": "Reconocimiento de area",
+        "desc": "Recorrido completo de planta Carrier A-470, identificacion de lineas LCH y LCV-4, evaluacion de condiciones de acceso"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0004",
+    "fecha": "2026-01-29",
+    "dia": "Jueves",
+    "semana": 1,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCH y LCV-4",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:00 pm",
+    "personal": 20,
+    "permisos": {
+      "trabajo_caliente": false,
+      "trabajo_rojo": false,
+      "alturas": false
+    },
+    "resumen": "Arranque del proyecto. LCH y LCV-4 mayormente energizados. Sin acceso a equipos criticos. Dependencia total de liberacion por planta.",
+    "actividades": [
+      {
+        "nombre": "Etiquetado general",
+        "desc": "Inicio de etiquetado de cabinas y lineas para control documental"
+      },
+      {
+        "nombre": "Retiro de perifericos",
+        "desc": "Retiro de scrap no energizado y perifericos accesibles sin riesgo electrico"
+      },
+      {
+        "nombre": "Reconocimiento de area",
+        "desc": "Recorrido completo de planta Carrier A-470, identificacion de lineas LCH y LCV-4, evaluacion de condiciones de acceso"
+      },
+      {
+        "nombre": "Levantamiento tecnico",
+        "desc": "Inicio de registro fotografico de equipos para packing list, identificacion de numeros de serie y ubicaciones"
+      },
+      {
+        "nombre": "Planeacion de intervencion",
+        "desc": "Definicion de secuencia de desmantelamiento, evaluacion de restricciones por equipos energizados"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0005",
+    "fecha": "2026-01-30",
+    "dia": "Viernes",
+    "semana": 1,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCH y LCV-4",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:00 pm",
+    "personal": 20,
+    "permisos": {
+      "trabajo_caliente": false,
+      "trabajo_rojo": false,
+      "alturas": false
+    },
+    "resumen": "Arranque del proyecto. LCH y LCV-4 mayormente energizados. Sin acceso a equipos criticos. Dependencia total de liberacion por planta.",
+    "actividades": [
+      {
+        "nombre": "Retiro de perifericos",
+        "desc": "Retiro de scrap no energizado y perifericos accesibles sin riesgo electrico"
+      },
+      {
+        "nombre": "Reconocimiento de area",
+        "desc": "Recorrido completo de planta Carrier A-470, identificacion de lineas LCH y LCV-4, evaluacion de condiciones de acceso"
+      },
+      {
+        "nombre": "Levantamiento tecnico",
+        "desc": "Inicio de registro fotografico de equipos para packing list, identificacion de numeros de serie y ubicaciones"
+      },
+      {
+        "nombre": "Planeacion de intervencion",
+        "desc": "Definicion de secuencia de desmantelamiento, evaluacion de restricciones por equipos energizados"
+      },
+      {
+        "nombre": "Etiquetado general",
+        "desc": "Inicio de etiquetado de cabinas y lineas para control documental"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0006",
+    "fecha": "2026-01-31",
+    "dia": "Sabado",
+    "semana": 1,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCH y LCV-4",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:00 pm",
+    "personal": 20,
+    "permisos": {
+      "trabajo_caliente": false,
+      "trabajo_rojo": false,
+      "alturas": false
+    },
+    "resumen": "Arranque del proyecto. LCH y LCV-4 mayormente energizados. Sin acceso a equipos criticos. Dependencia total de liberacion por planta.",
+    "actividades": [
+      {
+        "nombre": "Reconocimiento de area",
+        "desc": "Recorrido completo de planta Carrier A-470, identificacion de lineas LCH y LCV-4, evaluacion de condiciones de acceso"
+      },
+      {
+        "nombre": "Levantamiento tecnico",
+        "desc": "Inicio de registro fotografico de equipos para packing list, identificacion de numeros de serie y ubicaciones"
+      },
+      {
+        "nombre": "Planeacion de intervencion",
+        "desc": "Definicion de secuencia de desmantelamiento, evaluacion de restricciones por equipos energizados"
+      },
+      {
+        "nombre": "Etiquetado general",
+        "desc": "Inicio de etiquetado de cabinas y lineas para control documental"
+      },
+      {
+        "nombre": "Retiro de perifericos",
+        "desc": "Retiro de scrap no energizado y perifericos accesibles sin riesgo electrico"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0007",
+    "fecha": "2026-02-02",
+    "dia": "Lunes",
+    "semana": 2,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCH y LCV-4",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:00 pm",
+    "personal": 20,
+    "permisos": {
+      "trabajo_caliente": false,
+      "trabajo_rojo": false,
+      "alturas": false
+    },
+    "resumen": "Inicio de desmantelamiento parcial. Hairpin Bender sigue en produccion. Cabina LCV-4 energizada. Liberaciones parciales permiten intervencion en perifericos.",
+    "actividades": [
+      {
+        "nombre": "Desmantelamiento cabina LCH",
+        "desc": "Inicio de desmantelamiento de cabina LCH, continuacion de etiquetado tecnico"
+      },
+      {
+        "nombre": "Equipos perifericos LCV-4",
+        "desc": "Inicio de desmantelamiento en carros de linea (transferencias), equipos no energizados"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0008",
+    "fecha": "2026-02-03",
+    "dia": "Martes",
+    "semana": 2,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCH y LCV-4",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:00 pm",
+    "personal": 20,
+    "permisos": {
+      "trabajo_caliente": false,
+      "trabajo_rojo": false,
+      "alturas": false
+    },
+    "resumen": "Inicio de desmantelamiento parcial. Hairpin Bender sigue en produccion. Cabina LCV-4 energizada. Liberaciones parciales permiten intervencion en perifericos.",
+    "actividades": [
+      {
+        "nombre": "Equipos perifericos LCV-4",
+        "desc": "Inicio de desmantelamiento en carros de linea (transferencias), equipos no energizados"
+      },
+      {
+        "nombre": "Avellanadora M-1763",
+        "desc": "Desconexion y preparacion para desmontaje de Avellanadora ADM-003485"
+      },
+      {
+        "nombre": "Brazer M-1713",
+        "desc": "Desconexion de Brazer serial 282, preparacion de embalaje"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0009",
+    "fecha": "2026-02-04",
+    "dia": "Miercoles",
+    "semana": 2,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCH y LCV-4",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:00 pm",
+    "personal": 20,
+    "permisos": {
+      "trabajo_caliente": false,
+      "trabajo_rojo": false,
+      "alturas": false
+    },
+    "resumen": "Inicio de desmantelamiento parcial. Hairpin Bender sigue en produccion. Cabina LCV-4 energizada. Liberaciones parciales permiten intervencion en perifericos.",
+    "actividades": [
+      {
+        "nombre": "Avellanadora M-1763",
+        "desc": "Desconexion y preparacion para desmontaje de Avellanadora ADM-003485"
+      },
+      {
+        "nombre": "Brazer M-1713",
+        "desc": "Desconexion de Brazer serial 282, preparacion de embalaje"
+      },
+      {
+        "nombre": "Dobladora de coil M-1711",
+        "desc": "Desmantelamiento de Dobladora CFM M14-13, 2 TONS"
+      },
+      {
+        "nombre": "Dobladora de grill M-1725",
+        "desc": "Desconexion de Dobladora serial 586-1-1015, 2 TONS"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0010",
+    "fecha": "2026-02-05",
+    "dia": "Jueves",
+    "semana": 2,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCH y LCV-4",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:00 pm",
+    "personal": 20,
+    "permisos": {
+      "trabajo_caliente": false,
+      "trabajo_rojo": false,
+      "alturas": false
+    },
+    "resumen": "Inicio de desmantelamiento parcial. Hairpin Bender sigue en produccion. Cabina LCV-4 energizada. Liberaciones parciales permiten intervencion en perifericos.",
+    "actividades": [
+      {
+        "nombre": "Brazer M-1713",
+        "desc": "Desconexion de Brazer serial 282, preparacion de embalaje"
+      },
+      {
+        "nombre": "Dobladora de coil M-1711",
+        "desc": "Desmantelamiento de Dobladora CFM M14-13, 2 TONS"
+      },
+      {
+        "nombre": "Dobladora de grill M-1725",
+        "desc": "Desconexion de Dobladora serial 586-1-1015, 2 TONS"
+      },
+      {
+        "nombre": "Ductos LCV4",
+        "desc": "Retiro de ductos 454 de linea LCV-4"
+      },
+      {
+        "nombre": "Hairpin Bender M-21",
+        "desc": "Preparacion para intervencion post-produccion"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0011",
+    "fecha": "2026-02-06",
+    "dia": "Viernes",
+    "semana": 2,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCH y LCV-4",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:00 pm",
+    "personal": 20,
+    "permisos": {
+      "trabajo_caliente": false,
+      "trabajo_rojo": false,
+      "alturas": false
+    },
+    "resumen": "Inicio de desmantelamiento parcial. Hairpin Bender sigue en produccion. Cabina LCV-4 energizada. Liberaciones parciales permiten intervencion en perifericos.",
+    "actividades": [
+      {
+        "nombre": "Dobladora de coil M-1711",
+        "desc": "Desmantelamiento de Dobladora CFM M14-13, 2 TONS"
+      },
+      {
+        "nombre": "Dobladora de grill M-1725",
+        "desc": "Desconexion de Dobladora serial 586-1-1015, 2 TONS"
+      },
+      {
+        "nombre": "Ductos LCV4",
+        "desc": "Retiro de ductos 454 de linea LCV-4"
+      },
+      {
+        "nombre": "Hairpin Bender M-21",
+        "desc": "Preparacion para intervencion post-produccion"
+      },
+      {
+        "nombre": "Flejadora M-1751",
+        "desc": "Desconexion y retiro de flejadora"
+      },
+      {
+        "nombre": "Desmantelamiento cabina LCH",
+        "desc": "Inicio de desmantelamiento de cabina LCH, continuacion de etiquetado tecnico"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0012",
+    "fecha": "2026-02-07",
+    "dia": "Sabado",
+    "semana": 2,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCH y LCV-4",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:00 pm",
+    "personal": 20,
+    "permisos": {
+      "trabajo_caliente": false,
+      "trabajo_rojo": false,
+      "alturas": false
+    },
+    "resumen": "Inicio de desmantelamiento parcial. Hairpin Bender sigue en produccion. Cabina LCV-4 energizada. Liberaciones parciales permiten intervencion en perifericos.",
+    "actividades": [
+      {
+        "nombre": "Dobladora de grill M-1725",
+        "desc": "Desconexion de Dobladora serial 586-1-1015, 2 TONS"
+      },
+      {
+        "nombre": "Ductos LCV4",
+        "desc": "Retiro de ductos 454 de linea LCV-4"
+      },
+      {
+        "nombre": "Hairpin Bender M-21",
+        "desc": "Preparacion para intervencion post-produccion"
+      },
+      {
+        "nombre": "Flejadora M-1751",
+        "desc": "Desconexion y retiro de flejadora"
+      },
+      {
+        "nombre": "Desmantelamiento cabina LCH",
+        "desc": "Inicio de desmantelamiento de cabina LCH, continuacion de etiquetado tecnico"
+      },
+      {
+        "nombre": "Equipos perifericos LCV-4",
+        "desc": "Inicio de desmantelamiento en carros de linea (transferencias), equipos no energizados"
+      },
+      {
+        "nombre": "Avellanadora M-1763",
+        "desc": "Desconexion y preparacion para desmontaje de Avellanadora ADM-003485"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0013",
+    "fecha": "2026-02-09",
+    "dia": "Lunes",
+    "semana": 3,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCH y LCV-4",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:00 pm",
+    "personal": 14,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": false,
+      "alturas": false
+    },
+    "resumen": "Hairpin Bender finaliza produccion. Inicio de liberacion progresiva. Reduccion de personal de 20 a 14 personas por falta de liberacion total.",
+    "actividades": [
+      {
+        "nombre": "Continuacion cabina LCH",
+        "desc": "Avance en desmantelamiento de cabina LCH, retiro de paneles y estructura"
+      },
+      {
+        "nombre": "Desconexion electrica LCV-4",
+        "desc": "Desconexion electrica de equipos liberados, implementacion de LOTO"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0014",
+    "fecha": "2026-02-10",
+    "dia": "Martes",
+    "semana": 3,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCH y LCV-4",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:00 pm",
+    "personal": 14,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": false,
+      "alturas": false
+    },
+    "resumen": "Hairpin Bender finaliza produccion. Inicio de liberacion progresiva. Reduccion de personal de 20 a 14 personas por falta de liberacion total.",
+    "actividades": [
+      {
+        "nombre": "Desconexion electrica LCV-4",
+        "desc": "Desconexion electrica de equipos liberados, implementacion de LOTO"
+      },
+      {
+        "nombre": "Desconexion hidraulica",
+        "desc": "Desconexion de lineas hidraulicas en equipos desenergizados"
+      },
+      {
+        "nombre": "Marcaje de cableado",
+        "desc": "Identificacion y marcaje completo de cableado para reinstalacion"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0015",
+    "fecha": "2026-02-11",
+    "dia": "Miercoles",
+    "semana": 3,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCH y LCV-4",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:00 pm",
+    "personal": 14,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": false,
+      "alturas": false
+    },
+    "resumen": "Hairpin Bender finaliza produccion. Inicio de liberacion progresiva. Reduccion de personal de 20 a 14 personas por falta de liberacion total.",
+    "actividades": [
+      {
+        "nombre": "Desconexion hidraulica",
+        "desc": "Desconexion de lineas hidraulicas en equipos desenergizados"
+      },
+      {
+        "nombre": "Marcaje de cableado",
+        "desc": "Identificacion y marcaje completo de cableado para reinstalacion"
+      },
+      {
+        "nombre": "Validacion ausencia de energia",
+        "desc": "Trabajo electrico intensivo: verificacion de ausencia de energia en cada equipo"
+      },
+      {
+        "nombre": "Envio a area de embarque",
+        "desc": "Traslado de equipos desmantelados a area de resguardo interno"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0016",
+    "fecha": "2026-02-12",
+    "dia": "Jueves",
+    "semana": 3,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCH y LCV-4",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:00 pm",
+    "personal": 14,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": false,
+      "alturas": false
+    },
+    "resumen": "Hairpin Bender finaliza produccion. Inicio de liberacion progresiva. Reduccion de personal de 20 a 14 personas por falta de liberacion total.",
+    "actividades": [
+      {
+        "nombre": "Marcaje de cableado",
+        "desc": "Identificacion y marcaje completo de cableado para reinstalacion"
+      },
+      {
+        "nombre": "Validacion ausencia de energia",
+        "desc": "Trabajo electrico intensivo: verificacion de ausencia de energia en cada equipo"
+      },
+      {
+        "nombre": "Envio a area de embarque",
+        "desc": "Traslado de equipos desmantelados a area de resguardo interno"
+      },
+      {
+        "nombre": "Continuacion cabina LCH",
+        "desc": "Avance en desmantelamiento de cabina LCH, retiro de paneles y estructura"
+      },
+      {
+        "nombre": "Desconexion electrica LCV-4",
+        "desc": "Desconexion electrica de equipos liberados, implementacion de LOTO"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0017",
+    "fecha": "2026-02-13",
+    "dia": "Viernes",
+    "semana": 3,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCH y LCV-4",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:00 pm",
+    "personal": 14,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": false,
+      "alturas": false
+    },
+    "resumen": "Hairpin Bender finaliza produccion. Inicio de liberacion progresiva. Reduccion de personal de 20 a 14 personas por falta de liberacion total.",
+    "actividades": [
+      {
+        "nombre": "Validacion ausencia de energia",
+        "desc": "Trabajo electrico intensivo: verificacion de ausencia de energia en cada equipo"
+      },
+      {
+        "nombre": "Envio a area de embarque",
+        "desc": "Traslado de equipos desmantelados a area de resguardo interno"
+      },
+      {
+        "nombre": "Continuacion cabina LCH",
+        "desc": "Avance en desmantelamiento de cabina LCH, retiro de paneles y estructura"
+      },
+      {
+        "nombre": "Desconexion electrica LCV-4",
+        "desc": "Desconexion electrica de equipos liberados, implementacion de LOTO"
+      },
+      {
+        "nombre": "Desconexion hidraulica",
+        "desc": "Desconexion de lineas hidraulicas en equipos desenergizados"
+      },
+      {
+        "nombre": "Marcaje de cableado",
+        "desc": "Identificacion y marcaje completo de cableado para reinstalacion"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0018",
+    "fecha": "2026-02-14",
+    "dia": "Sabado",
+    "semana": 3,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCH y LCV-4",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:00 pm",
+    "personal": 14,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": false,
+      "alturas": false
+    },
+    "resumen": "Hairpin Bender finaliza produccion. Inicio de liberacion progresiva. Reduccion de personal de 20 a 14 personas por falta de liberacion total.",
+    "actividades": [
+      {
+        "nombre": "Envio a area de embarque",
+        "desc": "Traslado de equipos desmantelados a area de resguardo interno"
+      },
+      {
+        "nombre": "Continuacion cabina LCH",
+        "desc": "Avance en desmantelamiento de cabina LCH, retiro de paneles y estructura"
+      },
+      {
+        "nombre": "Desconexion electrica LCV-4",
+        "desc": "Desconexion electrica de equipos liberados, implementacion de LOTO"
+      },
+      {
+        "nombre": "Desconexion hidraulica",
+        "desc": "Desconexion de lineas hidraulicas en equipos desenergizados"
+      },
+      {
+        "nombre": "Marcaje de cableado",
+        "desc": "Identificacion y marcaje completo de cableado para reinstalacion"
+      },
+      {
+        "nombre": "Validacion ausencia de energia",
+        "desc": "Trabajo electrico intensivo: verificacion de ausencia de energia en cada equipo"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0019",
+    "fecha": "2026-02-16",
+    "dia": "Lunes",
+    "semana": 4,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCH y LCV-4 / Exterior",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:30 pm",
+    "personal": 18,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": true,
+      "alturas": true
+    },
+    "resumen": "Cabina LCV-4 liberada: grua y Fin Press desenergizadas. Mayor acceso operativo. LCH: envio de equipos a Planta C sin restriccion logistica.",
+    "actividades": [
+      {
+        "nombre": "Embarque LCH a Planta C",
+        "desc": "Envio de equipos LCH a Planta C, flujo continuo sin retrasos logisticos"
+      },
+      {
+        "nombre": "Embarque Cabina LCH — Packing F.001",
+        "desc": "Carga de soportes, puertas y estructura de cabina LCH en lowboys para transporte"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0020",
+    "fecha": "2026-02-17",
+    "dia": "Martes",
+    "semana": 4,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCH y LCV-4 / Exterior",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:30 pm",
+    "personal": 18,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": true,
+      "alturas": true
+    },
+    "resumen": "Cabina LCV-4 liberada: grua y Fin Press desenergizadas. Mayor acceso operativo. LCH: envio de equipos a Planta C sin restriccion logistica.",
+    "actividades": [
+      {
+        "nombre": "Embarque Cabina LCH — Packing F.001",
+        "desc": "Carga de soportes, puertas y estructura de cabina LCH en lowboys para transporte"
+      },
+      {
+        "nombre": "Intervencion Fin Press LCV-4",
+        "desc": "Inicio de desconexion electrica y desmontaje de Fin Press M-1701 a M-1704"
+      },
+      {
+        "nombre": "Intervencion cabina LCV-4",
+        "desc": "Acceso a cabina desenergizada, inicio de desmontaje de grua viajera A00511"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0021",
+    "fecha": "2026-02-18",
+    "dia": "Miercoles",
+    "semana": 4,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCH y LCV-4 / Exterior",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:30 pm",
+    "personal": 18,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": true,
+      "alturas": true
+    },
+    "resumen": "Cabina LCV-4 liberada: grua y Fin Press desenergizadas. Mayor acceso operativo. LCH: envio de equipos a Planta C sin restriccion logistica.",
+    "actividades": [
+      {
+        "nombre": "Intervencion Fin Press LCV-4",
+        "desc": "Inicio de desconexion electrica y desmontaje de Fin Press M-1701 a M-1704"
+      },
+      {
+        "nombre": "Intervencion cabina LCV-4",
+        "desc": "Acceso a cabina desenergizada, inicio de desmontaje de grua viajera A00511"
+      },
+      {
+        "nombre": "Embarque Expander LCH",
+        "desc": "Embarque de Expander M-37 (17 TONS) a Planta C"
+      },
+      {
+        "nombre": "Clasificacion de activos",
+        "desc": "Separacion de equipos: activos para Planta C vs chatarra para Planta A"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0022",
+    "fecha": "2026-02-19",
+    "dia": "Jueves",
+    "semana": 4,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCH y LCV-4 / Exterior",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:30 pm",
+    "personal": 18,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": true,
+      "alturas": true
+    },
+    "resumen": "Cabina LCV-4 liberada: grua y Fin Press desenergizadas. Mayor acceso operativo. LCH: envio de equipos a Planta C sin restriccion logistica.",
+    "actividades": [
+      {
+        "nombre": "Intervencion cabina LCV-4",
+        "desc": "Acceso a cabina desenergizada, inicio de desmontaje de grua viajera A00511"
+      },
+      {
+        "nombre": "Embarque Expander LCH",
+        "desc": "Embarque de Expander M-37 (17 TONS) a Planta C"
+      },
+      {
+        "nombre": "Clasificacion de activos",
+        "desc": "Separacion de equipos: activos para Planta C vs chatarra para Planta A"
+      },
+      {
+        "nombre": "Embarque LCH a Planta C",
+        "desc": "Envio de equipos LCH a Planta C, flujo continuo sin retrasos logisticos"
+      },
+      {
+        "nombre": "Embarque Cabina LCH — Packing F.001",
+        "desc": "Carga de soportes, puertas y estructura de cabina LCH en lowboys para transporte"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0023",
+    "fecha": "2026-02-20",
+    "dia": "Viernes",
+    "semana": 4,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCH y LCV-4 / Exterior",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:30 pm",
+    "personal": 18,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": true,
+      "alturas": true
+    },
+    "resumen": "Cabina LCV-4 liberada: grua y Fin Press desenergizadas. Mayor acceso operativo. LCH: envio de equipos a Planta C sin restriccion logistica.",
+    "actividades": [
+      {
+        "nombre": "Embarque Expander LCH",
+        "desc": "Embarque de Expander M-37 (17 TONS) a Planta C"
+      },
+      {
+        "nombre": "Clasificacion de activos",
+        "desc": "Separacion de equipos: activos para Planta C vs chatarra para Planta A"
+      },
+      {
+        "nombre": "Embarque LCH a Planta C",
+        "desc": "Envio de equipos LCH a Planta C, flujo continuo sin retrasos logisticos"
+      },
+      {
+        "nombre": "Embarque Cabina LCH — Packing F.001",
+        "desc": "Carga de soportes, puertas y estructura de cabina LCH en lowboys para transporte"
+      },
+      {
+        "nombre": "Intervencion Fin Press LCV-4",
+        "desc": "Inicio de desconexion electrica y desmontaje de Fin Press M-1701 a M-1704"
+      },
+      {
+        "nombre": "Intervencion cabina LCV-4",
+        "desc": "Acceso a cabina desenergizada, inicio de desmontaje de grua viajera A00511"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0024",
+    "fecha": "2026-02-21",
+    "dia": "Sabado",
+    "semana": 4,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCH y LCV-4 / Exterior",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:30 pm",
+    "personal": 18,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": true,
+      "alturas": true
+    },
+    "resumen": "Cabina LCV-4 liberada: grua y Fin Press desenergizadas. Mayor acceso operativo. LCH: envio de equipos a Planta C sin restriccion logistica.",
+    "actividades": [
+      {
+        "nombre": "Clasificacion de activos",
+        "desc": "Separacion de equipos: activos para Planta C vs chatarra para Planta A"
+      },
+      {
+        "nombre": "Embarque LCH a Planta C",
+        "desc": "Envio de equipos LCH a Planta C, flujo continuo sin retrasos logisticos"
+      },
+      {
+        "nombre": "Embarque Cabina LCH — Packing F.001",
+        "desc": "Carga de soportes, puertas y estructura de cabina LCH en lowboys para transporte"
+      },
+      {
+        "nombre": "Intervencion Fin Press LCV-4",
+        "desc": "Inicio de desconexion electrica y desmontaje de Fin Press M-1701 a M-1704"
+      },
+      {
+        "nombre": "Intervencion cabina LCV-4",
+        "desc": "Acceso a cabina desenergizada, inicio de desmontaje de grua viajera A00511"
+      },
+      {
+        "nombre": "Embarque Expander LCH",
+        "desc": "Embarque de Expander M-37 (17 TONS) a Planta C"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0025",
+    "fecha": "2026-02-23",
+    "dia": "Lunes",
+    "semana": 5,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCV-4 / Patio",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:00 pm",
+    "personal": 18,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": true,
+      "alturas": true
+    },
+    "resumen": "Equipos LCV-4 desconectados, desmantelados y listos para embarque. PROBLEMA CRITICO: Planta G sin disponibilidad de espacio para embarque.",
+    "actividades": [
+      {
+        "nombre": "Embalaje de equipos",
+        "desc": "Embalaje industrial de equipos desmantelados para transporte"
+      },
+      {
+        "nombre": "Clasificacion logistica",
+        "desc": "Organizacion y clasificacion de equipos por destino y prioridad de embarque"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0026",
+    "fecha": "2026-02-24",
+    "dia": "Martes",
+    "semana": 5,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCV-4 / Patio",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:00 pm",
+    "personal": 18,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": true,
+      "alturas": true
+    },
+    "resumen": "Equipos LCV-4 desconectados, desmantelados y listos para embarque. PROBLEMA CRITICO: Planta G sin disponibilidad de espacio para embarque.",
+    "actividades": [
+      {
+        "nombre": "Clasificacion logistica",
+        "desc": "Organizacion y clasificacion de equipos por destino y prioridad de embarque"
+      },
+      {
+        "nombre": "Resguardo en area interna",
+        "desc": "Almacenamiento temporal de equipos listos en patio interno por falta de salida"
+      },
+      {
+        "nombre": "Preparacion de maniobras",
+        "desc": "Planeacion de maniobras de carga para cuando se libere Planta G"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0027",
+    "fecha": "2026-02-25",
+    "dia": "Miercoles",
+    "semana": 5,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCV-4 / Patio",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:00 pm",
+    "personal": 18,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": true,
+      "alturas": true
+    },
+    "resumen": "Equipos LCV-4 desconectados, desmantelados y listos para embarque. PROBLEMA CRITICO: Planta G sin disponibilidad de espacio para embarque.",
+    "actividades": [
+      {
+        "nombre": "Resguardo en area interna",
+        "desc": "Almacenamiento temporal de equipos listos en patio interno por falta de salida"
+      },
+      {
+        "nombre": "Preparacion de maniobras",
+        "desc": "Planeacion de maniobras de carga para cuando se libere Planta G"
+      },
+      {
+        "nombre": "Control documental",
+        "desc": "Actualizacion de packing lists y registros de activos"
+      },
+      {
+        "nombre": "Embalaje de equipos",
+        "desc": "Embalaje industrial de equipos desmantelados para transporte"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0028",
+    "fecha": "2026-02-26",
+    "dia": "Jueves",
+    "semana": 5,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCV-4 / Patio",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:00 pm",
+    "personal": 18,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": true,
+      "alturas": true
+    },
+    "resumen": "Equipos LCV-4 desconectados, desmantelados y listos para embarque. PROBLEMA CRITICO: Planta G sin disponibilidad de espacio para embarque.",
+    "actividades": [
+      {
+        "nombre": "Preparacion de maniobras",
+        "desc": "Planeacion de maniobras de carga para cuando se libere Planta G"
+      },
+      {
+        "nombre": "Control documental",
+        "desc": "Actualizacion de packing lists y registros de activos"
+      },
+      {
+        "nombre": "Embalaje de equipos",
+        "desc": "Embalaje industrial de equipos desmantelados para transporte"
+      },
+      {
+        "nombre": "Clasificacion logistica",
+        "desc": "Organizacion y clasificacion de equipos por destino y prioridad de embarque"
+      },
+      {
+        "nombre": "Resguardo en area interna",
+        "desc": "Almacenamiento temporal de equipos listos en patio interno por falta de salida"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0029",
+    "fecha": "2026-02-27",
+    "dia": "Viernes",
+    "semana": 5,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCV-4 / Patio",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:00 pm",
+    "personal": 18,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": true,
+      "alturas": true
+    },
+    "resumen": "Equipos LCV-4 desconectados, desmantelados y listos para embarque. PROBLEMA CRITICO: Planta G sin disponibilidad de espacio para embarque.",
+    "actividades": [
+      {
+        "nombre": "Control documental",
+        "desc": "Actualizacion de packing lists y registros de activos"
+      },
+      {
+        "nombre": "Embalaje de equipos",
+        "desc": "Embalaje industrial de equipos desmantelados para transporte"
+      },
+      {
+        "nombre": "Clasificacion logistica",
+        "desc": "Organizacion y clasificacion de equipos por destino y prioridad de embarque"
+      },
+      {
+        "nombre": "Resguardo en area interna",
+        "desc": "Almacenamiento temporal de equipos listos en patio interno por falta de salida"
+      },
+      {
+        "nombre": "Preparacion de maniobras",
+        "desc": "Planeacion de maniobras de carga para cuando se libere Planta G"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0030",
+    "fecha": "2026-02-28",
+    "dia": "Sabado",
+    "semana": 5,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCV-4 / Patio",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:00 pm",
+    "personal": 18,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": true,
+      "alturas": true
+    },
+    "resumen": "Equipos LCV-4 desconectados, desmantelados y listos para embarque. PROBLEMA CRITICO: Planta G sin disponibilidad de espacio para embarque.",
+    "actividades": [
+      {
+        "nombre": "Embalaje de equipos",
+        "desc": "Embalaje industrial de equipos desmantelados para transporte"
+      },
+      {
+        "nombre": "Clasificacion logistica",
+        "desc": "Organizacion y clasificacion de equipos por destino y prioridad de embarque"
+      },
+      {
+        "nombre": "Resguardo en area interna",
+        "desc": "Almacenamiento temporal de equipos listos en patio interno por falta de salida"
+      },
+      {
+        "nombre": "Preparacion de maniobras",
+        "desc": "Planeacion de maniobras de carga para cuando se libere Planta G"
+      },
+      {
+        "nombre": "Control documental",
+        "desc": "Actualizacion de packing lists y registros de activos"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0031",
+    "fecha": "2026-03-02",
+    "dia": "Lunes",
+    "semana": 6,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCV-4 / Patio",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:00 pm",
+    "personal": 18,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": true,
+      "alturas": true
+    },
+    "resumen": "Persistencia de restriccion en Planta G. Equipos detenidos en patio. Continuacion de embalaje, organizacion y control documental.",
+    "actividades": [
+      {
+        "nombre": "Continuacion de embalaje",
+        "desc": "Embalaje adicional de equipos pendientes y aseguramiento de cargas"
+      },
+      {
+        "nombre": "Organizacion de patio",
+        "desc": "Reordenamiento de equipos en area de resguardo para optimizar espacio"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0032",
+    "fecha": "2026-03-03",
+    "dia": "Martes",
+    "semana": 6,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCV-4 / Patio",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:00 pm",
+    "personal": 18,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": true,
+      "alturas": true
+    },
+    "resumen": "Persistencia de restriccion en Planta G. Equipos detenidos en patio. Continuacion de embalaje, organizacion y control documental.",
+    "actividades": [
+      {
+        "nombre": "Organizacion de patio",
+        "desc": "Reordenamiento de equipos en area de resguardo para optimizar espacio"
+      },
+      {
+        "nombre": "Validacion electrica final",
+        "desc": "Trabajo continuo de electricos: validacion, desconexion y seguridad en equipos restantes"
+      },
+      {
+        "nombre": "Control documental",
+        "desc": "Actualizacion de registros, packing lists y status de embarque"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0033",
+    "fecha": "2026-03-04",
+    "dia": "Miercoles",
+    "semana": 6,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCV-4 / Patio",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:00 pm",
+    "personal": 18,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": true,
+      "alturas": true
+    },
+    "resumen": "Persistencia de restriccion en Planta G. Equipos detenidos en patio. Continuacion de embalaje, organizacion y control documental.",
+    "actividades": [
+      {
+        "nombre": "Validacion electrica final",
+        "desc": "Trabajo continuo de electricos: validacion, desconexion y seguridad en equipos restantes"
+      },
+      {
+        "nombre": "Control documental",
+        "desc": "Actualizacion de registros, packing lists y status de embarque"
+      },
+      {
+        "nombre": "Coordinacion Planta G",
+        "desc": "Coordinacion con Planta G para liberacion de espacio de embarque"
+      },
+      {
+        "nombre": "Continuacion de embalaje",
+        "desc": "Embalaje adicional de equipos pendientes y aseguramiento de cargas"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0034",
+    "fecha": "2026-03-05",
+    "dia": "Jueves",
+    "semana": 6,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCV-4 / Patio",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:00 pm",
+    "personal": 18,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": true,
+      "alturas": true
+    },
+    "resumen": "Persistencia de restriccion en Planta G. Equipos detenidos en patio. Continuacion de embalaje, organizacion y control documental.",
+    "actividades": [
+      {
+        "nombre": "Control documental",
+        "desc": "Actualizacion de registros, packing lists y status de embarque"
+      },
+      {
+        "nombre": "Coordinacion Planta G",
+        "desc": "Coordinacion con Planta G para liberacion de espacio de embarque"
+      },
+      {
+        "nombre": "Continuacion de embalaje",
+        "desc": "Embalaje adicional de equipos pendientes y aseguramiento de cargas"
+      },
+      {
+        "nombre": "Organizacion de patio",
+        "desc": "Reordenamiento de equipos en area de resguardo para optimizar espacio"
+      },
+      {
+        "nombre": "Validacion electrica final",
+        "desc": "Trabajo continuo de electricos: validacion, desconexion y seguridad en equipos restantes"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0035",
+    "fecha": "2026-03-06",
+    "dia": "Viernes",
+    "semana": 6,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCV-4 / Patio",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:00 pm",
+    "personal": 18,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": true,
+      "alturas": true
+    },
+    "resumen": "Persistencia de restriccion en Planta G. Equipos detenidos en patio. Continuacion de embalaje, organizacion y control documental.",
+    "actividades": [
+      {
+        "nombre": "Coordinacion Planta G",
+        "desc": "Coordinacion con Planta G para liberacion de espacio de embarque"
+      },
+      {
+        "nombre": "Continuacion de embalaje",
+        "desc": "Embalaje adicional de equipos pendientes y aseguramiento de cargas"
+      },
+      {
+        "nombre": "Organizacion de patio",
+        "desc": "Reordenamiento de equipos en area de resguardo para optimizar espacio"
+      },
+      {
+        "nombre": "Validacion electrica final",
+        "desc": "Trabajo continuo de electricos: validacion, desconexion y seguridad en equipos restantes"
+      },
+      {
+        "nombre": "Control documental",
+        "desc": "Actualizacion de registros, packing lists y status de embarque"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0036",
+    "fecha": "2026-03-07",
+    "dia": "Sabado",
+    "semana": 6,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCV-4 / Patio",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:00 pm",
+    "personal": 18,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": true,
+      "alturas": true
+    },
+    "resumen": "Persistencia de restriccion en Planta G. Equipos detenidos en patio. Continuacion de embalaje, organizacion y control documental.",
+    "actividades": [
+      {
+        "nombre": "Continuacion de embalaje",
+        "desc": "Embalaje adicional de equipos pendientes y aseguramiento de cargas"
+      },
+      {
+        "nombre": "Organizacion de patio",
+        "desc": "Reordenamiento de equipos en area de resguardo para optimizar espacio"
+      },
+      {
+        "nombre": "Validacion electrica final",
+        "desc": "Trabajo continuo de electricos: validacion, desconexion y seguridad en equipos restantes"
+      },
+      {
+        "nombre": "Control documental",
+        "desc": "Actualizacion de registros, packing lists y status de embarque"
+      },
+      {
+        "nombre": "Coordinacion Planta G",
+        "desc": "Coordinacion con Planta G para liberacion de espacio de embarque"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0037",
+    "fecha": "2026-03-09",
+    "dia": "Lunes",
+    "semana": 7,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCV-4 / Exterior / Planta G",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:30 pm",
+    "personal": 18,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": true,
+      "alturas": true
+    },
+    "resumen": "Se libera espacio en Planta G. Inicio de embarques masivos de equipos LCV-4 acumulados.",
+    "actividades": [
+      {
+        "nombre": "Embarque Fin Press M-1701",
+        "desc": "Carga y embarque de Fin Press M-1701 (20 TONS) hacia Planta C con lowboy"
+      },
+      {
+        "nombre": "Embarque Fin Press M-1702",
+        "desc": "Embarque de Fin Press M-1702 (activo A00442), desconexion electrica completada"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0038",
+    "fecha": "2026-03-10",
+    "dia": "Martes",
+    "semana": 7,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCV-4 / Exterior / Planta G",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:30 pm",
+    "personal": 18,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": true,
+      "alturas": true
+    },
+    "resumen": "Se libera espacio en Planta G. Inicio de embarques masivos de equipos LCV-4 acumulados.",
+    "actividades": [
+      {
+        "nombre": "Embarque Fin Press M-1702",
+        "desc": "Embarque de Fin Press M-1702 (activo A00442), desconexion electrica completada"
+      },
+      {
+        "nombre": "Embarque Fin Press M-1703",
+        "desc": "Carga de Fin Press M-1703 en plataforma de transporte"
+      },
+      {
+        "nombre": "Embarque Fin Press M-1704",
+        "desc": "Ultimo Fin Press embarcado, aseguramiento sobre cama baja"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0039",
+    "fecha": "2026-03-11",
+    "dia": "Miercoles",
+    "semana": 7,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCV-4 / Exterior / Planta G",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:30 pm",
+    "personal": 18,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": true,
+      "alturas": true
+    },
+    "resumen": "Se libera espacio en Planta G. Inicio de embarques masivos de equipos LCV-4 acumulados.",
+    "actividades": [
+      {
+        "nombre": "Embarque Fin Press M-1703",
+        "desc": "Carga de Fin Press M-1703 en plataforma de transporte"
+      },
+      {
+        "nombre": "Embarque Fin Press M-1704",
+        "desc": "Ultimo Fin Press embarcado, aseguramiento sobre cama baja"
+      },
+      {
+        "nombre": "Embarque Grua M-1705",
+        "desc": "Desmontaje y embarque de grua viajera de LCV-4"
+      },
+      {
+        "nombre": "Equipos auxiliares",
+        "desc": "Embarque de equipos auxiliares acumulados desde semana 5"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0040",
+    "fecha": "2026-03-12",
+    "dia": "Jueves",
+    "semana": 7,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCV-4 / Exterior / Planta G",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:30 pm",
+    "personal": 18,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": true,
+      "alturas": true
+    },
+    "resumen": "Se libera espacio en Planta G. Inicio de embarques masivos de equipos LCV-4 acumulados.",
+    "actividades": [
+      {
+        "nombre": "Embarque Fin Press M-1704",
+        "desc": "Ultimo Fin Press embarcado, aseguramiento sobre cama baja"
+      },
+      {
+        "nombre": "Embarque Grua M-1705",
+        "desc": "Desmontaje y embarque de grua viajera de LCV-4"
+      },
+      {
+        "nombre": "Equipos auxiliares",
+        "desc": "Embarque de equipos auxiliares acumulados desde semana 5"
+      },
+      {
+        "nombre": "Avance Run Test e HIPOT",
+        "desc": "Avance en sistemas de prueba Run Test para verificacion de equipos"
+      },
+      {
+        "nombre": "Embarque Fin Press M-1701",
+        "desc": "Carga y embarque de Fin Press M-1701 (20 TONS) hacia Planta C con lowboy"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0041",
+    "fecha": "2026-03-13",
+    "dia": "Viernes",
+    "semana": 7,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCV-4 / Exterior / Planta G",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:30 pm",
+    "personal": 18,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": true,
+      "alturas": true
+    },
+    "resumen": "Se libera espacio en Planta G. Inicio de embarques masivos de equipos LCV-4 acumulados.",
+    "actividades": [
+      {
+        "nombre": "Embarque Grua M-1705",
+        "desc": "Desmontaje y embarque de grua viajera de LCV-4"
+      },
+      {
+        "nombre": "Equipos auxiliares",
+        "desc": "Embarque de equipos auxiliares acumulados desde semana 5"
+      },
+      {
+        "nombre": "Avance Run Test e HIPOT",
+        "desc": "Avance en sistemas de prueba Run Test para verificacion de equipos"
+      },
+      {
+        "nombre": "Embarque Fin Press M-1701",
+        "desc": "Carga y embarque de Fin Press M-1701 (20 TONS) hacia Planta C con lowboy"
+      },
+      {
+        "nombre": "Embarque Fin Press M-1702",
+        "desc": "Embarque de Fin Press M-1702 (activo A00442), desconexion electrica completada"
+      },
+      {
+        "nombre": "Embarque Fin Press M-1703",
+        "desc": "Carga de Fin Press M-1703 en plataforma de transporte"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0042",
+    "fecha": "2026-03-14",
+    "dia": "Sabado",
+    "semana": 7,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta A-470 / LCV-4 / Exterior / Planta G",
+    "horario_inicio": "7:00 am",
+    "horario_fin": "17:30 pm",
+    "personal": 18,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": true,
+      "alturas": true
+    },
+    "resumen": "Se libera espacio en Planta G. Inicio de embarques masivos de equipos LCV-4 acumulados.",
+    "actividades": [
+      {
+        "nombre": "Equipos auxiliares",
+        "desc": "Embarque de equipos auxiliares acumulados desde semana 5"
+      },
+      {
+        "nombre": "Avance Run Test e HIPOT",
+        "desc": "Avance en sistemas de prueba Run Test para verificacion de equipos"
+      },
+      {
+        "nombre": "Embarque Fin Press M-1701",
+        "desc": "Carga y embarque de Fin Press M-1701 (20 TONS) hacia Planta C con lowboy"
+      },
+      {
+        "nombre": "Embarque Fin Press M-1702",
+        "desc": "Embarque de Fin Press M-1702 (activo A00442), desconexion electrica completada"
+      },
+      {
+        "nombre": "Embarque Fin Press M-1703",
+        "desc": "Carga de Fin Press M-1703 en plataforma de transporte"
+      },
+      {
+        "nombre": "Embarque Fin Press M-1704",
+        "desc": "Ultimo Fin Press embarcado, aseguramiento sobre cama baja"
+      },
+      {
+        "nombre": "Embarque Grua M-1705",
+        "desc": "Desmontaje y embarque de grua viajera de LCV-4"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0043",
+    "fecha": "2026-03-16",
+    "dia": "Lunes",
+    "semana": 8,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta LCV / Exterior",
+    "horario_inicio": "8:00 am",
+    "horario_fin": "17:30 pm",
+    "personal": 8,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": true,
+      "alturas": true
+    },
+    "resumen": "Cierre operativo en curso. Continuacion de embarques. Carga de celdas Finpress sobre lowboys. Desmontaje de grua puente PROSIMEC en area LCV Supermarket.",
+    "actividades": [
+      {
+        "nombre": "Carga de Finpress #1 en lowboy",
+        "desc": "Desmontaje de celda, rigging y carga sobre cama baja de 3 ejes con montacargas Hoist 40/60K"
+      },
+      {
+        "nombre": "Carga de Finpress #2 en lowboy",
+        "desc": "Extraccion de celda desde interior de planta por pasillo lateral con montacargas"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0044",
+    "fecha": "2026-03-17",
+    "dia": "Martes",
+    "semana": 8,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta LCV / Exterior",
+    "horario_inicio": "8:00 am",
+    "horario_fin": "17:30 pm",
+    "personal": 8,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": true,
+      "alturas": true
+    },
+    "resumen": "Cierre operativo en curso. Continuacion de embarques. Carga de celdas Finpress sobre lowboys. Desmontaje de grua puente PROSIMEC en area LCV Supermarket.",
+    "actividades": [
+      {
+        "nombre": "Carga de Finpress #2 en lowboy",
+        "desc": "Extraccion de celda desde interior de planta por pasillo lateral con montacargas"
+      },
+      {
+        "nombre": "Carga de Finpress #3 en lowboy",
+        "desc": "Maniobra con Hoist 40/60K, posicionamiento y aseguramiento sobre plataforma de transporte"
+      },
+      {
+        "nombre": "Carga de Finpress #4 en lowboy",
+        "desc": "Ultima celda Finpress, carga y amarre en cama baja roja con trailer Sterling"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0045",
+    "fecha": "2026-03-18",
+    "dia": "Miercoles",
+    "semana": 8,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta LCV / Exterior",
+    "horario_inicio": "8:00 am",
+    "horario_fin": "17:30 pm",
+    "personal": 8,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": true,
+      "alturas": true
+    },
+    "resumen": "Cierre operativo en curso. Continuacion de embarques. Carga de celdas Finpress sobre lowboys. Desmontaje de grua puente PROSIMEC en area LCV Supermarket.",
+    "actividades": [
+      {
+        "nombre": "Carga de Finpress #3 en lowboy",
+        "desc": "Maniobra con Hoist 40/60K, posicionamiento y aseguramiento sobre plataforma de transporte"
+      },
+      {
+        "nombre": "Carga de Finpress #4 en lowboy",
+        "desc": "Ultima celda Finpress, carga y amarre en cama baja roja con trailer Sterling"
+      },
+      {
+        "nombre": "Desmontaje grua puente PROSIMEC",
+        "desc": "Desmontaje completo en area LCV Supermarket: desconexiones electricas, cortes de estructura, descenso de viga principal"
+      },
+      {
+        "nombre": "Preparacion Expanders LCV-4",
+        "desc": "Evaluacion de condiciones de maniobra para expanders de 24 TONS"
+      }
+    ]
+  },
+  {
+    "folio": "BIT-2026-0046",
+    "fecha": "2026-03-19",
+    "dia": "Jueves",
+    "semana": 8,
+    "proyecto": "Especifica tecnica 43766",
+    "cliente": "CARRIER MEXICO — AMISA",
+    "supervisor": "Angel Rodriguez",
+    "area": "CARRIER MEXICO — Planta LCV / Exterior",
+    "horario_inicio": "8:00 am",
+    "horario_fin": "17:30 pm",
+    "personal": 8,
+    "permisos": {
+      "trabajo_caliente": true,
+      "trabajo_rojo": true,
+      "alturas": true
+    },
+    "resumen": "Cierre operativo en curso. Continuacion de embarques. Carga de celdas Finpress sobre lowboys. Desmontaje de grua puente PROSIMEC en area LCV Supermarket.",
+    "actividades": [
+      {
+        "nombre": "Carga de Finpress #4 en lowboy",
+        "desc": "Ultima celda Finpress, carga y amarre en cama baja roja con trailer Sterling"
+      },
+      {
+        "nombre": "Desmontaje grua puente PROSIMEC",
+        "desc": "Desmontaje completo en area LCV Supermarket: desconexiones electricas, cortes de estructura, descenso de viga principal"
+      },
+      {
+        "nombre": "Preparacion Expanders LCV-4",
+        "desc": "Evaluacion de condiciones de maniobra para expanders de 24 TONS"
+      },
+      {
+        "nombre": "Cierre documental",
+        "desc": "Actualizacion final de packing lists, status de embarque y control de activos"
+      },
+      {
+        "nombre": "Carga de Finpress #1 en lowboy",
+        "desc": "Desmontaje de celda, rigging y carga sobre cama baja de 3 ejes con montacargas Hoist 40/60K"
+      }
+    ]
+  }
+]
