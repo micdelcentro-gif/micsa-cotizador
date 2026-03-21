@@ -3,5 +3,6 @@ const nextConfig = {
   images: { unoptimized: true },
   typescript: { ignoreBuildErrors: true },
   eslint: { ignoreDuringBuilds: true },
+    serverExternalPackages: ['@supabase/supabase-js', '@supabase/ssr'],
 }
 module.exports = nextConfig
