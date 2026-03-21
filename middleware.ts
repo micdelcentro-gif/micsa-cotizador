@@ -1,57 +1,15 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { createServerClient } from '@supabase/ssr'
-export const runtime = 'nodejs'
 
-export async function middleware(request: NextRequest) {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    if (!supabaseUrl || !supabaseKey) {
-          const p = request.nextUrl.pathname
-          if (p === '/') return NextResponse.redirect(new URL('/login', request.url))
-          return NextResponse.next()
-    }
-  let supabaseResponse = NextResponse.next({ request })
 
-  const supabase = createServerClient(
-        supabaseUrl,
-        supabaseKey,
-    {
-      cookies: {
-        getAll() { return request.cookies.getAll() },
-        setAll(cookiesToSet: { name: string; value: string; options?: Record<string, unknown> }[]) {
-          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
-          supabaseResponse = NextResponse.next({ request })
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options))
-        },
-      },
-    }
-  )
-
-  const { data: { user } } = await supabase.auth.getUser()
-  const { pathname } = request.nextUrl
-
-  // Rutas públicas
-  if (pathname.startsWith('/login') || pathname.startsWith('/api/auth') || pathname.startsWith('/api/webhooks')) {
-    if (user && pathname === '/login') {
-      return NextResponse.redirect(new URL('/dashboard', request.url))
-    }
-    return supabaseResponse
-  }
-
-  // Ruta raíz
-  if (pathname === '/') {
-    return NextResponse.redirect(new URL(user ? '/dashboard' : '/login', request.url))
-  }
-
-  // Rutas protegidas
-  if (!user) {
-    return NextResponse.redirect(new URL('/login', request.url))
-  }
-
-  return supabaseResponse
+export function middleware(request: NextRequest) {
+      const pathname = request.nextUrl.pathname
+      if (pathname === '/') {
+              const hasCookie = request.cookies.getAll().some(c => c.name.includes('-auth-token'))
+              return NextResponse.redirect(new URL(hasCookie ? '/dashboard' : '/login', request.url))
+      }
+      return NextResponse.next()
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'],
+      matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'],
 }
