@@ -292,7 +292,6 @@ function calcCostoPersonaSem(pago_semanal, suaParams) {
   const uma = (suaParams && suaParams.uma) || P.UMA;
   const primaRT = (suaParams && suaParams.prima_rt) || P.PRIMA_RT;
   const isnPct = (suaParams && suaParams.isn_pct) || P.ISN_PCT;
-  const adminSem = (suaParams && suaParams.admin_sem) || P.ADMIN_PERSONA_SEM;
   const colchonPct = (suaParams && suaParams.colchon_pct) || P.COLCHON_PCT;
 
   // IMSS Patronal (sobre SD registrado)
@@ -317,16 +316,13 @@ function calcCostoPersonaSem(pago_semanal, suaParams) {
   // ISN (sobre pago real)
   const isn = pago_semanal * isnPct;
 
-  // Administración REPSE
-  const admin = adminSem;
-
   // Cuotas obreras absorbidas por patrón (sobre SD)
   const cuotas_obreras = sd * P.CUOTAS_OBRERAS * 7;
 
   // Colchón seguridad (sobre pago real)
   const colchon = pago_semanal * colchonPct;
 
-  const cargas = imss_patronal + rcv_infonavit + aguinaldo_prov + vacaciones_prov + isn + admin + cuotas_obreras + colchon;
+  const cargas = imss_patronal + rcv_infonavit + aguinaldo_prov + vacaciones_prov + isn + cuotas_obreras + colchon;
   const total = pago_semanal + cargas;
 
   const r2 = n => Math.round(n * 100) / 100;
@@ -339,7 +335,6 @@ function calcCostoPersonaSem(pago_semanal, suaParams) {
     vacaciones_prov: r2(vacaciones_prov),
     riesgo_trabajo: r2(riesgo_trabajo),
     isn: r2(isn),
-    admin,
     cuotas_obreras: r2(cuotas_obreras),
     colchon: r2(colchon),
     cargas: r2(cargas),
@@ -458,7 +453,7 @@ const EPP_PRESETS={kitBase:{nombre:"Kit Base",costoReal:674.34,items:[{p:"Guante
 const CONSUMIBLES_PRESETS=[{producto:"Tanque oxigeno",precioUnitario:460,unidad:"tanque"},{producto:"Tanque acetileno",precioUnitario:1090,unidad:"tanque"},{producto:"Sierra sable rep.",precioUnitario:186.66,unidad:"pza"},{producto:"Sierra cinta rep.",precioUnitario:205.25,unidad:"pza"},{producto:"Disco corte 4.5",precioUnitario:32,unidad:"pza"},{producto:"Cincho",precioUnitario:87,unidad:"bolsa"},{producto:"Gas montacargas",precioUnitario:315,unidad:"tanque"},{producto:"Cinta aislar",precioUnitario:25,unidad:"rollo"},{producto:"Emplaye",precioUnitario:287,unidad:"rollo"}];
 const VEHICULOS_PRESETS=[{vehiculo:"Suburban verde",costoSemanal:1713},{vehiculo:"Suburban negra",costoSemanal:1932},{vehiculo:"Urban blanca",costoSemanal:5721},{vehiculo:"Ford 2015",costoSemanal:3240}];
 const PUESTOS_REF=[{puesto:"Mecanico",sal:10000},{puesto:"Soldador",sal:10000},{puesto:"Rigger",sal:10000},{puesto:"Supervisor",sal:14000},{puesto:"Maniobrista",sal:14000},{puesto:"Seguridad",sal:14000}];
-const PARAMS_FIN={indirectos:0.10,administracion:0.05,utilidad:0.10,contingencia:0.10};
+const PARAMS_FIN={indirectos:0.10,contingencia:0.02,utilidad:0.20};
 
 let historialGlobal = [];
 
@@ -470,7 +465,7 @@ function App({ onLogout } = {}) {
     React.useEffect(()=>{const f=async()=>{try{const r=await fetch("https://open.er-api.com/v6/latest/USD");const d=await r.json();if(d&&d.rates&&d.rates.MXN){const v=Math.round(d.rates.MXN*100)/100;P.USD_MXN=v;setTcReal(v);setTcSrc("live");setTcLoading(false);return;}}catch(e){}try{const r2=await fetch("https://api.frankfurter.app/latest?from=USD&to=MXN");const d2=await r2.json();if(d2&&d2.rates&&d2.rates.MXN){const v2=Math.round(d2.rates.MXN*100)/100;P.USD_MXN=v2;setTcReal(v2);setTcSrc("live");setTcLoading(false);return;}}catch(e2){}setTcLoading(false);setTcSrc("offline");};f();const iv=setInterval(f,30*60*1000);return()=>clearInterval(iv);},[]);
     const [consumibles,setConsumibles]=React.useState(CONSUMIBLES_PRESETS.map(c=>({...c,cantidad:0})));
     const [vehiculos,setVehiculos]=React.useState(VEHICULOS_PRESETS.map(v=>({...v,cantidad:0,semanas:0})));
-    const [paramsFinancieros,setParamsFinancieros]=React.useState({...PARAMS_FIN});
+    const [paramsFinancieros,setParamsFinancieros]=React.useState({...PARAMS_FIN,comision_cliente:0,seguro_rc_cobertura_usd:748000,seguro_rc_costo:15880,dias_pago_cliente:0,tasa_mensual:0.02,factor_15:false});
   const PRESETS_DB_KEY = 'micsa_presets_db_v2';
   const loadPresetsDB = () => {
     try {
@@ -541,21 +536,12 @@ function App({ onLogout } = {}) {
   // Step 3: Equipos (entrada manual con referencia de cotización)
   const [equipos, setEquipos] = useState([]);
 
-  const [admin, setAdmin] = useState({
-    admin_pct: 5,
-    comision_cliente: 0,
-    seguro_rc_cobertura_usd: 748000,
-    seguro_rc_costo: 15880,
-    utilidad_pct: 20,
-  });
-
   // Parámetros SUA editables (para cálculo MO)
   const [suaParams, setSuaParams] = useState({
     sd: 315.04,           // Salario Diario registrado IMSS
     uma: 113.14,          // UMA diario
     prima_rt: 0.07589,    // Prima Riesgo de Trabajo (7.589%)
     isn_pct: 0.03,        // ISN (3%)
-    admin_sem: 181.25,    // Admin REPSE semanal
     colchon_pct: 0.008,   // Colchón seguridad (0.8%)
   });
 
@@ -625,6 +611,12 @@ function App({ onLogout } = {}) {
   const [descripcionPrecio, setDescripcionPrecio] = useState("");
   const [montoMXNAlt, setMontoMXNAlt] = useState("");
   const [fechaFormalInput, setFechaFormalInput] = useState(new Date().toISOString().slice(0,10));
+  const [propuestaValor, setPropuestaValor] = useState([
+    "Reducción de tiempos muertos en planta mediante coordinación integral.",
+    "Personal certificado con experiencia comprobada en proyectos similares.",
+    "Coordinación HSE con seguro de responsabilidad civil vigente."
+  ]);
+  const [modoTriple, setModoTriple] = useState(false);
 
   const addIncluye = () => setIncluye([...incluye, ""]);
   const removeIncluye = (i) => setIncluye(incluye.filter((_, idx) => idx !== i));
@@ -687,22 +679,59 @@ function App({ onLogout } = {}) {
   const pctProrrateo = totalSemanasMax / 52;
   const montoProrrateo = prorrateoActivo ? (totalAnualEmpresa * pctProrrateo) / proyectosActivos : 0;
 
-  // Subtotal directo = MO + costos op + equipos + seguro + comisión + levantamiento + prorrateo (FORZA STEEL logic)
-  const totalConsumibles=consumibles.reduce((s,c)=>s+c.precioUnitario*c.cantidad,0)*1.10;
-    const totalVehiculos=vehiculos.reduce((s,v)=>s+v.costoSemanal*v.cantidad*v.semanas,0);
-    const subtotalDirecto = totalMOGlobal + costosOpBase + totalEquiposBase + admin.seguro_rc_costo + admin.comision_cliente + totalLevantamiento + montoProrrateo+totalConsumibles+totalVehiculos;
-  const adminMonto = subtotalDirecto * (admin.admin_pct / 100);
-  const costoReal = subtotalDirecto + adminMonto;
-  const utilidadMonto = costoReal * (admin.utilidad_pct / 100);
-  const totalSinIVA = costoReal + utilidadMonto;
-  // IVA 16% sobre el subtotal facturable completo (SAT: IVA sobre total del servicio)
+  // ── CONSUMIBLES Y VEHÍCULOS ──
+  const totalConsumibles = consumibles.reduce((s,c) => s + c.precioUnitario * c.cantidad, 0);
+  const totalVehiculos = vehiculos.reduce((s,v) => s + v.costoSemanal * v.cantidad * v.semanas, 0);
+
+  // ── REGLA DEL 1.5 (proyectos complejos) ──
+  const factorComplejidad = paramsFinancieros.factor_15 ? 1.5 : 1.0;
+  const totalMOAjustado = totalMOGlobal * factorComplejidad;
+
+  // ── COSTO DIRECTO (CD) ──
+  const costoDirecto = totalMOAjustado + costosOpBase + totalEquiposBase
+    + paramsFinancieros.seguro_rc_costo + totalLevantamiento
+    + totalConsumibles + totalVehiculos;
+
+  // ── FACTOR DE SOBRECOSTO (FSC) ──
+  const fscIndirectos = paramsFinancieros.indirectos;
+  const fscContingencia = paramsFinancieros.contingencia;
+  const fscFinanciamiento = (paramsFinancieros.dias_pago_cliente / 30) * paramsFinancieros.tasa_mensual;
+
+  // Montos desglosados para display
+  const montoIndirectos = costoDirecto * fscIndirectos;
+  const montoContingencia = costoDirecto * (1 + fscIndirectos) * fscContingencia;
+  const montoFinanciamiento = costoDirecto * (1 + fscIndirectos) * (1 + fscContingencia) * fscFinanciamiento;
+
+  // COSTO TOTAL = CD × (1 + indirectos) × (1 + contingencia) × (1 + financiamiento)
+  const costoTotal = costoDirecto * (1 + fscIndirectos) * (1 + fscContingencia) * (1 + fscFinanciamiento);
+
+  // UTILIDAD
+  const utilidadMonto = costoTotal * paramsFinancieros.utilidad;
+
+  // PRECIO
+  const totalSinIVA = costoTotal + utilidadMonto;
   const ivaTotal = totalSinIVA * P.IVA;
   const totalPropuestaMXN = totalSinIVA + ivaTotal;
   const totalPropuestaUSD = totalPropuestaMXN / P.USD_MXN;
 
+  // 3 OPCIONES (Básica / Integral / Élite)
+  const calcOpcion = (utilPct) => {
+    const util = costoTotal * utilPct;
+    const sinIva = costoTotal + util;
+    return { utilidad: util, sinIva, iva: sinIva * P.IVA, total: sinIva * (1 + P.IVA) };
+  };
+  const opBasica = calcOpcion(paramsFinancieros.utilidad);
+  const opIntegral = calcOpcion(paramsFinancieros.utilidad + 0.05);
+  const opElite = calcOpcion(paramsFinancieros.utilidad + 0.10);
+
   // Precio final para cotización formal (en moneda seleccionada)
   const precioFormalSinIVA = proyecto.moneda === "USD" ? Math.round(totalSinIVA / P.USD_MXN * 100) / 100 : Math.round(totalSinIVA * 100) / 100;
   const monedaLabel = proyecto.moneda === "USD" ? "USD" : "MXN";
+
+  // Variables legacy para compatibilidad con UI existente
+  const subtotalDirecto = costoDirecto;
+  const adminMonto = montoIndirectos;
+  const costoReal = costoTotal;
 
   // ── HELPERS ────────────────────────────────────────────────────────────
   const addEtapa = () => setEtapas([...etapas, {
@@ -794,7 +823,7 @@ function App({ onLogout } = {}) {
     { n: 1, label: "Alcance" },
     { n: 2, label: "Personal" },
     { n: 3, label: "Costos operativos" },
-    { n: 4, label: "Equipos y admin" },
+    { n: 4, label: "Equipos y FSC" },
     { n: 5, label: "Resumen" },
   ];
 
@@ -880,7 +909,6 @@ function App({ onLogout } = {}) {
         dRow("Aguinaldo (provisión)", costoEjemplo.aguinaldo_prov),
         dRow("Vacaciones + prima (provisión)", costoEjemplo.vacaciones_prov),
         dRow("ISN (" + (suaParams.isn_pct * 100) + "%)", costoEjemplo.isn),
-        dRow("Administración REPSE", costoEjemplo.admin),
         dRow("Cuotas obreras (absorbe patrón)", costoEjemplo.cuotas_obreras),
         dRow("Colchón seguridad", costoEjemplo.colchon),
         dRow("TOTAL semanal por persona", costoEjemplo.total, true, "#f0f0f0"),
@@ -941,13 +969,7 @@ function App({ onLogout } = {}) {
         dSection("8) HERRAMIENTA (USO Y DESGASTE)"),
         dRow("Herramienta", costos.herramienta, true),
 
-        // 9) ADMIN
-        dSection("9) ADMINISTRACIÓN DEL PROYECTO (DOCUMENTOS / PERMISOS / ALTAS / HSE) " + admin.admin_pct + "%"),
-        dRow("Administración " + admin.admin_pct + "%", adminMonto, true),
-
-        // 10) COMISIÓN
-        dSection("10) COMISIÓN CLIENTE"),
-        dRow("Comisión cliente", admin.comision_cliente, true),
+        // (Admin y comisión ahora son parte del FSC indirectos)
 
         // 11) EQUIPOS
         equipos.length > 0 && dSection("11) EQUIPOS (Aplica flete + IVA)"),
@@ -964,8 +986,8 @@ function App({ onLogout } = {}) {
         // SEGURO RC
         dSection("SEGURO DE RESPONSABILIDAD CIVIL"),
         React.createElement("div", { style: { fontSize: 10 } },
-          "Cobertura de $" + fmt(admin.seguro_rc_cobertura_usd) + " USD — Costo del seguro: ",
-          React.createElement("strong", null, fmtP(admin.seguro_rc_costo))
+          "Cobertura de $" + fmt(paramsFinancieros.seguro_rc_cobertura_usd) + " USD — Costo del seguro: ",
+          React.createElement("strong", null, fmtP(paramsFinancieros.seguro_rc_costo))
         ),
 
         // LEVANTAMIENTO
@@ -986,31 +1008,38 @@ function App({ onLogout } = {}) {
 
         // ═══ RESUMEN ═══
         React.createElement("div", { style: { marginTop: 30, borderTop: "3px solid #111", paddingTop: 12 } },
-          React.createElement("div", { style: { fontWeight: 700, fontSize: 14, letterSpacing: 1, marginBottom: 12 } }, "RESUMEN \u2014 (SIN UTILIDAD)"),
+          React.createElement("div", { style: { fontWeight: 700, fontSize: 14, letterSpacing: 1, marginBottom: 12 } }, "RESUMEN — INGENIERÍA DE COSTOS"),
 
-          dRow("Mano de obra", totalMOGlobal),
+          React.createElement("div", { style: { fontWeight: 600, fontSize: 11, color: "#1e40af", marginBottom: 6 } }, "COSTO DIRECTO (CD)"),
+          dRow("Mano de obra" + (paramsFinancieros.factor_15 ? " (×1.5)" : ""), totalMOAjustado),
           dRow("Viáticos", totalViaticos),
           dRow("Hospedaje", totalHospedaje),
           dRow("Traslados", costos.traslados),
-          dRow("EPP", costos.epp),
-          dRow("DC3", costos.dc3),
-          dRow("Examen Médico", costos.examen_medico),
-          dRow("Herramienta", costos.herramienta),
+          dRow("EPP + DC3 + Examen + Herramienta", costos.epp + costos.dc3 + costos.examen_medico + costos.herramienta),
           totalEquiposBase > 0 && dRow("Equipos", totalEquiposBase),
-          dRow("Administración proyecto", adminMonto),
-          dRow("Comisión Cliente", admin.comision_cliente),
-          dRow("Seguro RC", admin.seguro_rc_costo),
+          dRow("Seguro RC", paramsFinancieros.seguro_rc_costo),
           levantamiento.activo && totalLevantamiento > 0 && dRow("Levantamiento", totalLevantamiento),
-          prorrateoActivo && montoProrrateo > 0 && dRow("Prorrateo costos fijos", montoProrrateo),
+          totalConsumibles > 0 && dRow("Consumibles", totalConsumibles),
+          totalVehiculos > 0 && dRow("Vehículos", totalVehiculos),
 
           React.createElement("div", { style: { background: "#111", color: "white", padding: "10px 20px", margin: "12px -20px 0", display: "flex", justifyContent: "space-between", fontWeight: 700, fontSize: 13 } },
-            React.createElement("span", null, "TOTAL COSTO REAL"),
-            React.createElement("span", { style: { fontFamily: "'DM Mono',monospace" } }, fmtP(costoReal) + " MXN")
+            React.createElement("span", null, "COSTO DIRECTO"),
+            React.createElement("span", { style: { fontFamily: "'DM Mono',monospace" } }, fmtP(costoDirecto) + " MXN")
+          ),
+
+          React.createElement("div", { style: { fontWeight: 600, fontSize: 11, color: "#1e40af", marginTop: 16, marginBottom: 6 } }, "FACTOR DE SOBRECOSTO (FSC)"),
+          dRow("Indirectos (" + Math.round(fscIndirectos*100) + "%)", montoIndirectos),
+          dRow("Contingencia (" + Math.round(fscContingencia*100) + "%)", montoContingencia),
+          fscFinanciamiento > 0 && dRow("Financiamiento (" + (fscFinanciamiento*100).toFixed(1) + "% — " + paramsFinancieros.dias_pago_cliente + " días)", montoFinanciamiento),
+
+          React.createElement("div", { style: { background: "#1e3a5f", color: "white", padding: "10px 20px", margin: "12px -20px 0", display: "flex", justifyContent: "space-between", fontWeight: 700, fontSize: 13 } },
+            React.createElement("span", null, "COSTO TOTAL"),
+            React.createElement("span", { style: { fontFamily: "'DM Mono',monospace" } }, fmtP(costoTotal) + " MXN")
           ),
 
           React.createElement("div", { style: { marginTop: 16, padding: "12px 0", borderBottom: "1px solid #ccc" } },
             React.createElement("div", { style: { display: "flex", justifyContent: "space-between", fontSize: 12, marginBottom: 4 } },
-              React.createElement("span", null, "UTILIDAD (" + admin.utilidad_pct + "%)"),
+              React.createElement("span", null, "UTILIDAD (" + Math.round(paramsFinancieros.utilidad*100) + "%)"),
               React.createElement("span", { style: { fontFamily: "'DM Mono',monospace" } }, fmtP(utilidadMonto) + " MXN")
             )
           ),
@@ -1023,6 +1052,10 @@ function App({ onLogout } = {}) {
           React.createElement("div", { style: { background: "#1e40af", color: "white", padding: "12px 20px", margin: "0 -20px", display: "flex", justifyContent: "space-between", fontWeight: 700, fontSize: 13 } },
             React.createElement("span", null, "PRECIO EN DÓLAR (" + fmt(P.USD_MXN) + " MXN)"),
             React.createElement("span", { style: { fontFamily: "'DM Mono',monospace", fontSize: 15 } }, "$" + fmt(totalSinIVA / P.USD_MXN) + " USD")
+          ),
+
+          prorrateoActivo && montoProrrateo > 0 && React.createElement("div", { style: { marginTop: 12, padding: 8, background: "#fef9c3", borderRadius: 6, fontSize: 10, color: "#92400e" } },
+            "Ref: Prorrateo costos fijos: " + fmtP(montoProrrateo) + " (incluido en indirectos " + Math.round(fscIndirectos*100) + "%)"
           )
         ),
 
@@ -1175,6 +1208,22 @@ function App({ onLogout } = {}) {
           React.createElement("button", { className: "cot-btn-sm", onClick: () => setAlcances(["Asignación de supervisión de proyecto para coordinar, controlar y asegurar la correcta ejecución de los trabajos conforme a manuales, instructivos y prácticas aplicables.","Suministro de personal especializado en el número adecuado, laborando conforme a la jornada requerida por el volumen de obra, con EPP básico y específico.","Coordinación permanente con los representantes del cliente para definir el procedimiento más adecuado de ejecución.","Ejecución de actividades exclusivamente por personal calificado conforme a su perfil y puesto de trabajo.","Cumplimiento estricto del reglamento interno de planta.","Uso de herramienta adecuada y necesaria para cada actividad, así como equipo de protección personal requerido.","Toma de evidencia fotográfica únicamente para fines de reportes de avance y control interno.","Supervisión de seguridad industrial para asegurar el cumplimiento de los estándares de seguridad durante todo el evento.","Recepción del área y equipos libres de producción por parte del cliente.","Coordinación técnica con un representante del cliente para aclaraciones operativas y liberaciones de trabajo.","Planeación, coordinación logística, control documental y reportes del proyecto.","Seguro de Responsabilidad Civil vigente durante toda la ejecución del servicio."]) }, "\u21ba Restaurar")
         ),
 
+        // PROPUESTA DE VALOR
+        React.createElement("div", { className: "cot-section-header blue" }, "¿POR QUÉ MICSA? (Propuesta de Valor)"),
+        propuestaValor.map((item, i) =>
+          React.createElement("div", { key: i, className: "cot-item-row" },
+            React.createElement("div", { className: "cot-item-letter", style: { color: "#059669" } }, "✓"),
+            React.createElement("div", { className: "cot-item-input" },
+              React.createElement("textarea", { value: item, onChange: e => { const u = [...propuestaValor]; u[i] = e.target.value; setPropuestaValor(u); }, rows: 2 })
+            ),
+            React.createElement("button", { className: "cot-item-del", onClick: () => setPropuestaValor(propuestaValor.filter((_, idx) => idx !== i)) }, "\u00d7")
+          )
+        ),
+        React.createElement("div", { className: "cot-btn-row" },
+          React.createElement("button", { className: "cot-btn-sm", onClick: () => setPropuestaValor([...propuestaValor, ""]) }, "+ Agregar"),
+          React.createElement("button", { className: "cot-btn-sm", onClick: () => setPropuestaValor(["Reducción de tiempos muertos en planta mediante coordinación integral.", "Personal certificado con experiencia comprobada en proyectos similares.", "Coordinación HSE con seguro de responsabilidad civil vigente."]) }, "\u21ba Restaurar")
+        ),
+
         // FORMAS DE PAGO
         React.createElement("div", { className: "cot-section-header" }, "FORMAS DE PAGO"),
         React.createElement("div", { className: "cot-field-row" },
@@ -1268,6 +1317,15 @@ function App({ onLogout } = {}) {
             React.createElement("span", { style: { fontWeight: 700 } }, "\u2022 "), alcanceEspecifico
           ),
 
+          // ── POR QUÉ MICSA (Propuesta de Valor) ──
+          React.createElement("div", { className: "pv-section-title", style: { marginTop: 16 } }, "¿POR QUÉ MICSA?"),
+          propuestaValor.map((item, i) =>
+            React.createElement("div", { key: i, style: { display: "flex", alignItems: "flex-start", marginBottom: 6, fontSize: 10, lineHeight: 1.5 } },
+              React.createElement("span", { style: { color: "#1e3a5f", fontWeight: 700, marginRight: 8, fontSize: 14 } }, "✓"),
+              React.createElement("span", null, item)
+            )
+          ),
+
           // ── PAGE BREAK ──
           React.createElement("div", { style: { borderTop: "1px dashed #ccc", margin: "20px 0" } }),
 
@@ -1322,7 +1380,7 @@ function App({ onLogout } = {}) {
             "SEGURO DE RESPONSABILIDAD CIVIL"
           ),
           React.createElement("p", { style: { fontSize: 9, lineHeight: 1.4, textAlign: "justify", marginBottom: 4 } },
-            "MICSA cuenta con Seguro de Responsabilidad Civil vigente con cobertura de $" + fmt(admin.seguro_rc_cobertura_usd) + " USD durante toda la ejecución del servicio."
+            "MICSA cuenta con Seguro de Responsabilidad Civil vigente con cobertura de $" + fmt(paramsFinancieros.seguro_rc_cobertura_usd) + " USD durante toda la ejecución del servicio."
           ),
           React.createElement("p", { style: { fontSize: 8, lineHeight: 1.3, color: "#555", textAlign: "justify", marginBottom: 4 } },
             "El uso y funcionamiento del equipo de montaje de MICSA pueden causar daños a las superficies de suelo y/o estructuras de soporte. Es responsabilidad del cliente asegurar que los pisos y/o estructuras son capaces de soportar los equipos y las cargas en el proceso."
@@ -1969,7 +2027,7 @@ function App({ onLogout } = {}) {
 
             React.createElement("div", { className: "btn-row no-print" },
               React.createElement("button", { className: "btn btn-secondary", onClick: () => setStep(2) }, "\u2190 Personal"),
-              React.createElement("button", { className: "btn btn-primary", onClick: () => setStep(4) }, "Continuar \u2192 Equipos y admin")
+              React.createElement("button", { className: "btn btn-primary", onClick: () => setStep(4) }, "Continuar \u2192 Equipos y FSC")
             )
           ),
 
@@ -2092,7 +2150,7 @@ function App({ onLogout } = {}) {
               ),
 
               // Personal oficina
-              React.createElement("div", { style: { fontSize: 11, color: "var(--muted)", textTransform: "uppercase", letterSpacing: 1, marginBottom: 8 } }, "A) Nómina oficina (pago semanal + ~26% cargas + admin REPSE)"),
+              React.createElement("div", { style: { fontSize: 11, color: "var(--muted)", textTransform: "uppercase", letterSpacing: 1, marginBottom: 8 } }, "A) Nómina oficina (pago semanal + ~26% cargas)"),
               React.createElement("table", { className: "ptable" },
                 React.createElement("thead", null, React.createElement("tr", null,
                   React.createElement("th", null, "Nombre"),
@@ -2167,34 +2225,58 @@ function App({ onLogout } = {}) {
               )
             ),
 
-            // ADMINISTRACI\u00d3N
-            React.createElement("div", { className: "section" },
-              React.createElement("div", { className: "section-title" }, "Administración, comisiones y seguro"),
+            // FACTOR DE SOBRECOSTO (FSC)
+            React.createElement("div", { className: "section", style: { border: "2px solid var(--accent2)" } },
+              React.createElement("div", { className: "section-title" }, "Factor de Sobrecosto (FSC) — Ingeniería de Costos"),
+              React.createElement("div", { style: { padding: "8px 12px", background: "#dbeafe", borderRadius: 8, fontSize: 12, color: "#1e40af", marginBottom: 12 } },
+                "Un solo factor consolidado sobre el Costo Directo. Incluye: indirectos de oficina/campo, REPSE admin, prorrateo, comisiones."
+              ),
               React.createElement("div", { className: "cost-grid" },
                 React.createElement("div", { className: "cost-card" },
-                  React.createElement("div", { className: "cost-card-title" }, "Administración proyecto (%)"),
-                  React.createElement("input", { type: "number", min: 0, max: 30, step: 0.5, value: admin.admin_pct,
-                    onChange: e => setAdmin({ ...admin, admin_pct: Number(e.target.value) }) }),
-                  React.createElement("div", { className: "cost-card-note" }, fmtP(adminMonto) + " (" + admin.admin_pct + "% sobre costo directo)")
+                  React.createElement("div", { className: "cost-card-title" }, "Indirectos (%)"),
+                  React.createElement("input", { type: "number", min: 0, max: 50, step: 0.5, value: Math.round(paramsFinancieros.indirectos * 100),
+                    onChange: e => setParamsFinancieros({ ...paramsFinancieros, indirectos: Number(e.target.value) / 100 }) }),
+                  React.createElement("div", { className: "cost-card-note" }, fmtP(montoIndirectos) + " — Incluye REPSE, prorrateo, comisión")
                 ),
                 React.createElement("div", { className: "cost-card" },
-                  React.createElement("div", { className: "cost-card-title" }, "Comisión cliente"),
-                  React.createElement("input", { type: "number", min: 0, value: admin.comision_cliente,
-                    onChange: e => setAdmin({ ...admin, comision_cliente: Number(e.target.value) }) }),
-                  React.createElement("div", { className: "cost-card-note" }, fmtP(admin.comision_cliente) + " MXN")
+                  React.createElement("div", { className: "cost-card-title" }, "Contingencia (%)"),
+                  React.createElement("input", { type: "number", min: 0, max: 10, step: 0.5, value: Math.round(paramsFinancieros.contingencia * 100),
+                    onChange: e => setParamsFinancieros({ ...paramsFinancieros, contingencia: Number(e.target.value) / 100 }) }),
+                  React.createElement("div", { className: "cost-card-note" }, fmtP(montoContingencia) + " — Provisión riesgos 1-3%")
+                ),
+                React.createElement("div", { className: "cost-card" },
+                  React.createElement("div", { className: "cost-card-title" }, "Días pago cliente"),
+                  React.createElement("input", { type: "number", min: 0, max: 180, step: 1, value: paramsFinancieros.dias_pago_cliente,
+                    onChange: e => setParamsFinancieros({ ...paramsFinancieros, dias_pago_cliente: Number(e.target.value) }) }),
+                  React.createElement("div", { className: "cost-card-note" }, "Financiamiento: " + (fscFinanciamiento * 100).toFixed(1) + "% = " + fmtP(montoFinanciamiento))
+                ),
+                React.createElement("div", { className: "cost-card" },
+                  React.createElement("div", { className: "cost-card-title" }, "Tasa mensual dinero (%)"),
+                  React.createElement("input", { type: "number", min: 0, max: 10, step: 0.1, value: (paramsFinancieros.tasa_mensual * 100).toFixed(1),
+                    onChange: e => setParamsFinancieros({ ...paramsFinancieros, tasa_mensual: Number(e.target.value) / 100 }) }),
+                  React.createElement("div", { className: "cost-card-note" }, "Default: 2% mensual")
+                ),
+                React.createElement("div", { className: "cost-card", style: { border: "2px solid var(--green)" } },
+                  React.createElement("div", { className: "cost-card-title", style: { color: "var(--green)" } }, "Utilidad (%)"),
+                  React.createElement("input", { type: "number", min: 0, max: 50, step: 0.5, value: Math.round(paramsFinancieros.utilidad * 100),
+                    onChange: e => setParamsFinancieros({ ...paramsFinancieros, utilidad: Number(e.target.value) / 100 }) }),
+                  React.createElement("div", { className: "cost-card-note" }, fmtP(utilidadMonto) + " (" + Math.round(paramsFinancieros.utilidad * 100) + "% sobre costo total)")
                 ),
                 React.createElement("div", { className: "cost-card" },
                   React.createElement("div", { className: "cost-card-title" }, "Seguro RC (costo)"),
-                  React.createElement("input", { type: "number", min: 0, value: admin.seguro_rc_costo,
-                    onChange: e => setAdmin({ ...admin, seguro_rc_costo: Number(e.target.value) }) }),
-                  React.createElement("div", { className: "cost-card-note" }, "Cobertura: $" + fmt(admin.seguro_rc_cobertura_usd) + " USD")
-                ),
-                React.createElement("div", { className: "cost-card" },
-                  React.createElement("div", { className: "cost-card-title" }, "Utilidad (%)"),
-                  React.createElement("input", { type: "number", min: 0, max: 50, step: 0.5, value: admin.utilidad_pct,
-                    onChange: e => setAdmin({ ...admin, utilidad_pct: Number(e.target.value) }) }),
-                  React.createElement("div", { className: "cost-card-note" }, fmtP(utilidadMonto) + " (" + admin.utilidad_pct + "%)")
+                  React.createElement("input", { type: "number", min: 0, value: paramsFinancieros.seguro_rc_costo,
+                    onChange: e => setParamsFinancieros({ ...paramsFinancieros, seguro_rc_costo: Number(e.target.value) }) }),
+                  React.createElement("div", { className: "cost-card-note" }, "Cobertura: $" + fmt(paramsFinancieros.seguro_rc_cobertura_usd) + " USD")
                 )
+              ),
+              // Referencias
+              React.createElement("div", { style: { marginTop: 12, display: "flex", flexWrap: "wrap", gap: 8 } },
+                React.createElement("label", { style: { display: "flex", alignItems: "center", gap: 6, padding: "6px 12px", background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 6, fontSize: 12, cursor: "pointer" } },
+                  React.createElement("input", { type: "checkbox", checked: paramsFinancieros.factor_15,
+                    onChange: e => setParamsFinancieros({ ...paramsFinancieros, factor_15: e.target.checked }) }),
+                  "Regla ×1.5 (proyectos complejos) — MO: " + fmtP(totalMOAjustado)
+                ),
+                prorrateoActivo && montoProrrateo > 0 && React.createElement("span", { className: "prorrateo-tag" }, "Prorrateo ref: " + fmtP(montoProrrateo))
               )
             ),
 
@@ -2234,12 +2316,6 @@ function App({ onLogout } = {}) {
                   React.createElement("input", { type: "number", min: 0, max: 10, step: 0.1, value: (suaParams.isn_pct * 100).toFixed(1),
                     onChange: e => setSuaParams({ ...suaParams, isn_pct: Number(e.target.value) / 100 }) }),
                   React.createElement("div", { className: "cost-card-note" }, "Coahuila: 3%")
-                ),
-                React.createElement("div", { className: "cost-card" },
-                  React.createElement("div", { className: "cost-card-title" }, "Admin REPSE ($/sem)"),
-                  React.createElement("input", { type: "number", min: 0, step: 0.25, value: suaParams.admin_sem,
-                    onChange: e => setSuaParams({ ...suaParams, admin_sem: Number(e.target.value) }) }),
-                  React.createElement("div", { className: "cost-card-note" }, "Default: $181.25")
                 ),
                 React.createElement("div", { className: "cost-card" },
                   React.createElement("div", { className: "cost-card-title" }, "Colchón seguridad (%)"),
@@ -2282,8 +2358,6 @@ function App({ onLogout } = {}) {
               React.createElement("button", { className: "btn btn-primary", onClick: () => setStep(5) }, "Continuar \u2192 Resumen")
             )
           ),
-
-          React.createElement("div",{className:"section"},React.createElement("div",{className:"section-title"},"Parametros Financieros"),React.createElement("div",{style:{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(180px,1fr))",gap:12}},[{k:"indirectos",l:"Indirectos"},{k:"administracion",l:"Administracion"},{k:"utilidad",l:"Utilidad"},{k:"contingencia",l:"Contingencia"}].map(p=>React.createElement("div",{key:p.k,style:{background:"var(--surface)",border:"1px solid var(--border)",borderRadius:"var(--radius)",padding:14}},React.createElement("div",{style:{fontWeight:600,fontSize:13,marginBottom:6}},p.l),React.createElement("div",{style:{display:"flex",alignItems:"center",gap:6}},React.createElement("input",{type:"number",min:0,max:100,step:1,value:Math.round(paramsFinancieros[p.k]*100),style:{width:55,padding:"5px",borderRadius:5,border:"1px solid var(--border)",textAlign:"center",fontSize:16,fontWeight:700},onChange:e=>setParamsFinancieros({...paramsFinancieros,[p.k]:+e.target.value/100})}),React.createElement("span",{style:{fontSize:16,fontWeight:700,color:"var(--muted)"}},"%"))))),React.createElement("div",{style:{marginTop:10,padding:10,background:"#dbeafe",borderRadius:8,fontSize:12,color:"#1e40af"}},"Defaults: Ind.10% Admin.5% Util.10% Conting.10%")),
 
           // ═══ STEP 5: RESUMEN ═══
           step === 5 && React.createElement(React.Fragment, null,
@@ -2356,12 +2430,12 @@ function App({ onLogout } = {}) {
                 ),
                 React.createElement("div", { className: "cost-row" },
                   React.createElement("span", { className: "cost-label" }, "Seguro RC"),
-                  React.createElement("span", { className: "cost-val" }, fmtP(admin.seguro_rc_costo))
+                  React.createElement("span", { className: "cost-val" }, fmtP(paramsFinancieros.seguro_rc_costo))
                 ),
 
                 React.createElement("div", { className: "cost-row" },
                   React.createElement("span", { className: "cost-label" }, "Comisión cliente"),
-                  React.createElement("span", { className: "cost-val" }, fmtP(admin.comision_cliente))
+                  React.createElement("span", { className: "cost-val" }, fmtP(paramsFinancieros.comision_cliente))
                 ),
 
                 levantamiento.activo && totalLevantamiento > 0 && React.createElement("div", { className: "cost-row", style: { background: "#dbeafe", margin: "4px -24px", padding: "8px 24px", border: "none" } },
@@ -2377,39 +2451,73 @@ function App({ onLogout } = {}) {
                   React.createElement("span", { className: "cost-val", style: { color: "#92400e", fontWeight: 600 } }, fmtP(montoProrrateo))
                 ),
 
-            totalConsumibles>0&&React.createElement("div",{className:"cost-row",style:{background:"#fefce8"}},React.createElement("span",{className:"cost-label",style:{color:"#92400e"}},"Consumibles (c/conting.)"),React.createElement("span",{className:"cost-val",style:{color:"#92400e"}},fmtP(totalConsumibles))),
-            totalVehiculos>0&&React.createElement("div",{className:"cost-row",style:{background:"#f0fdf4"}},React.createElement("span",{className:"cost-label",style:{color:"#166534"}},"Vehiculos"),React.createElement("span",{className:"cost-val",style:{color:"#166534"}},fmtP(totalVehiculos))),
+            totalConsumibles>0&&React.createElement("div",{className:"cost-row",style:{background:"#fefce8"}},React.createElement("span",{className:"cost-label",style:{color:"#92400e"}},"Consumibles"),React.createElement("span",{className:"cost-val",style:{color:"#92400e"}},fmtP(totalConsumibles))),
+            totalVehiculos>0&&React.createElement("div",{className:"cost-row",style:{background:"#f0fdf4"}},React.createElement("span",{className:"cost-label",style:{color:"#166534"}},"Vehículos"),React.createElement("span",{className:"cost-val",style:{color:"#166534"}},fmtP(totalVehiculos))),
+
+                paramsFinancieros.factor_15 && React.createElement("div", { style: { padding: "4px 10px", fontSize: 11, color: "#7c3aed", background: "#f5f3ff", borderRadius: 6, margin: "2px 0 6px" } }, "Regla ×1.5 aplicada a MO"),
 
                 React.createElement("div", { className: "cost-row subtotal" },
-                  React.createElement("span", { className: "cost-label" }, "Subtotal directo"),
-                  React.createElement("span", { className: "cost-val" }, fmtP(subtotalDirecto))
+                  React.createElement("span", { className: "cost-label" }, "COSTO DIRECTO (CD)"),
+                  React.createElement("span", { className: "cost-val" }, fmtP(costoDirecto))
+                ),
+
+                // FSC
+                React.createElement("div", { style: { padding: "8px 10px", fontSize: 11, color: "#1e40af", background: "#dbeafe", borderRadius: 6, margin: "8px 0 4px", fontWeight: 600 } }, "FACTOR DE SOBRECOSTO (FSC)"),
+                React.createElement("div", { className: "cost-row" },
+                  React.createElement("span", { className: "cost-label" }, "Indirectos (" + Math.round(fscIndirectos*100) + "%)"),
+                  React.createElement("span", { className: "cost-val" }, fmtP(montoIndirectos))
                 ),
                 React.createElement("div", { className: "cost-row" },
-                  React.createElement("span", { className: "cost-label" }, "Administración (" + admin.admin_pct + "%)"),
-                  React.createElement("span", { className: "cost-val" }, fmtP(adminMonto))
+                  React.createElement("span", { className: "cost-label" }, "Contingencia (" + Math.round(fscContingencia*100) + "%)"),
+                  React.createElement("span", { className: "cost-val" }, fmtP(montoContingencia))
+                ),
+                fscFinanciamiento > 0 && React.createElement("div", { className: "cost-row" },
+                  React.createElement("span", { className: "cost-label" }, "Financiamiento (" + (fscFinanciamiento*100).toFixed(1) + "% — " + paramsFinancieros.dias_pago_cliente + " días)"),
+                  React.createElement("span", { className: "cost-val" }, fmtP(montoFinanciamiento))
                 ),
                 React.createElement("div", { className: "cost-row subtotal" },
-                  React.createElement("span", { className: "cost-label" }, "TOTAL COSTO REAL"),
-                  React.createElement("span", { className: "cost-val" }, fmtP(costoReal))
+                  React.createElement("span", { className: "cost-label" }, "COSTO TOTAL"),
+                  React.createElement("span", { className: "cost-val" }, fmtP(costoTotal))
                 ),
+
                 React.createElement("div", { className: "cost-row" },
-                  React.createElement("span", { className: "cost-label" }, "Utilidad (" + admin.utilidad_pct + "%)"),
+                  React.createElement("span", { className: "cost-label", style: { color: "var(--green)" } }, "Utilidad (" + Math.round(paramsFinancieros.utilidad*100) + "%)"),
                   React.createElement("span", { className: "cost-val", style: { color: "var(--green)" } }, fmtP(utilidadMonto))
                 ),
                 React.createElement("div", { className: "cost-row subtotal" },
                   React.createElement("span", { className: "cost-label" }, "SUBTOTAL SIN IVA"),
                   React.createElement("span", { className: "cost-val", style: { fontWeight: 700, fontSize: 14 } }, fmtP(totalSinIVA))
                 ),
-
                 React.createElement("div", { className: "cost-row iva-row" },
                   React.createElement("span", { className: "cost-label", style: { fontWeight: 700 } }, "IVA 16%"),
                   React.createElement("span", { className: "cost-val", style: { fontWeight: 700, fontSize: 14 } }, fmtP(ivaTotal))
                 ),
-
                 React.createElement("div", { className: "cost-row total" },
                   React.createElement("span", { className: "cost-label" }, "PRECIO DE VENTA (c/IVA)"),
                   React.createElement("span", { className: "cost-val" },
                     proyecto.moneda === "USD" ? fmtUSD(totalPropuestaUSD) : fmtP(totalPropuestaMXN))
+                ),
+
+                // TOGGLE 3 OPCIONES
+                React.createElement("div", { style: { marginTop: 12, textAlign: "center" } },
+                  React.createElement("button", {
+                    onClick: () => setModoTriple(!modoTriple),
+                    style: { padding: "6px 16px", fontSize: 12, fontWeight: 600, borderRadius: "var(--radius)", border: modoTriple ? "2px solid var(--accent)" : "1px solid var(--border)", background: modoTriple ? "#eef2ff" : "var(--surface)", color: modoTriple ? "var(--accent)" : "var(--muted)", cursor: "pointer" }
+                  }, modoTriple ? "✓ Cotización 3 opciones" : "Mostrar 3 opciones de precio")
+                ),
+
+                // 3 OPCIONES
+                modoTriple && React.createElement("div", { style: { marginTop: 16, display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 } },
+                  [
+                    { label: "Básica", data: opBasica, pct: Math.round(paramsFinancieros.utilidad*100), color: "var(--muted)" },
+                    { label: "Integral ★", data: opIntegral, pct: Math.round((paramsFinancieros.utilidad+0.05)*100), color: "var(--accent)" },
+                    { label: "Élite", data: opElite, pct: Math.round((paramsFinancieros.utilidad+0.10)*100), color: "var(--green)" }
+                  ].map(op => React.createElement("div", { key: op.label, style: { border: op.label.includes("Integral") ? "2px solid var(--accent)" : "1px solid var(--border)", borderRadius: "var(--radius)", padding: 12, textAlign: "center", background: op.label.includes("Integral") ? "#eef2ff" : "var(--surface)" } },
+                    React.createElement("div", { style: { fontWeight: 700, fontSize: 13, marginBottom: 6, color: op.color } }, op.label),
+                    React.createElement("div", { style: { fontSize: 11, color: "var(--muted)", marginBottom: 4 } }, "Utilidad " + op.pct + "%"),
+                    React.createElement("div", { style: { fontSize: 16, fontWeight: 700 } }, fmtP(op.data.total)),
+                    React.createElement("div", { style: { fontSize: 10, color: "var(--muted)" } }, "Sin IVA: " + fmtP(op.data.sinIva))
+                  ))
                 )
               ),
 
@@ -2430,7 +2538,7 @@ function App({ onLogout } = {}) {
                           React.createElement("div", { className: "detail-row" }, React.createElement("span", null, "INFONAVIT"), React.createElement("span", null, fmtP(p.costo.infonavit))),
                           React.createElement("div", { className: "detail-row" }, React.createElement("span", null, "Aguinaldo prov."), React.createElement("span", null, fmtP(p.costo.aguinaldo_prov))),
                           React.createElement("div", { className: "detail-row" }, React.createElement("span", null, "Vacaciones prov."), React.createElement("span", null, fmtP(p.costo.vacaciones_prov))),
-                          React.createElement("div", { className: "detail-row" }, React.createElement("span", null, "Riesgo + ISN + Admin"), React.createElement("span", null, fmtP(p.costo.riesgo_trabajo + p.costo.isn + p.costo.admin)))
+                          React.createElement("div", { className: "detail-row" }, React.createElement("span", null, "Riesgo + ISN"), React.createElement("span", null, fmtP(p.costo.riesgo_trabajo + p.costo.isn)))
                         ),
                         React.createElement("div", { style: { display: "flex", justifyContent: "space-between", marginTop: 4, fontSize: 13 } },
                           React.createElement("span", { style: { color: "var(--muted)" } }, "Total " + et.semanas + " sem \u00d7 " + p.cantidad + "p:"),
@@ -2647,7 +2755,8 @@ function LoginScreen({ onLogin }) {
 }
 
 function AppWithLogin() {
-  const [user, setUser] = React.useState(null);
+  const isIframe = window !== window.parent;
+  const [user, setUser] = React.useState(() => isIframe ? USERS[0] : null);
   if (!user) {
     return React.createElement(LoginScreen, { onLogin: setUser });
   }
