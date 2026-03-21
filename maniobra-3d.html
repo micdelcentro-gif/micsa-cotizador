@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MICSA — Maniobra de Izaje 3D</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#1a1d23;color:#e0e0e0;font-family:'Segoe UI',system-ui,sans-serif;overflow:hidden}
+#canvas-container{width:100vw;height:100vh;position:relative}
+canvas{display:block}
+
+/* Panel de controles */
+#controls{position:absolute;top:20px;left:20px;background:rgba(20,22,28,0.92);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px;width:280px;z-index:10}
+#controls h1{font-size:14px;letter-spacing:3px;text-transform:uppercase;color:#4a9eff;margin-bottom:4px;font-weight:700}
+#controls .sub{font-size:11px;color:#888;margin-bottom:18px;letter-spacing:1px}
+.ctrl-group{margin-bottom:14px}
+.ctrl-group label{display:flex;justify-content:space-between;font-size:11px;color:#aaa;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px}
+.ctrl-group label span{color:#4a9eff;font-family:'Consolas',monospace;font-weight:700}
+input[type=range]{-webkit-appearance:none;width:100%;height:6px;border-radius:3px;background:#2a2d35;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:#4a9eff;cursor:pointer;border:2px solid #1a1d23}
+.btn-row{display:flex;gap:8px;margin-top:16px}
+.btn{flex:1;padding:8px;border:1px solid rgba(255,255,255,0.1);border-radius:8px;background:rgba(74,158,255,0.1);color:#4a9eff;font-size:11px;font-weight:600;cursor:pointer;text-transform:uppercase;letter-spacing:1px;transition:all .2s}
+.btn:hover{background:rgba(74,158,255,0.25)}
+.btn.active{background:#4a9eff;color:#0a0c10}
+
+/* Info panel */
+#info{position:absolute;bottom:20px;left:20px;background:rgba(20,22,28,0.92);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px 20px;z-index:10}
+#info .row{display:flex;gap:24px}
+#info .stat{text-align:center}
+#info .stat .val{font-size:22px;font-weight:700;color:#4a9eff;font-family:'Consolas',monospace}
+#info .stat .lbl{font-size:9px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+
+/* Logo */
+#logo{position:absolute;top:20px;right:20px;background:rgba(20,22,28,0.92);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:12px 18px;z-index:10;display:flex;align-items:center;gap:10px}
+#logo .mark{width:36px;height:36px;background:#4a9eff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#0a0c10;letter-spacing:1px}
+#logo .txt{font-size:10px;color:#888;letter-spacing:2px;text-transform:uppercase;line-height:1.4}
+#logo .txt strong{display:block;font-size:14px;color:#e0e0e0;letter-spacing:3px}
+
+/* Annotations */
+.annotation{position:absolute;pointer-events:none;z-index:5}
+.annotation .line{width:1px;height:40px;background:rgba(74,158,255,0.4);margin:0 auto}
+.annotation .tag{background:rgba(74,158,255,0.15);border:1px solid rgba(74,158,255,0.3);border-radius:6px;padding:3px 8px;font-size:9px;color:#4a9eff;white-space:nowrap;text-transform:uppercase;letter-spacing:1px}
+</style>
+</head>
+<body>
+<div id="canvas-container">
+  <div id="controls">
+    <h1>Maniobra de Izaje</h1>
+    <div class="sub">Simulador 3D — Grupo MICSA</div>
+
+    <div class="ctrl-group">
+      <label>Ángulo del boom <span id="v-angle">45°</span></label>
+      <input type="range" id="boom-angle" min="15" max="80" value="45" step="1"/>
+    </div>
+    <div class="ctrl-group">
+      <label>Extensión telescópica <span id="v-ext">60%</span></label>
+      <input type="range" id="boom-ext" min="20" max="100" value="60" step="1"/>
+    </div>
+    <div class="ctrl-group">
+      <label>Rotación tornamesa <span id="v-rot">0°</span></label>
+      <input type="range" id="turntable" min="-180" max="180" value="0" step="1"/>
+    </div>
+    <div class="ctrl-group">
+      <label>Carga (ton) <span id="v-load">5.0</span></label>
+      <input type="range" id="load" min="0.5" max="30" value="5" step="0.5"/>
+    </div>
+    <div class="btn-row">
+      <button class="btn" id="btn-pos1">Pos. 1</button>
+      <button class="btn" id="btn-pos2">Pos. 2</button>
+      <button class="btn" id="btn-pos3">Pos. 3</button>
+      <button class="btn" id="btn-reset">Reset</button>
+    </div>
+    <div class="btn-row">
+      <button class="btn" id="btn-animate">Animar Secuencia</button>
+    </div>
+  </div>
+
+  <div id="info">
+    <div class="row">
+      <div class="stat"><div class="val" id="s-radius">--</div><div class="lbl">Radio (m)</div></div>
+      <div class="stat"><div class="val" id="s-height">--</div><div class="lbl">Altura (m)</div></div>
+      <div class="stat"><div class="val" id="s-cap">--</div><div class="lbl">Cap. Máx (ton)</div></div>
+      <div class="stat"><div class="val" id="s-util">--</div><div class="lbl">Utilización %</div></div>
+    </div>
+  </div>
+
+  <div id="logo">
+    <div class="mark">M</div>
+    <div class="txt"><strong>MICSA</strong>Montajes Industriales</div>
+  </div>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.162.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+// ── Scene setup ──
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x1a1d23);
+scene.fog = new THREE.Fog(0x1a1d23, 60, 120);
+
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 200);
+camera.position.set(25, 15, 30);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.2;
+document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+controls.target.set(0, 6, 0);
+controls.maxPolarAngle = Math.PI / 2.05;
+
+// ── Lights ──
+const ambient = new THREE.AmbientLight(0x4466aa, 0.6);
+scene.add(ambient);
+
+const dirLight = new THREE.DirectionalLight(0xffeedd, 2.5);
+dirLight.position.set(15, 25, 20);
+dirLight.castShadow = true;
+dirLight.shadow.mapSize.set(2048, 2048);
+dirLight.shadow.camera.near = 1;
+dirLight.shadow.camera.far = 80;
+dirLight.shadow.camera.left = -30;
+dirLight.shadow.camera.right = 30;
+dirLight.shadow.camera.top = 30;
+dirLight.shadow.camera.bottom = -30;
+scene.add(dirLight);
+
+const fillLight = new THREE.DirectionalLight(0x6688cc, 0.8);
+fillLight.position.set(-10, 10, -15);
+scene.add(fillLight);
+
+// ── Materials ──
+const matChassis = new THREE.MeshStandardMaterial({ color: 0xf5c518, roughness: 0.4, metalness: 0.3 });
+const matBoom = new THREE.MeshStandardMaterial({ color: 0xf5c518, roughness: 0.35, metalness: 0.4 });
+const matFrame = new THREE.MeshStandardMaterial({ color: 0x333840, roughness: 0.5, metalness: 0.6 });
+const matWheel = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.8, metalness: 0.1 });
+const matRim = new THREE.MeshStandardMaterial({ color: 0x999999, roughness: 0.3, metalness: 0.7 });
+const matCable = new THREE.MeshStandardMaterial({ color: 0x888888, roughness: 0.6, metalness: 0.5 });
+const matLoad = new THREE.MeshStandardMaterial({ color: 0xcc3333, roughness: 0.5, metalness: 0.3 });
+const matAFrame = new THREE.MeshStandardMaterial({ color: 0xf5c518, roughness: 0.4, metalness: 0.4 });
+const matGround = new THREE.MeshStandardMaterial({ color: 0x2a2d35, roughness: 0.95 });
+const matOutrigger = new THREE.MeshStandardMaterial({ color: 0x444444, roughness: 0.5, metalness: 0.5 });
+const matCab = new THREE.MeshStandardMaterial({ color: 0xf5c518, roughness: 0.4, metalness: 0.3 });
+const matGlass = new THREE.MeshStandardMaterial({ color: 0x88ccff, roughness: 0.1, metalness: 0.8, transparent: true, opacity: 0.5 });
+const matPin = new THREE.MeshStandardMaterial({ color: 0xaaaaaa, roughness: 0.3, metalness: 0.8 });
+const matSteel = new THREE.MeshStandardMaterial({ color: 0x667788, roughness: 0.3, metalness: 0.7 });
+
+// ── Ground ──
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(120, 120), matGround);
+ground.rotation.x = -Math.PI / 2;
+ground.receiveShadow = true;
+scene.add(ground);
+
+// Grid
+const grid = new THREE.GridHelper(80, 40, 0x333840, 0x252830);
+scene.add(grid);
+
+// ── Crane Group ──
+const craneGroup = new THREE.Group();
+scene.add(craneGroup);
+
+// Turntable group (rotates with tornamesa)
+const turntableGroup = new THREE.Group();
+craneGroup.add(turntableGroup);
+
+// ── Truck chassis ──
+function createTruck() {
+  const truck = new THREE.Group();
+
+  // Main chassis frame
+  const chassis = new THREE.Mesh(new THREE.BoxGeometry(3.2, 1.0, 8), matFrame);
+  chassis.position.set(0, 1.2, 0);
+  chassis.castShadow = true;
+  truck.add(chassis);
+
+  // Engine hood
+  const hood = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.8, 2.5), matChassis);
+  hood.position.set(0, 1.8, -3.5);
+  hood.castShadow = true;
+  truck.add(hood);
+
+  // Cab
+  const cab = new THREE.Mesh(new THREE.BoxGeometry(2.6, 1.8, 2.0), matCab);
+  cab.position.set(0, 2.8, -1.8);
+  cab.castShadow = true;
+  truck.add(cab);
+
+  // Cab windshield
+  const glass = new THREE.Mesh(new THREE.BoxGeometry(2.4, 1.0, 0.1), matGlass);
+  glass.position.set(0, 3.1, -2.81);
+  truck.add(glass);
+
+  // Side windows
+  const sideGlassL = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.9, 1.6), matGlass);
+  sideGlassL.position.set(-1.31, 3.0, -1.8);
+  truck.add(sideGlassL);
+  const sideGlassR = sideGlassL.clone();
+  sideGlassR.position.x = 1.31;
+  truck.add(sideGlassR);
+
+  // Flatbed / turntable base
+  const bed = new THREE.Mesh(new THREE.BoxGeometry(3.0, 0.3, 4.5), matFrame);
+  bed.position.set(0, 1.85, 1.8);
+  bed.castShadow = true;
+  truck.add(bed);
+
+  // Wheels
+  const wheelGeo = new THREE.CylinderGeometry(0.55, 0.55, 0.4, 24);
+  const rimGeo = new THREE.CylinderGeometry(0.3, 0.3, 0.42, 12);
+  const wheelPositions = [
+    [-1.7, 0.6, -3.0], [1.7, 0.6, -3.0],
+    [-1.7, 0.6, 0.5], [1.7, 0.6, 0.5],
+    [-1.7, 0.6, 1.8], [1.7, 0.6, 1.8],
+    [-1.7, 0.6, 3.0], [1.7, 0.6, 3.0],
+  ];
+  wheelPositions.forEach(([x, y, z]) => {
+    const wheel = new THREE.Mesh(wheelGeo, matWheel);
+    wheel.rotation.z = Math.PI / 2;
+    wheel.position.set(x, y, z);
+    wheel.castShadow = true;
+    truck.add(wheel);
+    const rim = new THREE.Mesh(rimGeo, matRim);
+    rim.rotation.z = Math.PI / 2;
+    rim.position.set(x, y, z);
+    truck.add(rim);
+  });
+
+  return truck;
+}
+
+const truck = createTruck();
+craneGroup.add(truck);
+
+// ── Outriggers (estabilizadores) ──
+function createOutriggers() {
+  const group = new THREE.Group();
+  const positions = [[-2.8, 0.8, -0.5], [2.8, 0.8, -0.5], [-2.8, 0.8, 3.2], [2.8, 0.8, 3.2]];
+  positions.forEach(([x, y, z]) => {
+    // Beam
+    const beam = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.25, 0.25), matOutrigger);
+    beam.position.set(x > 0 ? x + 0.5 : x - 0.5, y, z);
+    beam.castShadow = true;
+    group.add(beam);
+    // Cylinder (piston)
+    const piston = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.8, 12), matOutrigger);
+    piston.position.set(x > 0 ? x + 1.2 : x - 1.2, 0.4, z);
+    group.add(piston);
+    // Pad
+    const pad = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.5, 0.1, 8), matOutrigger);
+    pad.position.set(x > 0 ? x + 1.2 : x - 1.2, 0.05, z);
+    pad.castShadow = true;
+    group.add(pad);
+  });
+  return group;
+}
+const outriggers = createOutriggers();
+craneGroup.add(outriggers);
+
+// ── Turntable base (corona de giro) ──
+const turntableBase = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.2, 0.3, 32), matFrame);
+turntableBase.position.set(0, 2.15, 1.5);
+turntableGroup.add(turntableBase);
+
+// ── Boom pivot housing ──
+const pivotHousing = new THREE.Mesh(new THREE.BoxGeometry(1.0, 1.2, 1.0), matChassis);
+pivotHousing.position.set(0, 2.9, 1.5);
+pivotHousing.castShadow = true;
+turntableGroup.add(pivotHousing);
+
+// ── A-Frame (mastil) — based on sketches ──
+function createAFrame() {
+  const group = new THREE.Group();
+  const legGeo = new THREE.CylinderGeometry(0.08, 0.08, 5.0, 8);
+
+  // Left leg
+  const legL = new THREE.Mesh(legGeo, matAFrame);
+  legL.position.set(-0.6, 5.0, 1.5);
+  legL.rotation.z = 0.12;
+  legL.castShadow = true;
+  group.add(legL);
+
+  // Right leg
+  const legR = new THREE.Mesh(legGeo, matAFrame);
+  legR.position.set(0.6, 5.0, 1.5);
+  legR.rotation.z = -0.12;
+  legR.castShadow = true;
+  group.add(legR);
+
+  // Cross bar
+  const crossbar = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 1.4, 8), matAFrame);
+  crossbar.rotation.z = Math.PI / 2;
+  crossbar.position.set(0, 6.2, 1.5);
+  group.add(crossbar);
+
+  // Top plate
+  const top = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.2, 0.5), matFrame);
+  top.position.set(0, 7.3, 1.5);
+  group.add(top);
+
+  return group;
+}
+const aFrame = createAFrame();
+turntableGroup.add(aFrame);
+
+// ── Boom arm (telescópico) ──
+const boomPivot = new THREE.Group();
+boomPivot.position.set(0, 3.3, 1.5);
+turntableGroup.add(boomPivot);
+
+// Base section
+const boomBase = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.7, 8), matBoom);
+boomBase.position.set(0, 0, 4);
+boomBase.castShadow = true;
+boomPivot.add(boomBase);
+
+// Mid section (telescopes out)
+const boomMid = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.55, 7), matBoom);
+boomMid.position.set(0, 0, 7.5);
+boomMid.castShadow = true;
+boomPivot.add(boomMid);
+
+// Tip section
+const boomTip = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.4, 6), matBoom);
+boomTip.position.set(0, 0, 11);
+boomTip.castShadow = true;
+boomPivot.add(boomTip);
+
+// Boom head sheave (polea)
+const sheave = new THREE.Mesh(new THREE.TorusGeometry(0.25, 0.06, 8, 16), matRim);
+sheave.position.set(0, 0, 14.2);
+sheave.rotation.y = Math.PI / 2;
+boomPivot.add(sheave);
+
+// Pin details on boom sections (like in sketches)
+function addPins(parent, z) {
+  const pinGeo = new THREE.CylinderGeometry(0.06, 0.06, 0.9, 8);
+  const pin = new THREE.Mesh(pinGeo, matPin);
+  pin.rotation.z = Math.PI / 2;
+  pin.position.set(0, 0, z);
+  parent.add(pin);
+}
+addPins(boomPivot, 1.0);
+addPins(boomPivot, 5.0);
+addPins(boomPivot, 9.0);
+
+// ── Hydraulic cylinder (pistón del boom) ──
+const cylBase = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 3.5, 12), matOutrigger);
+cylBase.position.set(0, -0.8, 3);
+cylBase.rotation.x = -Math.PI / 2;
+boomPivot.add(cylBase);
+
+const cylRod = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 2.5, 8), matRim);
+cylRod.position.set(0, -0.8, 5.5);
+cylRod.rotation.x = -Math.PI / 2;
+boomPivot.add(cylRod);
+
+// ── Cable (from A-frame top to boom tip) ──
+const cableGeo = new THREE.BufferGeometry();
+const cableMat = new THREE.LineBasicMaterial({ color: 0x888888, linewidth: 2 });
+const cable = new THREE.Line(cableGeo, cableMat);
+turntableGroup.add(cable);
+
+// ── Hook & Load ──
+const hookGroup = new THREE.Group();
+scene.add(hookGroup);
+
+// Hook
+const hookBody = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.08, 8, 16, Math.PI * 1.5), matRim);
+hookBody.rotation.x = Math.PI / 2;
+hookGroup.add(hookBody);
+const hookShaft = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.8, 8), matRim);
+hookShaft.position.y = 0.4;
+hookGroup.add(hookShaft);
+const hookSheave = new THREE.Mesh(new THREE.TorusGeometry(0.2, 0.05, 8, 12), matFrame);
+hookSheave.position.y = 0.8;
+hookSheave.rotation.x = Math.PI / 2;
+hookGroup.add(hookSheave);
+
+// Load (steel beam / viga)
+const loadGroup = new THREE.Group();
+hookGroup.add(loadGroup);
+
+const beam = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.4, 4), matSteel);
+beam.position.y = -1.2;
+loadGroup.add(beam);
+
+const flangeGeo = new THREE.BoxGeometry(0.8, 0.15, 4);
+const flangeTop = new THREE.Mesh(flangeGeo, matSteel);
+flangeTop.position.y = -1.0;
+loadGroup.add(flangeTop);
+const flangeBot = new THREE.Mesh(flangeGeo, matSteel);
+flangeBot.position.y = -1.4;
+loadGroup.add(flangeBot);
+
+// Rigging slings
+const slingGeo = new THREE.CylinderGeometry(0.02, 0.02, 1.5, 6);
+const slingL = new THREE.Mesh(slingGeo, matCable);
+slingL.position.set(0, -0.4, -1.2);
+slingL.rotation.z = 0.3;
+loadGroup.add(slingL);
+const slingR = new THREE.Mesh(slingGeo, matCable);
+slingR.position.set(0, -0.4, 1.2);
+slingR.rotation.z = -0.3;
+loadGroup.add(slingR);
+
+// ── Connection hardware detail (top right of sketches) ──
+function createHardwareDetail() {
+  const g = new THREE.Group();
+  // Plate
+  const plate = new THREE.Mesh(new THREE.BoxGeometry(0.8, 1.2, 0.1), matFrame);
+  g.add(plate);
+  // Holes
+  [0.35, 0, -0.35].forEach(y => {
+    const hole = new THREE.Mesh(new THREE.TorusGeometry(0.08, 0.025, 6, 12), matRim);
+    hole.position.set(0, y, 0.06);
+    g.add(hole);
+  });
+  // Pin through
+  const pin = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.4, 8), matPin);
+  pin.rotation.x = Math.PI / 2;
+  pin.position.set(0.3, -0.35, 0);
+  g.add(pin);
+  // Clevis
+  const clev1 = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.5, 0.08), matFrame);
+  clev1.position.set(0.3, -0.35, 0.15);
+  g.add(clev1);
+  const clev2 = clev1.clone();
+  clev2.position.z = -0.15;
+  g.add(clev2);
+  return g;
+}
+const hw = createHardwareDetail();
+hw.position.set(8, 10, -5);
+hw.scale.setScalar(2.5);
+scene.add(hw);
+
+// Label for hardware
+const hwLabel = document.createElement('div');
+hwLabel.className = 'annotation';
+hwLabel.innerHTML = '<div class="tag">Detalle — Herraje conexión</div><div class="line"></div>';
+document.getElementById('canvas-container').appendChild(hwLabel);
+
+// ── Hoist cable (vertical from boom tip to hook) ──
+const hoistCableGeo = new THREE.BufferGeometry();
+const hoistCable = new THREE.Line(hoistCableGeo, cableMat);
+scene.add(hoistCable);
+
+// ── Support cable (A-frame to boom) ──
+const supportCableGeo = new THREE.BufferGeometry();
+const supportCable = new THREE.Line(supportCableGeo, cableMat);
+turntableGroup.add(supportCable);
+
+// ── State ──
+let boomAngleDeg = 45;
+let boomExtension = 0.6;
+let turntableAngle = 0;
+let loadTons = 5.0;
+const BOOM_BASE_LEN = 14;
+
+// ── Capacity table (simplified) ──
+function getCapacity(radius) {
+  // Simple lookup: at 3m=30t, at 8m=15t, at 12m=10t, at 18m=5t, at 25m=2.5t
+  if (radius <= 3) return 30;
+  if (radius <= 8) return 30 - (radius - 3) * 3;
+  if (radius <= 12) return 15 - (radius - 8) * 1.25;
+  if (radius <= 18) return 10 - (radius - 12) * 0.83;
+  if (radius <= 25) return 5 - (radius - 18) * 0.36;
+  return 2;
+}
+
+function updateCrane() {
+  const angleRad = THREE.MathUtils.degToRad(boomAngleDeg);
+
+  // Boom rotation
+  boomPivot.rotation.x = -angleRad;
+
+  // Scale boom sections for extension
+  const ext = boomExtension;
+  boomMid.position.z = 4 + ext * 5;
+  boomTip.position.z = 7 + ext * 7;
+  sheave.position.z = 10.2 + ext * 7;
+
+  // Turntable rotation
+  turntableGroup.rotation.y = THREE.MathUtils.degToRad(turntableAngle);
+  turntableGroup.position.set(0, 0, 1.5);
+
+  // Boom tip world position
+  const tipLocal = new THREE.Vector3(0, 0, sheave.position.z);
+  const tipWorld = new THREE.Vector3();
+  tipLocal.applyMatrix4(boomPivot.matrixWorld);
+  // We need to update matrices first
+  craneGroup.updateMatrixWorld(true);
+  sheave.getWorldPosition(tipWorld);
+
+  // Hook position (below boom tip)
+  hookGroup.position.copy(tipWorld);
+  hookGroup.position.y -= 2;
+
+  // Hoist cable
+  const hoistPts = [tipWorld.clone(), hookGroup.position.clone().add(new THREE.Vector3(0, 0.8, 0))];
+  hoistCableGeo.setFromPoints(hoistPts);
+
+  // Support cable (from A-frame top to boom midpoint)
+  const aTop = new THREE.Vector3(0, 7.3, 1.5);
+  turntableGroup.localToWorld(aTop);
+  const boomMidPt = new THREE.Vector3();
+  boomMid.getWorldPosition(boomMidPt);
+  supportCableGeo.setFromPoints([aTop, boomMidPt]);
+
+  // Main cable (A-frame to boom tip)
+  const cablePts = [aTop.clone(), tipWorld.clone()];
+  cableGeo.setFromPoints(cablePts);
+
+  // Compute stats
+  const boomLen = (BOOM_BASE_LEN * (0.5 + ext * 0.5));
+  const radius = Math.cos(angleRad) * boomLen;
+  const height = Math.sin(angleRad) * boomLen + 3.3;
+  const cap = getCapacity(radius);
+  const util = (loadTons / cap) * 100;
+
+  document.getElementById('s-radius').textContent = radius.toFixed(1);
+  document.getElementById('s-height').textContent = height.toFixed(1);
+  document.getElementById('s-cap').textContent = cap.toFixed(1);
+
+  const utilEl = document.getElementById('s-util');
+  utilEl.textContent = Math.min(util, 999).toFixed(0);
+  utilEl.style.color = util > 85 ? '#ff4444' : util > 70 ? '#ffaa00' : '#4a9eff';
+
+  // Hardware detail annotation position
+  const hwScreen = toScreen(new THREE.Vector3(8, 12, -5));
+  if (hwScreen) {
+    hwLabel.style.left = hwScreen.x + 'px';
+    hwLabel.style.top = (hwScreen.y - 60) + 'px';
+    hwLabel.style.display = 'block';
+  }
+}
+
+function toScreen(pos) {
+  const v = pos.clone().project(camera);
+  if (v.z > 1) return null;
+  return {
+    x: (v.x * 0.5 + 0.5) * window.innerWidth,
+    y: (-v.y * 0.5 + 0.5) * window.innerHeight
+  };
+}
+
+// ── Controls ──
+const sliderAngle = document.getElementById('boom-angle');
+const sliderExt = document.getElementById('boom-ext');
+const sliderRot = document.getElementById('turntable');
+const sliderLoad = document.getElementById('load');
+
+sliderAngle.addEventListener('input', e => {
+  boomAngleDeg = +e.target.value;
+  document.getElementById('v-angle').textContent = boomAngleDeg + '°';
+});
+sliderExt.addEventListener('input', e => {
+  boomExtension = +e.target.value / 100;
+  document.getElementById('v-ext').textContent = e.target.value + '%';
+});
+sliderRot.addEventListener('input', e => {
+  turntableAngle = +e.target.value;
+  document.getElementById('v-rot').textContent = e.target.value + '°';
+});
+sliderLoad.addEventListener('input', e => {
+  loadTons = +e.target.value;
+  document.getElementById('v-load').textContent = (+e.target.value).toFixed(1);
+});
+
+// Preset positions (matching sketch sequence)
+document.getElementById('btn-pos1').addEventListener('click', () => animateTo(35, 40, 0));
+document.getElementById('btn-pos2').addEventListener('click', () => animateTo(55, 70, 0));
+document.getElementById('btn-pos3').addEventListener('click', () => animateTo(75, 90, 0));
+document.getElementById('btn-reset').addEventListener('click', () => animateTo(45, 60, 0));
+
+let animating = false;
+function animateTo(angle, ext, rot) {
+  const startA = boomAngleDeg, startE = boomExtension * 100, startR = turntableAngle;
+  const duration = 1200;
+  const t0 = performance.now();
+  function step(t) {
+    const p = Math.min((t - t0) / duration, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    boomAngleDeg = startA + (angle - startA) * ease;
+    boomExtension = (startE + (ext - startE) * ease) / 100;
+    turntableAngle = startR + (rot - startR) * ease;
+    sliderAngle.value = boomAngleDeg;
+    sliderExt.value = boomExtension * 100;
+    sliderRot.value = turntableAngle;
+    document.getElementById('v-angle').textContent = Math.round(boomAngleDeg) + '°';
+    document.getElementById('v-ext').textContent = Math.round(boomExtension * 100) + '%';
+    document.getElementById('v-rot').textContent = Math.round(turntableAngle) + '°';
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+// Full sequence animation
+document.getElementById('btn-animate').addEventListener('click', () => {
+  if (animating) return;
+  animating = true;
+  const seq = [
+    { a: 25, e: 30, r: -30, t: 1500 },
+    { a: 45, e: 60, r: 0, t: 1500 },
+    { a: 65, e: 80, r: 0, t: 1500 },
+    { a: 75, e: 95, r: 15, t: 1500 },
+    { a: 55, e: 70, r: 0, t: 1500 },
+    { a: 45, e: 60, r: 0, t: 1000 },
+  ];
+  let i = 0;
+  function next() {
+    if (i >= seq.length) { animating = false; return; }
+    const s = seq[i++];
+    animateTo(s.a, s.e, s.r);
+    setTimeout(next, s.t);
+  }
+  next();
+});
+
+// ── Render loop ──
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  updateCrane();
+  renderer.render(scene, camera);
+}
+animate();
+
+// ── Resize ──
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+</body>
+</html>
