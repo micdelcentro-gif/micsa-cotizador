@@ -354,7 +354,7 @@ function equipoSemanalMXN(eq) {
   let base = eq.precio;
   if (eq.moneda === "USD") base = base * P.USD_MXN;
   if (eq.periodo === "dia") return base * 7;
-  if (eq.periodo === "mes") return base / 4.33;
+  if (eq.periodo === "mes") return base / 4;
   return base;
 }
 
