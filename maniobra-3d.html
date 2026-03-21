@@ -430,7 +430,13 @@ const cableLine = new THREE.Line(
 );
 scene.add(cableLine);
 
-// ── Industrial Machine (LEFT side, matching SIMI photos) ──
+// ── OAK EXPANDER (LEFT side, matching real photo) ──
+const matYellowRail = new THREE.MeshPhysicalMaterial({ color: 0xf5a623, roughness: 0.35, metalness: 0.3, clearcoat: 0.3 });
+const matRedBase = new THREE.MeshPhysicalMaterial({ color: 0xbb2222, roughness: 0.35, metalness: 0.4, clearcoat: 0.3 });
+const matDarkPlates = new THREE.MeshPhysicalMaterial({ color: 0x2a2a2a, roughness: 0.5, metalness: 0.6 });
+const matWhiteFrame = new THREE.MeshPhysicalMaterial({ color: 0xe8e8e8, roughness: 0.3, metalness: 0.4, clearcoat: 0.4 });
+const matMeshPanel = new THREE.MeshPhysicalMaterial({ color: 0xc8a050, roughness: 0.6, metalness: 0.1, transparent: true, opacity: 0.7 });
+
 const machinePivot = new THREE.Group();
 machinePivot.position.set(-7, 0, 0);
 scene.add(machinePivot);
@@ -438,52 +444,193 @@ scene.add(machinePivot);
 const machineGroup = new THREE.Group();
 machinePivot.add(machineGroup);
 
-// Main body — tall industrial machine
-const machBody = new THREE.Mesh(new THREE.BoxGeometry(1.4, 5.5, 1.2), M.machine);
-machBody.position.set(0, 2.75, 0);
-machBody.castShadow = true;
-machineGroup.add(machBody);
+// ── Base roja (conveyor/feed system) ──
+const redBase = new THREE.Mesh(new THREE.BoxGeometry(3.5, 0.6, 2.0), matRedBase);
+redBase.position.set(0.3, 0.3, 0);
+redBase.castShadow = true;
+machineGroup.add(redBase);
 
-// Top section
-const machTop = new THREE.Mesh(new THREE.BoxGeometry(1.6, 1.0, 1.4), M.machine);
-machTop.position.set(0, 5.8, 0);
-machTop.castShadow = true;
-machineGroup.add(machTop);
-
-// Blue control panel
-const panel = new THREE.Mesh(new THREE.BoxGeometry(1.2, 1.0, 0.15), M.machineBlue);
-panel.position.set(0, 0.8, 0.65);
-machineGroup.add(panel);
-
-// Red warning label
-const label = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.25, 0.02), M.machineRed);
-label.position.set(0, 1.5, 0.68);
-machineGroup.add(label);
-
-// Side details / fins
-[-0.75, 0.75].forEach(x => {
-  const fin = new THREE.Mesh(new THREE.BoxGeometry(0.08, 3.0, 1.0), M.lightGray);
-  fin.position.set(x, 3.5, 0);
-  machineGroup.add(fin);
+// Rieles del conveyor
+[-0.7, 0, 0.7].forEach(z => {
+  const rail = new THREE.Mesh(new THREE.BoxGeometry(4.0, 0.12, 0.15), matRedBase);
+  rail.position.set(0.5, 0.65, z);
+  machineGroup.add(rail);
 });
 
-// Internal components visible (tubes, cylinders)
-[1.5, 2.5, 3.5, 4.5].forEach(y => {
-  const tube = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 1.2, 8), M.lightGray);
-  tube.rotation.z = Math.PI / 2;
-  tube.position.set(0, y, -0.1);
-  machineGroup.add(tube);
+// Rodillos del conveyor
+for (let x = -1.2; x <= 2.2; x += 0.35) {
+  const roller = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 1.6, 8), M.lightGray);
+  roller.rotation.x = Math.PI / 2;
+  roller.position.set(x, 0.65, 0);
+  machineGroup.add(roller);
+}
+
+// Patas base roja
+[[-1.2, -0.8], [-1.2, 0.8], [2.0, -0.8], [2.0, 0.8]].forEach(([x, z]) => {
+  const leg = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.6, 0.12), matRedBase);
+  leg.position.set(x, 0.3, z);
+  machineGroup.add(leg);
 });
 
-// Base frame with pallet
-const baseFrame = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.3, 1.6), M.gray);
-baseFrame.position.set(0, 0.15, 0);
-baseFrame.castShadow = true;
-machineGroup.add(baseFrame);
+// Flechas de precaución (chevrons amarillos en la base)
+[-0.5, 0.5].forEach(x => {
+  const chev = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.15, 0.02), matYellowRail);
+  chev.position.set(x, 0.5, 1.02);
+  machineGroup.add(chev);
+});
 
-// Rigging point (where cable attaches to machine top)
-const riggingPoint = new THREE.Mesh(new THREE.SphereGeometry(0.1, 8, 8), M.machineRed);
-riggingPoint.position.set(0, 6.3, 0);
+// ── Marco principal vertical (blanco/gris) ──
+// Columnas verticales
+const colH = 6.5;
+[[-0.9, -0.8], [0.9, -0.8], [-0.9, 0.8], [0.9, 0.8]].forEach(([x, z]) => {
+  const col = new THREE.Mesh(new THREE.BoxGeometry(0.18, colH, 0.18), matWhiteFrame);
+  col.position.set(x, 0.6 + colH/2, z);
+  col.castShadow = true;
+  machineGroup.add(col);
+});
+
+// Travesaños horizontales del marco
+[1.5, 3.8, 5.0, 6.5].forEach(y => {
+  // Frontal/trasero
+  [-0.8, 0.8].forEach(z => {
+    const beam = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.12, 0.12), matWhiteFrame);
+    beam.position.set(0, y, z);
+    machineGroup.add(beam);
+  });
+  // Laterales
+  [-0.9, 0.9].forEach(x => {
+    const beam = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.12, 1.6), matWhiteFrame);
+    beam.position.set(x, y, 0);
+    machineGroup.add(beam);
+  });
+});
+
+// ── Placas/cabezales de expansión apilados (sección oscura central) ──
+// Sección inferior (más grande, negra)
+const lowerStack = new THREE.Mesh(new THREE.BoxGeometry(1.5, 3.0, 1.3), matDarkPlates);
+lowerStack.position.set(0, 2.3, 0);
+lowerStack.castShadow = true;
+machineGroup.add(lowerStack);
+
+// Líneas horizontales de las placas (simulan las capas apiladas)
+for (let y = 1.0; y <= 3.5; y += 0.25) {
+  const plateLine = new THREE.Mesh(new THREE.BoxGeometry(1.55, 0.03, 1.35), M.gray);
+  plateLine.position.set(0, y, 0);
+  machineGroup.add(plateLine);
+}
+
+// Sección superior (más estrecha, con cabezales de expansión)
+const upperStack = new THREE.Mesh(new THREE.BoxGeometry(1.2, 2.5, 1.0), M.machine);
+upperStack.position.set(0, 5.3, 0);
+upperStack.castShadow = true;
+machineGroup.add(upperStack);
+
+// Líneas de los cabezales superiores
+for (let y = 4.2; y <= 6.3; y += 0.2) {
+  const headLine = new THREE.Mesh(new THREE.BoxGeometry(1.25, 0.025, 1.05), M.lightGray);
+  headLine.position.set(0, y, 0);
+  machineGroup.add(headLine);
+}
+
+// Caja de control/motor en la cima
+const topBox = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.6, 0.8), matWhiteFrame);
+topBox.position.set(0.3, 6.9, 0);
+topBox.castShadow = true;
+machineGroup.add(topBox);
+
+// ── Plataforma superior con barandales amarillos ──
+// Piso de la plataforma
+const platform = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.08, 2.4), M.lightGray);
+platform.position.set(0, 5.0, 0);
+machineGroup.add(platform);
+
+// Barandales amarillos
+// Postes verticales
+const railH = 1.0;
+[[-1.35, -1.15], [1.35, -1.15], [-1.35, 1.15], [1.35, 1.15],
+ [0, -1.15], [0, 1.15], [-1.35, 0], [1.35, 0]].forEach(([x, z]) => {
+  const post = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, railH, 6), matYellowRail);
+  post.position.set(x, 5.0 + railH/2, z);
+  machineGroup.add(post);
+});
+
+// Pasamanos horizontales (top rail + mid rail)
+[5.5, 5.95].forEach(y => {
+  // Front/back
+  [-1.15, 1.15].forEach(z => {
+    const handrail = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 2.7, 6), matYellowRail);
+    handrail.rotation.z = Math.PI / 2;
+    handrail.position.set(0, y, z);
+    machineGroup.add(handrail);
+  });
+  // Sides
+  [-1.35, 1.35].forEach(x => {
+    const sideRail = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 2.3, 6), matYellowRail);
+    sideRail.rotation.x = Math.PI / 2;
+    sideRail.position.set(x, y, 0);
+    machineGroup.add(sideRail);
+  });
+});
+
+// Mesh/malla de seguridad (paneles translúcidos amarillos)
+[-1.15, 1.15].forEach(z => {
+  const meshPanel = new THREE.Mesh(new THREE.PlaneGeometry(2.7, 0.9), matMeshPanel);
+  meshPanel.position.set(0, 5.5, z);
+  meshPanel.rotation.y = z > 0 ? 0 : Math.PI;
+  machineGroup.add(meshPanel);
+});
+
+// ── Escalera de acceso (lado izquierdo) ──
+const ladderH = 5.0;
+// Largueros
+[-0.2, 0.2].forEach(z => {
+  const stringer = new THREE.Mesh(new THREE.BoxGeometry(0.06, ladderH, 0.06), matYellowRail);
+  stringer.position.set(-1.6, ladderH/2 + 0.3, z);
+  stringer.rotation.z = 0.15; // ligera inclinación
+  machineGroup.add(stringer);
+});
+// Peldaños
+for (let y = 0.6; y <= 5.0; y += 0.3) {
+  const rung = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.4, 6), matYellowRail);
+  rung.rotation.x = Math.PI / 2;
+  rung.position.set(-1.6 - (y * 0.03), y, 0);
+  machineGroup.add(rung);
+}
+
+// ── Guardas amarillas inferiores ──
+// Guarda frontal izquierda
+const guardL = new THREE.Mesh(new THREE.BoxGeometry(0.05, 1.5, 1.0), matYellowRail);
+guardL.position.set(-1.0, 1.35, 0);
+machineGroup.add(guardL);
+// Guarda frontal derecha
+const guardR = new THREE.Mesh(new THREE.BoxGeometry(0.05, 1.5, 0.8), matMeshPanel);
+guardR.position.set(1.0, 1.35, 0.5);
+machineGroup.add(guardR);
+
+// ── Panel de control (brazo articulado a la derecha) ──
+const ctrlArm = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 1.2, 6), M.gray);
+ctrlArm.position.set(1.5, 1.2, 0.5);
+ctrlArm.rotation.z = -0.3;
+machineGroup.add(ctrlArm);
+const ctrlBox = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.5, 0.15), M.lightGray);
+ctrlBox.position.set(1.8, 1.5, 0.5);
+machineGroup.add(ctrlBox);
+
+// Logo OAK (plaquita roja)
+const oakLogo = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.15, 0.02), matRedBase);
+oakLogo.position.set(0, 4.0, 0.82);
+machineGroup.add(oakLogo);
+
+// ── Cilindros hidráulicos laterales ──
+[-0.7, 0.7].forEach(x => {
+  const hyd = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 2.5, 8), M.gray);
+  hyd.position.set(x, 2.5, 0.75);
+  machineGroup.add(hyd);
+});
+
+// Rigging point (top center)
+const riggingPoint = new THREE.Mesh(new THREE.SphereGeometry(0.12, 8, 8), matRedBase);
+riggingPoint.position.set(0, 7.2, 0);
 machineGroup.add(riggingPoint);
 
 // Sling / strap from hook to machine
