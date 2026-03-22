@@ -1501,7 +1501,7 @@ function App({ onLogout } = {}) {
 
         // TABS
         React.createElement("div", { className: "tabs no-print" },
-          React.createElement("button", { className: "tab " + (activeTab === "nueva" ? "active" : ""), onClick: () => setActiveTab("nueva") }, "Nueva Cotización"),
+          React.createElement("button", { className: "tab " + (activeTab === "nueva" ? "active" : ""), onClick: () => { setStep(1); setActiveTab("nueva"); setProyecto(prev => ({ ...prev, nombre: "", cliente: "", lugar: "", planta: "", contacto: "", correo_contacto: "", actividad: "", descripcion: "", cot_numero: String(getNextFolio()).padStart(3, "0") })); setEtapas([{ nombre: "Etapa 1", semanas: 4, jornada: 12, personal: [{ puesto: "Supervisor Obra", cantidad: 1, escenario: 4 }, { puesto: "Supervisor HSE", cantidad: 1, escenario: 4 }, { puesto: "Mecánico", cantidad: 3, escenario: 4 }] }]); setEquipos([]); } }, "Nueva Cotización"),
           React.createElement("button", { className: "tab " + (activeTab === "historial" ? "active" : ""), onClick: () => setActiveTab("historial") },
             "Historial " + (historial.length > 0 ? "(" + historial.length + ")" : "")
           ),
