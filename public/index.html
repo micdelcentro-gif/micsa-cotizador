@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>MICSA Cotizador PRO 2026</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.h0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
-    <script src="https://cdnjs.cloudfare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<style>h
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#f5f6fa;--surface:#ffffff;--surface2:#f0f1f5;--surface3:hh#e8eaef;--border:#b0b5c0;--text:#0a0c10;--muted:#3d4350;--accent:#0066ff;--accent2:#c58a00;--green:#15803d;--red:#dc2626;--blue:#2563eb;--purple:#7c3aed;--radius:10px}
+:root{--bg:#f5f6fa;--surface:#ffffff;--surface2:#f0f1f5;--surface3:#e8eaef;--border:#b0b5c0;--text:#0a0c10;--muted:#3d4350;--accent:#0066ff;--accent2:#c58a00;--green:#15803d;--red:#dc2626;--blue:#2563eb;--purple:#7c3aed;--radius:10px}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh}
 .app{max-width:1200px;margin:0 auto;padding:0 20px 60px}
 .header{border-bottom:1px solid var(--border);padding:24px 0 20px;margin-bottom:32px;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px}
@@ -354,7 +354,7 @@ function equipoSemanalMXN(eq) {
   let base = eq.precio;
   if (eq.moneda === "USD") base = base * P.USD_MXN;
   if (eq.periodo === "dia") return base * 7;
-  if (eq.periodo === "mes") return base / 4.33;
+  if (eq.periodo === "mes") return base / 4;
   return base;
 }
 
@@ -451,12 +451,7 @@ const EQUIPO_PRESETS = [
 
 const EPP_PRESETS={kitBase:{nombre:"Kit Base",costoReal:674.34,items:[{p:"Guante anticorte",pr:75.28},{p:"Lente claro",pr:19.72},{p:"Tapon auditivo",pr:9.16},{p:"Casco matraca",pr:140.24},{p:"Chaleco",pr:186.64},{p:"Manga anticorte",pr:182}]},soldador:{nombre:"EPP Soldador",costoAdicional:401.12},alturas:{nombre:"EPP Alturas",costoAdicional:1577},quimico:{nombre:"EPP Quimico",costoAdicional:210.76}};
 const CONSUMIBLES_PRESETS=[{producto:"Tanque oxigeno",precioUnitario:460,unidad:"tanque"},{producto:"Tanque acetileno",precioUnitario:1090,unidad:"tanque"},{producto:"Sierra sable rep.",precioUnitario:186.66,unidad:"pza"},{producto:"Sierra cinta rep.",precioUnitario:205.25,unidad:"pza"},{producto:"Disco corte 4.5",precioUnitario:32,unidad:"pza"},{producto:"Cincho",precioUnitario:87,unidad:"bolsa"},{producto:"Gas montacargas",precioUnitario:315,unidad:"tanque"},{producto:"Cinta aislar",precioUnitario:25,unidad:"rollo"},{producto:"Emplaye",precioUnitario:287,unidad:"rollo"}];
-const VEHICULOS_PRESETS=[
-  {vehiculo:"Suburban verde", costoMensual:1713, kmDiario:40.8, rendKmL:4,   llantas:24000, vidaLlantasKm:40000, valorVehiculo:2000000, kmAnual:30000},
-  {vehiculo:"Suburban negra", costoMensual:1932, kmDiario:46,   rendKmL:4,   llantas:24000, vidaLlantasKm:40000, valorVehiculo:2000000, kmAnual:30000},
-  {vehiculo:"Urban blanca",   costoMensual:5721, kmDiario:119.2,rendKmL:3.5, llantas:32000, vidaLlantasKm:40000, valorVehiculo:2500000, kmAnual:30000},
-  {vehiculo:"Ford 2015",      costoMensual:3240, kmDiario:80,   rendKmL:8,   llantas:12000, vidaLlantasKm:40000, valorVehiculo:400000,  kmAnual:20000},
-]
+const VEHICULOS_PRESETS=[{vehiculo:"Suburban verde",costoMensual:1713},{vehiculo:"Suburban negra",costoMensual:1932},{vehiculo:"Urban blanca",costoMensual:5721},{vehiculo:"Ford 2015",costoMensual:3240}];
 const PUESTOS_REF=[{puesto:"Mecanico",sal:10000},{puesto:"Soldador",sal:10000},{puesto:"Rigger",sal:10000},{puesto:"Supervisor",sal:14000},{puesto:"Maniobrista",sal:14000},{puesto:"Seguridad",sal:14000}];
 const PARAMS_FIN={indirectos:0.10,contingencia:0.02,utilidad:0.20};
 
@@ -491,7 +486,7 @@ function App({ onLogout } = {}) {
   const [dbPdfText, setDbPdfText] = React.useState('');
   const [dbNewItem, setDbNewItem] = React.useState({ nombre: '', precio: '', moneda: 'MXN', periodo: 'sem', fuente: '', notas: '' });
   const [saved, setSaved] = useState(false);
-  const [historial, setHistorial] = useState(() => { try { return JSON.parse(localStorage.getItem("micsa_cotizaciones") || "[]"); } catch(e) { return historialGlobal; } });
+  const [historial, setHistorial] = useState(historialGlobal);
   const [showFormal, setShowFormal] = useState(false);
   const [showDesglose, setShowDesglose] = useState(false);
 
@@ -648,7 +643,7 @@ function App({ onLogout } = {}) {
       return { ...p, esc, costo, totalMO: costo.total * p.cantidad * et.semanas };
     });
     const totalMO = personalCalc.reduce((a, p) => a + p.totalMO, 0);
-    const habitaciones = (costos.personas_por_hab > 0 ? Math.ceil(personas / costos.personas_por_hab) : 0);
+    const habitaciones = Math.ceil(personas / costos.personas_por_hab);
     const viaticosSem = costos.viaticos_persona_sem * personas;
     const viaticosTotal = viaticosSem * et.semanas;
     const hospedajeTotal = costos.hotel_noche * habitaciones * 7 * et.semanas;
@@ -687,18 +682,6 @@ function App({ onLogout } = {}) {
   // ── CONSUMIBLES Y VEHÍCULOS ──
   const totalConsumibles = consumibles.reduce((s,c) => s + c.precioUnitario * c.cantidad, 0);
   const totalVehiculos = vehiculos.reduce((s,v) => s + (v.costoMensual/4.3) * v.cantidad * v.semanas, 0);
-// ── CÁLCULO COSTO POR KM (metodología Suárez Salazar) ──
-const PRECIO_GASOLINA = 24; // MXN/litro referencia
-const calcCostoKm = (v) => {
-  const deprAnual = v.valorVehiculo * 0.20;           // 20% anual
-  const deprKm    = deprAnual / v.kmAnual;             // $/km
-  const mantKm    = deprKm * 0.50;                     // 50% depr
-  const llantasKm = v.llantas / v.vidaLlantasKm;      // $/km
-  const gasolinaKm= PRECIO_GASOLINA / v.rendKmL;      // $/km
-  const seguroKm  = (v.valorVehiculo * 0.02) / v.kmAnual; // 2% valor/año
-  return {deprKm, mantKm, llantasKm, gasolinaKm, seguroKm,
-          totalKm: deprKm + mantKm + llantasKm + gasolinaKm + seguroKm};
-};
 
   // ── REGLA DEL 1.5 (proyectos complejos) ──
   const factorComplejidad = paramsFinancieros.factor_15 ? 1.5 : 1.0;
@@ -832,7 +815,6 @@ const calcCostoKm = (v) => {
     const n = { id: Date.now(), fecha: new Date().toLocaleDateString("es-MX"), proyecto: proyecto.nombre, cliente: proyecto.cliente, total: totalPropuestaMXN, totalUSD: totalPropuestaUSD, semanas: totalSemanasMax, personal: totalPersonasGlobal };
     historialGlobal = [n, ...historialGlobal];
     setHistorial(historialGlobal);
-          try { localStorage.setItem("micsa_cotizaciones", JSON.stringify(historialGlobal)); } catch(e) {}
     setSaved(true);
     setTimeout(() => setSaved(false), 3000);
   };
@@ -1519,7 +1501,7 @@ const calcCostoKm = (v) => {
 
         // TABS
         React.createElement("div", { className: "tabs no-print" },
-          React.createElement("button", { className: "tab " + (activeTab === "nueva" ? "active" : ""), onClick: () => { setStep(1); setActiveTab("nueva"); setProyecto({ nombre: "", cliente: "", lugar: "", planta: "", contacto: "", correo_contacto: "", referencia: "Servicio.", actividad: "", descripcion: "", moneda: "USD", cot_numero: String(getNextFolio()).padStart(3, "0") }); setEtapas([{ nombre: "Etapa 1", semanas: 4, jornada: 12, personal: [{ puesto: "Supervisor Obra", cantidad: 1, escenario: 4 }, { puesto: "Supervisor HSE", cantidad: 1, escenario: 4 }, { puesto: "Mecánico", cantidad: 3, escenario: 4 }] }]); setEquipos([]); } }, "Nueva Cotización"),
+          React.createElement("button", { className: "tab " + (activeTab === "nueva" ? "active" : ""), onClick: () => { setStep(1); setActiveTab("nueva"); setProyecto(prev => ({ ...prev, nombre: "", cliente: "", lugar: "", planta: "", contacto: "", correo_contacto: "", actividad: "", descripcion: "", cot_numero: String(getNextFolio()).padStart(3, "0") })); setEtapas([{ nombre: "Etapa 1", semanas: 4, jornada: 12, personal: [{ puesto: "Supervisor Obra", cantidad: 1, escenario: 4 }, { puesto: "Supervisor HSE", cantidad: 1, escenario: 4 }, { puesto: "Mecánico", cantidad: 3, escenario: 4 }] }]); setEquipos([]); } }, "Nueva Cotización"),
           React.createElement("button", { className: "tab " + (activeTab === "historial" ? "active" : ""), onClick: () => setActiveTab("historial") },
             "Historial " + (historial.length > 0 ? "(" + historial.length + ")" : "")
           ),
@@ -2051,177 +2033,6 @@ const calcCostoKm = (v) => {
 
           React.createElement("div",{className:"section"},React.createElement("div",{className:"section-title"},"Consumibles ",React.createElement("span",{className:"iva-tag"},"+ IVA")),React.createElement("div",{style:{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(200px,1fr))",gap:10}},consumibles.map((c,i)=>React.createElement("div",{key:i,style:{background:"var(--surface)",border:"1px solid var(--border)",borderRadius:"var(--radius)",padding:12}},React.createElement("div",{style:{fontWeight:600,fontSize:13,marginBottom:4}},c.producto),React.createElement("div",{style:{fontSize:11,color:"var(--muted)",marginBottom:8}},"$"+fmt(c.precioUnitario)+" / "+c.unidad),React.createElement("div",{style:{display:"flex",alignItems:"center",gap:8}},React.createElement("input",{type:"number",min:0,value:c.cantidad,style:{width:55,padding:"5px",borderRadius:5,border:"1px solid var(--border)",textAlign:"center",fontSize:14},onChange:e=>{const u=[...consumibles];u[i]={...u[i],cantidad:+e.target.value};setConsumibles(u);}}),c.cantidad>0&&React.createElement("span",{style:{fontSize:12,fontFamily:"monospace",color:"var(--accent)"}},"$"+fmt(c.precioUnitario*c.cantidad)))))),consumibles.some(c=>c.cantidad>0)&&React.createElement("div",{style:{marginTop:10,padding:10,background:"var(--surface2)",borderRadius:8,display:"flex",justifyContent:"space-between"}},React.createElement("span",null,"Subtotal: $"+fmt(consumibles.reduce((s,c)=>s+c.precioUnitario*c.cantidad,0))),React.createElement("span",{style:{fontWeight:700}},"Con conting. 10%: $"+fmt(consumibles.reduce((s,c)=>s+c.precioUnitario*c.cantidad,0)*1.10)))),
           React.createElement("div",{className:"section"},React.createElement("div",{className:"section-title"},"Vehiculos"),React.createElement("table",{className:"ptable"},React.createElement("thead",null,React.createElement("tr",null,React.createElement("th",null,"Vehiculo"),React.createElement("th",{style:{width:100}},"$/Sem"),React.createElement("th",{style:{width:60}},"Cant"),React.createElement("th",{style:{width:60}},"Sem"),React.createElement("th",{style:{width:100,textAlign:"right"}},"Total"))),React.createElement("tbody",null,vehiculos.map((v,i)=>React.createElement("tr",{key:i},React.createElement("td",null,v.vehiculo),React.createElement("td",{style:{fontFamily:"monospace"}},"$"+fmt(v.costoMensual/4.3)),React.createElement("td",null,React.createElement("input",{type:"number",min:0,value:v.cantidad,style:{width:45,padding:"3px",borderRadius:4,border:"1px solid var(--border)",textAlign:"center"},onChange:e=>{const u=[...vehiculos];u[i]={...u[i],cantidad:+e.target.value};setVehiculos(u);}})),React.createElement("td",null,React.createElement("input",{type:"number",min:0,value:v.semanas,style:{width:45,padding:"3px",borderRadius:4,border:"1px solid var(--border)",textAlign:"center"},onChange:e=>{const u=[...vehiculos];u[i]={...u[i],semanas:+e.target.value};setVehiculos(u);}})),React.createElement("td",{style:{textAlign:"right",fontFamily:"monospace"}},"$"+fmt((v.costoMensual/4.3)*v.cantidad*v.semanas))))))),
-
-// ── MÓDULO ANÁLISIS DE TRASLADOS ──
-React.createElement("div",{className:"section"},
-  React.createElement("div",{className:"section-title"},
-    "🚗 Análisis de Traslados",
-    React.createElement("span",{style:{fontSize:10,fontWeight:400,color:"#64748b",marginLeft:8}},
-      "Costo real por km (gasolina + desgaste + mantenimiento + llantas)"
-    )
-  ),
-  // Parámetros de traslado
-  React.createElement("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12,marginBottom:16}},
-    React.createElement("div",{className:"field"},
-      React.createElement("label",null,"📍 Distancia del traslado (km ida)"),
-      React.createElement("input",{type:"number",min:0,step:1,
-        value:data.traslado_km||"",
-        placeholder:"ej. 150",
-        onChange:e=>setData(d=>({...d,traslado_km:e.target.value}))
-      })
-    ),
-    React.createElement("div",{className:"field"},
-      React.createElement("label",null,"⛽ Precio gasolina ($/litro)"),
-      React.createElement("input",{type:"number",min:0,step:0.5,
-        value:data.traslado_precio_gasolina||"24",
-        placeholder:"24",
-        onChange:e=>setData(d=>({...d,traslado_precio_gasolina:e.target.value}))
-      })
-    ),
-    React.createElement("div",{className:"field"},
-      React.createElement("label",null,"🚌 Costo boleto autobús ($/persona ida)"),
-      React.createElement("input",{type:"number",min:0,step:10,
-        value:data.traslado_costo_bus||"",
-        placeholder:"ej. 350",
-        onChange:e=>setData(d=>({...d,traslado_costo_bus:e.target.value}))
-      })
-    ),
-    React.createElement("div",{className:"field"},
-      React.createElement("label",null,"✈️ Costo boleto avión ($/persona ida)"),
-      React.createElement("input",{type:"number",min:0,step:100,
-        value:data.traslado_costo_avion||"",
-        placeholder:"ej. 2500",
-        onChange:e=>setData(d=>({...d,traslado_costo_avion:e.target.value}))
-      })
-    ),
-    React.createElement("div",{className:"field"},
-      React.createElement("label",null,"👥 Personas a trasladar"),
-      React.createElement("input",{type:"number",min:1,step:1,
-        value:data.traslado_personas||"1",
-        placeholder:"1",
-        onChange:e=>setData(d=>({...d,traslado_personas:e.target.value}))
-      })
-    ),
-    React.createElement("div",{className:"field"},
-      React.createElement("label",null,"🔄 Viajes (ida y vuelta = 2)"),
-      React.createElement("input",{type:"number",min:1,step:1,
-        value:data.traslado_viajes||"2",
-        placeholder:"2",
-        onChange:e=>setData(d=>({...d,traslado_viajes:e.target.value}))
-      })
-    )
-  ),
-  // Tabla desglose costo/km por vehículo
-  React.createElement("div",{style:{marginBottom:16}},
-    React.createElement("div",{style:{fontSize:11,fontWeight:700,color:"#1e40af",marginBottom:8,textTransform:"uppercase",letterSpacing:"0.05em"}},
-      "Costo real por km — desglose técnico (metodología Suárez Salazar)"
-    ),
-    React.createElement("div",{style:{overflowX:"auto"}},
-      React.createElement("table",{className:"ptable"},
-        React.createElement("thead",null,
-          React.createElement("tr",null,
-            React.createElement("th",null,"Vehículo"),
-            React.createElement("th",{style:{textAlign:"right"}},"Gasolina $/km"),
-            React.createElement("th",{style:{textAlign:"right"}},"Depreciación $/km"),
-            React.createElement("th",{style:{textAlign:"right"}},"Mantenimiento $/km"),
-            React.createElement("th",{style:{textAlign:"right"}},"Llantas $/km"),
-            React.createElement("th",{style:{textAlign:"right"}},"Seguros $/km"),
-            React.createElement("th",{style:{textAlign:"right",background:"#1e3a5f",color:"white"}},"TOTAL $/km"),
-            React.createElement("th",{style:{textAlign:"right",background:"#0066ff",color:"white"}},"$/km c/margen 20%")
-          )
-        ),
-        React.createElement("tbody",null,
-          VEHICULOS_PRESETS.map((v,i)=>{
-            const pg = parseFloat(data.traslado_precio_gasolina||24);
-            const d = v.valorVehiculo*0.20/v.kmAnual;
-            const m = d*0.50;
-            const l = v.llantas/v.vidaLlantasKm;
-            const g = pg/v.rendKmL;
-            const s = (v.valorVehiculo*0.02)/v.kmAnual;
-            const tot = d+m+l+g+s;
-            const conMargen = tot*1.20;
-            return React.createElement("tr",{key:i},
-              React.createElement("td",null,v.vehiculo),
-              React.createElement("td",{style:{textAlign:"right",fontFamily:"monospace"}},"$"+fmt(g)),
-              React.createElement("td",{style:{textAlign:"right",fontFamily:"monospace"}},"$"+fmt(d)),
-              React.createElement("td",{style:{textAlign:"right",fontFamily:"monospace"}},"$"+fmt(m)),
-              React.createElement("td",{style:{textAlign:"right",fontFamily:"monospace"}},"$"+fmt(l)),
-              React.createElement("td",{style:{textAlign:"right",fontFamily:"monospace"}},"$"+fmt(s)),
-              React.createElement("td",{style:{textAlign:"right",fontFamily:"monospace",fontWeight:700,background:"#f0f4ff"}},"$"+fmt(tot)),
-              React.createElement("td",{style:{textAlign:"right",fontFamily:"monospace",fontWeight:700,background:"#dbeafe"}},"$"+fmt(conMargen))
-            );
-          })
-        )
-      )
-    )
-  ),
-  // Comparativa auto vs bus vs avión (solo si hay distancia capturada)
-  parseFloat(data.traslado_km||0)>0 && (()=>{
-    const km      = parseFloat(data.traslado_km||0);
-    const pg      = parseFloat(data.traslado_precio_gasolina||24);
-    const pBus    = parseFloat(data.traslado_costo_bus||0);
-    const pAvion  = parseFloat(data.traslado_costo_avion||0);
-    const personas= parseFloat(data.traslado_personas||1);
-    const viajes  = parseFloat(data.traslado_viajes||2);
-    // Usar primer vehículo activo como referencia
-    const vRef    = vehiculos.find(v=>v.cantidad>0) || VEHICULOS_PRESETS[0];
-    const presetRef= VEHICULOS_PRESETS.find(p=>p.vehiculo===vRef.vehiculo)||VEHICULOS_PRESETS[0];
-    const d = presetRef.valorVehiculo*0.20/presetRef.kmAnual;
-    const m = d*0.50;
-    const l = presetRef.llantas/presetRef.vidaLlantasKm;
-    const g = pg/presetRef.rendKmL;
-    const s = (presetRef.valorVehiculo*0.02)/presetRef.kmAnual;
-    const costoKmAuto = d+m+l+g+s;
-    // Casetas estimadas: $0.80/km en autopista
-    const casetas = km * 0.80;
-    const totalAuto  = (km * viajes * costoKmAuto) + casetas;
-    const totalBus   = pBus * personas * viajes;
-    const totalAvion = pAvion * personas * viajes * 1.10; // +10% gestión
-    const recomendacion = km<=150?"🚗 Auto propio":km<=500?(totalAuto<totalBus?"🚗 Auto propio":"🚌 Autobús"):"✈️ Avión";
-    return React.createElement("div",{style:{background:"#f8faff",border:"1px solid #c7d7f5",borderRadius:8,padding:16}},
-      React.createElement("div",{style:{fontWeight:700,fontSize:13,marginBottom:12,color:"#1e3a5f"}},
-        "📊 Comparativa de traslado — "+km+" km × "+viajes+" viajes × "+personas+" persona(s)"
-      ),
-      React.createElement("table",{className:"ptable"},
-        React.createElement("thead",null,
-          React.createElement("tr",null,
-            React.createElement("th",null,"Modalidad"),
-            React.createElement("th",{style:{textAlign:"right"}},"Costo base"),
-            React.createElement("th",{style:{textAlign:"right"}},"Extras"),
-            React.createElement("th",{style:{textAlign:"right",background:"#1e3a5f",color:"white"}},"TOTAL"),
-            React.createElement("th",null,"Recomendado si...")
-          )
-        ),
-        React.createElement("tbody",null,
-          React.createElement("tr",{style:{background:km<=150||totalAuto<=Math.min(totalBus||99999,totalAvion||99999)?"#dcfce7":"white"}},
-            React.createElement("td",null,"🚗 Auto propio ("+presetRef.vehiculo+")"),
-            React.createElement("td",{style:{textAlign:"right",fontFamily:"monospace"}},"$"+fmt(km*viajes*costoKmAuto)+" (km)"),
-            React.createElement("td",{style:{textAlign:"right",fontFamily:"monospace"}},"$"+fmt(casetas)+" (casetas est.)"),
-            React.createElement("td",{style:{textAlign:"right",fontFamily:"monospace",fontWeight:700}},"$"+fmt(totalAuto)),
-            React.createElement("td",{style:{fontSize:11,color:"#64748b"}},"< 150 km o >3 personas")
-          ),
-          pBus>0&&React.createElement("tr",{style:{background:km>150&&km<=500&&totalBus<totalAuto?"#dcfce7":"white"}},
-            React.createElement("td",null,"🚌 Autobús"),
-            React.createElement("td",{style:{textAlign:"right",fontFamily:"monospace"}},"$"+fmt(pBus)+" x "+personas+"p x "+viajes+" viajes"),
-            React.createElement("td",{style:{textAlign:"right",fontFamily:"monospace"}},"-"),
-            React.createElement("td",{style:{textAlign:"right",fontFamily:"monospace",fontWeight:700}},"$"+fmt(totalBus)),
-            React.createElement("td",{style:{fontSize:11,color:"#64748b"}},"150-500 km, 1-2 personas")
-          ),
-          pAvion>0&&React.createElement("tr",{style:{background:km>500?"#dcfce7":"white"}},
-            React.createElement("td",null,"✈️ Avión (+10% gestión)"),
-            React.createElement("td",{style:{textAlign:"right",fontFamily:"monospace"}},"$"+fmt(pAvion)+" x "+personas+"p x "+viajes+" viajes"),
-            React.createElement("td",{style:{textAlign:"right",fontFamily:"monospace"}},"$"+fmt(pAvion*personas*viajes*0.10)+" (gestión)"),
-            React.createElement("td",{style:{textAlign:"right",fontFamily:"monospace",fontWeight:700}},"$"+fmt(totalAvion)),
-            React.createElement("td",{style:{fontSize:11,color:"#64748b"}},"> 500 km")
-          )
-        )
-      ),
-      React.createElement("div",{style:{marginTop:12,padding:"10px 16px",background:"#1e3a5f",color:"white",borderRadius:6,fontSize:13,fontWeight:700}},
-        "Recomendación: "+recomendacion+" — Distancia de "+km+" km"+(km>150?" | Tiempo en auto estimado: "+(km/80).toFixed(1)+" hrs":"")
-      )
-    );
-  })()
-),
 
           // ═══ STEP 4: EQUIPOS, PRORRATEO Y ADMIN ═══
           step === 4 && React.createElement(React.Fragment, null,

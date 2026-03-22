@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MICSA - Recordatorio de Pago</title>
+</head>
+<body style="margin:0;padding:0;font-family:Arial,Helvetica,sans-serif;background:#f4f4f4">
+  <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;background:#ffffff">
+
+    <!-- HEADER -->
+    <tr>
+      <td style="background:#0a1628;padding:24px 32px;text-align:center">
+        <h1 style="color:#c8a84b;margin:0;font-size:22px;font-weight:bold">
+          GRUPO MICSA
+        </h1>
+        <p style="color:#ffffff;margin:4px 0 0;font-size:12px;letter-spacing:2px">
+          MONTAJES E IZAJES DEL CENTRO S.A.
+        </p>
+      </td>
+    </tr>
+
+    <!-- BARRA DORADA -->
+    <tr>
+      <td style="background:#c8a84b;height:4px"></td>
+    </tr>
+
+    <!-- CUERPO -->
+    <tr>
+      <td style="padding:32px">
+        <h2 style="color:#1a3a6b;margin:0 0 16px;font-size:18px">
+          Recordatorio de Pago
+        </h2>
+
+        <p style="color:#333;line-height:1.6;margin:0 0 16px">
+          Estimado/a <strong>{{1.A}}</strong>,
+        </p>
+
+        <p style="color:#333;line-height:1.6;margin:0 0 24px">
+          Le recordamos que tiene un pago pendiente por los servicios
+          prestados por Grupo MICSA. A continuacion los detalles:
+        </p>
+
+        <!-- TABLA DE DETALLES -->
+        <table width="100%" cellpadding="10" cellspacing="0"
+               style="border:1px solid #e0e0e0;border-radius:4px;margin:0 0 24px;border-collapse:collapse">
+          <tr style="background:#f8f8f8">
+            <td style="color:#666;font-size:13px;border-bottom:1px solid #e0e0e0;width:40%">
+              Servicio Contratado
+            </td>
+            <td style="color:#333;font-size:13px;border-bottom:1px solid #e0e0e0">
+              <strong>{{1.C}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td style="color:#666;font-size:13px;border-bottom:1px solid #e0e0e0">
+              Planta / Ubicacion
+            </td>
+            <td style="color:#333;font-size:13px;border-bottom:1px solid #e0e0e0">
+              {{1.B}}
+            </td>
+          </tr>
+          <tr style="background:#f8f8f8">
+            <td style="color:#666;font-size:13px;border-bottom:1px solid #e0e0e0">
+              No. de Factura
+            </td>
+            <td style="color:#333;font-size:13px;border-bottom:1px solid #e0e0e0">
+              <strong>{{1.D}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td style="color:#666;font-size:13px;border-bottom:1px solid #e0e0e0">
+              Fecha Limite de Pago
+            </td>
+            <td style="color:#d42b2b;font-size:13px;border-bottom:1px solid #e0e0e0">
+              <strong>{{1.F}}</strong>
+            </td>
+          </tr>
+          <tr style="background:#fff3cd">
+            <td style="color:#666;font-size:14px;font-weight:bold">
+              Monto Adeudado
+            </td>
+            <td style="color:#1a3a6b;font-size:18px;font-weight:bold">
+              ${{1.E}} MXN
+            </td>
+          </tr>
+        </table>
+
+        <p style="color:#333;line-height:1.6;margin:0 0 16px">
+          Agradecemos su pronta atencion a este asunto. Si ya realizo el pago,
+          favor de hacer caso omiso a este mensaje y enviarnos su comprobante
+          de pago a <a href="mailto:micdelcentro@gmail.com" style="color:#1a3a6b">
+          micdelcentro@gmail.com</a>.
+        </p>
+
+        <p style="color:#333;line-height:1.6;margin:0 0 24px">
+          Para cualquier aclaracion, no dude en contactarnos.
+        </p>
+
+        <!-- BOTON CTA -->
+        <table width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td style="text-align:center">
+              <a href="mailto:micdelcentro@gmail.com?subject=Re: Factura {{1.D}}"
+                 style="display:inline-block;padding:14px 32px;background:#1a3a6b;
+                        color:#ffffff;text-decoration:none;font-size:14px;
+                        font-weight:bold;border-radius:4px">
+                Contactar a MICSA
+              </a>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+
+    <!-- SEPARADOR -->
+    <tr>
+      <td style="background:#c8a84b;height:2px"></td>
+    </tr>
+
+    <!-- FOOTER -->
+    <tr>
+      <td style="background:#0a1628;padding:20px 32px;text-align:center">
+        <p style="color:#c8a84b;margin:0 0 4px;font-size:12px;font-weight:bold">
+          Grupo MICSA - Montajes e Izajes del Centro S.A.
+        </p>
+        <p style="color:#888;margin:0;font-size:11px">
+          Blvd. Antonio Rocha Cordero 1030, Simon Diaz, San Luis Potosi, SLP
+        </p>
+        <p style="color:#888;margin:4px 0 0;font-size:11px">
+          Tel: (444) 811 6961 | micdelcentro@gmail.com | grupomicsa.com
+        </p>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
