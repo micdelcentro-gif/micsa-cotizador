@@ -8,7 +8,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.h0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
     <script src="https://cdnjs.cloudfare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<style>
+<style>h
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#f5f6fa;--surface:#ffffff;--surface2:#f0f1f5;--surface3:hh#e8eaef;--border:#b0b5c0;--text:#0a0c10;--muted:#3d4350;--accent:#0066ff;--accent2:#c58a00;--green:#15803d;--red:#dc2626;--blue:#2563eb;--purple:#7c3aed;--radius:10px}
@@ -491,7 +491,7 @@ function App({ onLogout } = {}) {
   const [dbPdfText, setDbPdfText] = React.useState('');
   const [dbNewItem, setDbNewItem] = React.useState({ nombre: '', precio: '', moneda: 'MXN', periodo: 'sem', fuente: '', notas: '' });
   const [saved, setSaved] = useState(false);
-  const [historial, setHistorial] = useState(historialGlobal);
+  const [historial, setHistorial] = useState(() => { try { return JSON.parse(localStorage.getItem("micsa_cotizaciones") || "[]"); } catch(e) { return historialGlobal; } });
   const [showFormal, setShowFormal] = useState(false);
   const [showDesglose, setShowDesglose] = useState(false);
 
@@ -832,6 +832,7 @@ const calcCostoKm = (v) => {
     const n = { id: Date.now(), fecha: new Date().toLocaleDateString("es-MX"), proyecto: proyecto.nombre, cliente: proyecto.cliente, total: totalPropuestaMXN, totalUSD: totalPropuestaUSD, semanas: totalSemanasMax, personal: totalPersonasGlobal };
     historialGlobal = [n, ...historialGlobal];
     setHistorial(historialGlobal);
+          try { localStorage.setItem("micsa_cotizaciones", JSON.stringify(historialGlobal)); } catch(e) {}
     setSaved(true);
     setTimeout(() => setSaved(false), 3000);
   };
@@ -1518,7 +1519,7 @@ const calcCostoKm = (v) => {
 
         // TABS
         React.createElement("div", { className: "tabs no-print" },
-          React.createElement("button", { className: "tab " + (activeTab === "nueva" ? "active" : ""), onClick: () => setActiveTab("nueva") }, "Nueva Cotización"),
+          React.createElement("button", { className: "tab " + (activeTab === "nueva" ? "active" : ""), onClick: () => { setStep(1); setActiveTab("nueva"); setProyecto({ nombre: "", cliente: "", lugar: "", planta: "", contacto: "", correo_contacto: "", referencia: "Servicio.", actividad: "", descripcion: "", moneda: "USD", cot_numero: String(getNextFolio()).padStart(3, "0") }); setEtapas([{ nombre: "Etapa 1", semanas: 4, jornada: 12, personal: [{ puesto: "Supervisor Obra", cantidad: 1, escenario: 4 }, { puesto: "Supervisor HSE", cantidad: 1, escenario: 4 }, { puesto: "Mecánico", cantidad: 3, escenario: 4 }] }]); setEquipos([]); } }, "Nueva Cotización"),
           React.createElement("button", { className: "tab " + (activeTab === "historial" ? "active" : ""), onClick: () => setActiveTab("historial") },
             "Historial " + (historial.length > 0 ? "(" + historial.length + ")" : "")
           ),
