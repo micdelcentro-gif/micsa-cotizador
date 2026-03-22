@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>MICSA Cotizador PRO 2026</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.h0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
     <script src="https://cdnjs.cloudfare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#f5f6fa;--surface:#ffffff;--surface2:#f0f1f5;--surface3:#e8eaef;--border:#b0b5c0;--text:#0a0c10;--muted:#3d4350;--accent:#0066ff;--accent2:#c58a00;--green:#15803d;--red:#dc2626;--blue:#2563eb;--purple:#7c3aed;--radius:10px}
+:root{--bg:#f5f6fa;--surface:#ffffff;--surface2:#f0f1f5;--surface3:hh#e8eaef;--border:#b0b5c0;--text:#0a0c10;--muted:#3d4350;--accent:#0066ff;--accent2:#c58a00;--green:#15803d;--red:#dc2626;--blue:#2563eb;--purple:#7c3aed;--radius:10px}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh}
 .app{max-width:1200px;margin:0 auto;padding:0 20px 60px}
 .header{border-bottom:1px solid var(--border);padding:24px 0 20px;margin-bottom:32px;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px}
@@ -648,7 +648,7 @@ function App({ onLogout } = {}) {
       return { ...p, esc, costo, totalMO: costo.total * p.cantidad * et.semanas };
     });
     const totalMO = personalCalc.reduce((a, p) => a + p.totalMO, 0);
-    const habitaciones = Math.ceil(personas / costos.personas_por_hab);
+    const habitaciones = (costos.personas_por_hab > 0 ? Math.ceil(personas / costos.personas_por_hab) : 0);
     const viaticosSem = costos.viaticos_persona_sem * personas;
     const viaticosTotal = viaticosSem * et.semanas;
     const hospedajeTotal = costos.hotel_noche * habitaciones * 7 * et.semanas;
